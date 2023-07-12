@@ -27,14 +27,10 @@ class UpdateTasksRequest extends FormRequest
             'cluster_id' => ['required'],
             'client_id' => ['required'],
             'agent_id' => ['required'],
-            'accounting_period' => ['required'],
+            'shift_date' => ['required'],
             'dashboard_activity_id' => ['required'],
             'client_activity_id' => ['required'],
-            'client_detailed_activity' => ['required'],
-            'poc' => ['required'],
-            'frequency' => ['required'],
-            'due_date' => ['required'],
-            'estimated_handling_time' => ['required'],
+            'description' => ['required'],
         ];
     }
 
@@ -44,14 +40,10 @@ class UpdateTasksRequest extends FormRequest
             'cluster_id.required' => 'Cluster Name is required.',
             'client_id.required' => 'Client Name is required.',
             'agent_id.required' => 'Employee Name is required.',
-            'accounting_period.required' => 'Accounting Period is required.',
-            'dashboard_activity_id.required' => 'Accounting Period is required.',
-            'client_activity_id.required' => 'Client Activity Name is required.',
-            'client_detailed_activity.required' => 'Client Detailed Activities is required.',
-            'poc.required' => 'POC is required.',
-            'frequency.required' => 'Frequency is required.',
-            'due_date.required' => 'Due Date is required.',
-            'estimated_handling_time.required' => 'Estimated Handling Time is required.',
+            'shift_date.required' => 'Shift Date is required.',
+            'dashboard_activity_id.required' => 'Dashboard Activity is required.',
+            'client_activity_id.required' => 'Client Activity is required.',
+            'description.required' => 'Description is required.',
         ];
     }
 }

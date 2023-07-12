@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Client;
-use App\Models\ClientActivity;
 use App\Models\Cluster;
-use App\Models\DashboardActivity;
 use App\Models\Permission;
-use Illuminate\Http\Request;
+use App\Models\ClientActivity;
+use App\Models\DashboardActivity;
 use Illuminate\Support\Facades\View;
 
 class GlobalVariableController extends Controller

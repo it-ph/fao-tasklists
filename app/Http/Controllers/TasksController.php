@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Models\ClientActivity;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TaskCollection;
@@ -19,7 +20,7 @@ class TasksController extends GlobalVariableController
         parent::__construct();
     }
 
-    // AGENT ACCEESS
+    // AGENT ACCESS
     public function agentTask(Request $request)
     {
         $status = $request['status'];
@@ -56,7 +57,14 @@ class TasksController extends GlobalVariableController
                 ->where('status',$status)
                 ->get();
         }
-        return view('pages.agent.tasks.list', compact('tasks'));
+
+        $user_client_activities = ClientActivity::query()
+            ->where('agent_id', Auth::id())
+            ->select('id','agent_id','name')
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        return view('pages.agent.tasks.list', compact('tasks','user_client_activities'));
     }
 
     // ADMIN, TL, & OM ACCESS
@@ -118,6 +126,7 @@ class TasksController extends GlobalVariableController
     public function store(StoreTasksRequest $request)
     {
         $request['created_by'] = Auth::id();
+        $request['start_date'] = \Carbon\Carbon::now();
         $task = new TaskResource(Task::create($request->all()));
         return redirect()->back()->with('with_success', "Task created successfully!");
     }

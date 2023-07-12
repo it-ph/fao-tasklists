@@ -12,7 +12,7 @@
 
     @component('components.breadcrumb')
         @slot('li_1') Tasks @endslot
-        @slot('title') Tasks List @endslot
+        @slot('title') Tasks List - @if(\Request::get('status')) <span>{{ ucwords(\Request::get('status')) }} @else ALL @endif</span>@endslot
     @endcomponent
 
     <div class="row">
@@ -43,7 +43,7 @@
                     <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Action</th>
+                                {{-- <th>Action</th> --}}
                                 <th>Status</th>
                                 <th>Employee Name</th>
                                 <th>Shift Date</th>
@@ -62,20 +62,20 @@
                         <tbody>
                             @foreach ($tasks as $task)
                                 <tr>
-                                    <td class="text-center">
-                                        {{-- ADMIN/TL/OM --}}
+                                    {{-- <td class="text-center">
+                                        ADMIN/TL/OM
                                         <form id="deleteTaskForm-{{ $task->id }}" class="form-horizontal" action="{{ route('task.destroy',$task) }}" method="POST">
                                             @csrf
                                             @method("DELETE")
                                         </form>
                                         <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="idelete('deleteTaskForm-{{ $task->id }}')"><i class="fas fa-times"></i></button>
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         @if($task->status == "In Progress")
-                                            <span class="text-secondary"><strong>{{ $task->status }}</strong></span>
-                                        @elseif($task->status == "Completed")
                                             <span class="text-success"><strong>{{ $task->status }}</strong></span>
+                                        @elseif($task->status == "Completed")
+                                            <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                         @endif
                                     </td>
                                     <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>

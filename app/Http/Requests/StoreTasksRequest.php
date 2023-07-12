@@ -40,9 +40,9 @@ class StoreTasksRequest extends FormRequest
             'cluster_id.required' => 'Cluster Name is required.',
             'client_id.required' => 'Client Name is required.',
             'agent_id.required' => 'Employee Name is required.',
-            'shift_date.required' => 'Accounting Period is required.',
-            'dashboard_activity_id.required' => 'Accounting Period is required.',
-            'client_activity_id.required' => 'Client Activity Name is required.',
+            'shift_date.required' => 'Shift Date is required.',
+            'dashboard_activity_id.required' => 'Dashboard Activity is required.',
+            'client_activity_id.required' => 'Client Activity is required.',
             'description.required' => 'Description is required.',
         ];
     }

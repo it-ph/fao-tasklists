@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth','web'],],function () {
     // Client Activity Import / Export
     Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
     Route::post('client-activity-import', [ImportController::class, 'importClientActivity'])->name('client-activity-import');
+    Route::resource('client-activities', ClientActivityController::class);
 
     // ADMIN ONLY
     // Resource
@@ -82,7 +83,6 @@ Route::group(['middleware' => ['auth','web'],],function () {
     Route::resource('clients', ClientController::class);
     Route::resource('permissions', PermissionController::class);
     Route::resource('dashboard-activities', DashboardActivityController::class);
-    Route::resource('client-activities', ClientActivityController::class);
     Route::resource('user-clients', UserClientController::class);
     Route::resource('task', TasksController::class);
     Route::resource('task/logs', TaskLogController::class);

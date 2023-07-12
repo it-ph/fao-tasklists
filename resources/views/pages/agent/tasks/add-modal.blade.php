@@ -14,18 +14,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                                    {{-- <select class="form-control select2" name="agent_id" style="width:100%;">
-                                        <option value="">-- Select Employee -- </option>
-                                            @foreach ($permissions as $permission )
-                                                @if($permission)
-                                                    @isset($permission->theuser->employeeprofile)
-                                                        <option value="{{ $permission->theuser->id }}">@isset($permission->theuser->employeeprofile){{ ucwords($permission->theuser->employeeprofile->fullname) }} {{ ucwords($permission->theuser->employeeprofile->last_name) }}@endisset</option>
-                                                    @endisset
-                                                @endif
-                                            @endforeach
-                                    </select> --}}
                                     <input class="form-control" type="hidden" name="agent_id" value="{{ Auth::id() }}">
-                                    <input class="form-control" type="text" disabled name="accountant_name" value="@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset">
+                                    <input class="form-control" type="text" disabled value="@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset">
                                 </div>
                             </div>
                         </div>
@@ -33,7 +23,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" value="">
+                                    <input class="form-control" type="date" name="shift_date" value="{{ old('shift_date') }}">
                                 </div>
                             </div>
                         </div>
@@ -44,14 +34,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="cluster_id" style="width:100%;" disabled>
-                                        <option value="">-- Select Cluster --</option>
-                                            @foreach ($clusters as $cluster )
-                                                @if($cluster)
-                                                    <option value="{{ $cluster->id }}" @if(Auth::user()->thepermisssion->cluster_id == $cluster->id) selected @endif>{{ ucwords($cluster->name) }}</option>
-                                                @endif
-                                            @endforeach
-                                    </select>
+                                    <input class="form-control" type="hidden" name="cluster_id" value="{{ Auth::user()->thepermisssion->cluster_id }}">
+                                    <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->thecluster->name }}">
                                 </div>
                             </div>
                         </div>
@@ -59,14 +43,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_id" class="col-form-label custom-label"><strong>CLIENT NAME:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="client_id" style="width:100%;">
-                                        <option value="">-- Select Client Name -- </option>
-                                            @foreach ($clients as $client )
-                                                @if($client)
-                                                    <option value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
-                                                @endif
-                                            @endforeach
-                                    </select>
+                                    <input class="form-control" type="hidden" name="client_id" value="{{ Auth::user()->thepermisssion->client_id }}">
+                                    <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->theclient->name }}">
                                 </div>
                             </div>
                         </div>
@@ -78,10 +56,12 @@
                                 <div class="form-group">
                                     <label for="dashboard_activity_id" class="col-form-label custom-label"><strong>DASHBOARD ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="dashboard_activity_id" style="width:100%;">
-                                        <option value="">-- Select Dashboard Activity -- </option>
+                                        <option value="" selected disabled>-- Select Dashboard Activity -- </option>
                                             @foreach ($dashboard_activities as $dashboard_activity )
                                                 @if($dashboard_activity)
-                                                    <option value="{{ $dashboard_activity->id }}">{{ ucwords($dashboard_activity->name) }}</option>
+                                                    <option {{ old('dashboard_activity_id') == $dashboard_activity->id ? "selected" : "" }}
+                                                        value="{{ $dashboard_activity->id }}">{{ ucwords($dashboard_activity->name) }}
+                                                    </option>
                                                 @endif
                                             @endforeach
                                     </select>
@@ -93,10 +73,12 @@
                                 <div class="form-group">
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="client_activity_id" style="width:100%;">
-                                        <option value="">-- Select Client Activity -- </option>
-                                            @foreach ($client_activities as $client_activity )
-                                                @if($client_activity)
-                                                    <option value="{{ $client_activity->id }}">{{ ucwords($client_activity->name) }}</option>
+                                        <option value="" selected disabled>-- Select Client Activity -- </option>
+                                            @foreach ($user_client_activities as $user_client_activity )
+                                                @if($user_client_activity)
+                                                    <option {{ old('client_activity_id') == $user_client_activity->id ? "selected" : "" }}
+                                                        value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }}
+                                                    </option>
                                                 @endif
                                             @endforeach
                                     </select>
@@ -110,7 +92,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
-                                    <textarea class="form-control" name="description" placeholder="Type here the description"></textarea>
+                                    <textarea class="form-control" name="description" placeholder="Type the description here">{{ old('description') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -119,22 +101,19 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="status" class="col-form-label custom-label"><strong>STATUS:</strong></label>
                                     <select class="form-control" name="status" disabled>
-                                        <option value="" disabled selected>-- Select Status --</option>
-                                        <option value="In Progress">In Progress</option>
+                                        <option value="" disabled>-- Select Status --</option>
+                                        <option value="In Progress" selected>In Progress</option>
                                         <option value="Completed">Completed</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="start_date" class="col-form-label custom-label"><strong>START TIME:</span></strong></label>
@@ -142,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="end_date" class="col-form-label custom-label"><strong>END TIME:</span></strong></label>
@@ -150,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="actual_handling_time" class="col-form-label custom-label"><strong>ACTUAL HANDLING TIME:</span></strong></label>

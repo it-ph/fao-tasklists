@@ -29,7 +29,7 @@
         {{-- End of Active Users --}}
 
         {{-- End of ADMIN / TL / OM --}}
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bx-task"></i>
                         <span key="t-tasks">Tasks</span>
@@ -38,6 +38,12 @@
                         <li><a href="{{ url('task') }}" key="t-tasks-list">Tasks List</a></li>
                         <li><a href="{{ url('tasks-upload') }}" key="t-upload-tasks">Upload Tasks</a></li>
                     </ul>
+                </li> --}}
+                <li>
+                    <a href="{{ url('task') }}" class="waves-effect">
+                        <i class="bx bx-task"></i>
+                        <span key="t-tasks-list">Task Lists</span>
+                    </a>
                 </li>
 
                 {{-- REPORTS --}}

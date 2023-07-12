@@ -12,7 +12,7 @@
 
     @component('components.breadcrumb')
         @slot('li_1') Tasks @endslot
-        @slot('title') Tasks List @endslot
+        @slot('title') Tasks List - @if(\Request::get('status')) <span>{{ ucwords(\Request::get('status')) }} @else ALL @endif</span>@endslot
     @endcomponent
 
     <div class="row">
@@ -74,9 +74,9 @@
                                     </td>
                                     <td>
                                         @if($task->status == "In Progress")
-                                            <span class="text-secondary"><strong>{{ $task->status }}</strong></span>
-                                        @elseif($task->status == "Completed")
                                             <span class="text-success"><strong>{{ $task->status }}</strong></span>
+                                        @elseif($task->status == "Completed")
+                                            <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                         @endif
                                     </td>
                                     <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
@@ -92,8 +92,12 @@
                                     <td>{{ $task->volume }}</td>
                                     <td>{{ $task->remarks }}</td>
                                 </tr>
-                                @include('pages.agent.tasks.stop-modal')
-                                @include('pages.agent.tasks.edit-modal')
+
+                                {{-- load only if task is In Progress --}}
+                                @if($task->status == "In Progress")
+                                    @include('pages.agent.tasks.stop-modal')
+                                    @include('pages.agent.tasks.edit-modal')
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
