@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ClientActivityResource;
 use App\Http\Resources\ClientActivityCollection;
 use App\Http\Requests\StoreClientActivityRequest;
@@ -32,6 +33,10 @@ class ClientActivityController extends GlobalVariableController
         }
         else
         {
+            if(Auth::user()->isAccountant())
+            {
+                return view('errors.401');
+            }
             return view('pages.admin.client-activities.list');
         }
     }

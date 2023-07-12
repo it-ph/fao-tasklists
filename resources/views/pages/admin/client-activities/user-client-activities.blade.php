@@ -10,8 +10,8 @@
 @section('content')
 
     @component('components.breadcrumb')
-        @slot('li_1') {{ ucwords(\Request::get('employeename')) }}'s Client Activities @endslot
-        @slot('title') {{ ucwords(\Request::get('employeename')) }}'s Client Activities List @endslot
+        @slot('li_1') Client Activities @endslot
+        @slot('title') @if(!Auth::user()->isAccountant()) {{ ucwords(\Request::get('employeename')) }}'s @endif Client Activity List @endslot
     @endcomponent
 
     <div class="row">
@@ -27,8 +27,14 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <a href="{{ url('client-activities') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-chevron-left"></i> Back</a>
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientActivityModal"><i class="fas fa-plus"></i> Create</button>
+                            @if(Auth::user()->isAccountant())
+                                <a href="{{ url('client-activity-upload-template') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
+                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadClientActivityModal"><i class="fas fa-upload"></i> Upload</button>
+                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientActivityModal"><i class="fas fa-plus"></i> Create</button>
+                            @else
+                                <a href="{{ url('client-activities') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-chevron-left"></i> Back</a>
+                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientActivityModal"><i class="fas fa-plus"></i> Create</button>
+                            @endif
                         </div>
                     </div>
 
@@ -63,6 +69,7 @@
         </div> <!-- end col -->
     </div>
 
+    @include('pages.admin.client-activities.upload-modal')
     @include('pages.admin.client-activities.add-modal')
 @endsection
 

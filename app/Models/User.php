@@ -64,6 +64,136 @@ class User extends Authenticatable
     }
 
     /**
+     *  START OF USER PERMISSIONS
+     */
+
+    // accountant
+    public function isAccountant()
+    {
+        $permission = 'accountant';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // admin
+    public function isAdmin()
+    {
+        $permission = 'admin';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                'superadmin',
+                $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Team Leader
+    public function isTeamLeader()
+    {
+        $permission = 'team leader';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                'superadmin',
+                $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Operations Manager
+    public function isOperationsManager()
+    {
+        $permission = 'team leader';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                'superadmin',
+                $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // admin or team leader
+    public function isTeamLeaderOrAdmin()
+    {
+        $permission = 'team leader';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                'superadmin',
+                'admin',
+                $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // admin or operations manager
+    public function isOperationsManagerOrAdmin()
+    {
+        $permission = 'operations manager';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                'superadmin',
+                'admin',
+                $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * END OF USER PERMISSIONS
+     */
+
+
+    /**
      * Generate 6 digits MFA code for the User
      */
     public function generateTwoFactorCode()

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Permission;
 use App\Models\ClientActivity;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
@@ -22,6 +23,8 @@ class ClientActivityImport implements ToModel, WithHeadingRow,WithValidation,Ski
         array_push($this->has_error, "Something went wrong, Please check all entries that you have encoded.");
         $user = User::where('email', $row['email_address'])->select('id')->first();
 
+        // check if haspermission
+
         $this->row_number += 1;
         if($user)
         {
@@ -33,14 +36,20 @@ class ClientActivityImport implements ToModel, WithHeadingRow,WithValidation,Ski
             array_push($this->has_error, " Check Cell B".$this->row_number.", "."Email Address: ".$row['email_address']." does not exist.");
         }
 
-        $client_activity = $row['client_activity'];
+        // check if isAccountant() - must only upload own client activities
+        $is_accountant_with_invalid_email = Auth::user()->isAccountant() && Auth::user()->email <> $row['email_address'] ? true : false;
+        if($is_accountant_with_invalid_email)
+        {
+            $ctr_error += 1;
+            array_push($this->has_error, " Check Cell B".$this->row_number.", "."Email Address: ".$row['email_address']." does not belong to you.");
+        }
 
         if($ctr_error <= 0)
         {
             ClientActivity::updateOrCreate(
                 [
                     'agent_id' => $user_id,
-                    'name' => $client_activity
+                    'name' => $row['client_activity']
                 ]
             );
         }

@@ -73,9 +73,9 @@ Route::group(['middleware' => ['auth','web'],],function () {
     Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
 
     // Client Activity Import / Export
+    Route::resource('client-activities', ClientActivityController::class);
     Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
     Route::post('client-activity-import', [ImportController::class, 'importClientActivity'])->name('client-activity-import');
-    Route::resource('client-activities', ClientActivityController::class);
 
     // ADMIN ONLY
     // Resource
