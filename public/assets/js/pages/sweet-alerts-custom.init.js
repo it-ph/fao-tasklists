@@ -1,0 +1,119 @@
+function store(form) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, save it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        cancelButtonClass: 'btn btn-danger ms-2 mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    }).then(function(result) {
+        if (result.value) {
+            Swal.fire({
+                title: 'Thank you!',
+                icon: 'success',
+                allowOutsideClick: false
+            });
+            $("#" + form).submit();
+        }
+    });
+}
+
+function update(form) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, update it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        cancelButtonClass: 'btn btn-danger ms-2 mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    }).then(function(result) {
+        if (result.value) {
+            Swal.fire({
+                title: 'Thank you!',
+                icon: 'success',
+                allowOutsideClick: false
+            });
+            $("#" + form).submit();
+        }
+    });
+}
+
+function idelete(form) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        cancelButtonClass: 'btn btn-danger ms-2 mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    }).then(function(result) {
+        if (result.value) {
+            Swal.fire({
+                title: 'Thank you!',
+                icon: 'success',
+                allowOutsideClick: false
+            });
+            $("#" + form).submit();
+        }
+    });
+}
+
+function start(form) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, start it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        cancelButtonClass: 'btn btn-danger ms-2 mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    }).then(function(result) {
+        if (result.value) {
+            Swal.fire({
+                title: 'Thank you!',
+                icon: 'success',
+                allowOutsideClick: false
+            });
+            $("#" + form).submit();
+        }
+    });
+}
+
+function stop(form) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, stop it!',
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        cancelButtonClass: 'btn btn-danger ms-2 mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    }).then(function(result) {
+        if (result.value) {
+            Swal.fire({
+                title: 'Thank you!',
+                icon: 'success',
+                allowOutsideClick: false
+            });
+            $("#" + form).submit();
+        }
+    });
+}

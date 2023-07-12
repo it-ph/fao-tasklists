@@ -1,0 +1,250 @@
+.navbar-header {
+    background-color: #00599D !important;
+}
+
+.header-item.show {
+    background-color: #00599D !important;
+}
+
+.menu-title {
+    color: #fff !important;
+}
+
+.bg-primary {
+    background-color: #00599D !important;
+}
+
+.bg-primary.bg-soft {
+    background-color: rgba(0, 89, 157) !important;
+}
+
+.text-primary {
+    color: #00599D !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #00599D !important;
+    border-color: #00599D !important;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 89, 157, 0.4);
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #00599D !important;
+    border-color: #00599D !important;
+    transform: translateY(-3px);
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #F46A6A !important;
+    border-color: #F46A6A !important;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(244, 106, 106, 0.4);
+}
+
+.btn-danger:hover {
+    color: #fff;
+    background-color: #F46A6A !important;
+    border-color: #F46A6A !important;
+    transform: translateY(-3px);
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #F1B44C !important;
+    border-color: #F1B44C !important;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(241, 180, 76, 0.4);
+}
+
+.btn-warning:hover {
+    color: #fff;
+    background-color: #F1B44C !important;
+    border-color: #F1B44C !important;
+    transform: translateY(-3px);
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #34C38F !important;
+    border-color: #34C38F !important;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(52, 195, 143, 0.4);
+}
+
+.btn-success:hover {
+    color: #fff;
+    background-color: #34C38F !important;
+    border-color: #34C38F !important;
+    transform: translateY(-3px);
+}
+
+
+/* page title */
+
+.page-title {
+    color: #4B5A64;
+}
+
+.modal-confirm {
+    color: #4B5A64;
+}
+
+.custom-label {
+    color: #4B5A64 !important;
+}
+
+
+/* modal */
+
+.modal-header {
+    background: #00599D;
+}
+
+.modal-title {
+    color: #fff !important;
+}
+
+.modal-close {
+    color: #fff !important;
+}
+
+
+/* title - label */
+
+.title {
+    font-weight: bold;
+    color: #fff !important;
+    padding: 8px;
+    background-color: #00599D;
+}
+
+
+/* card border */
+
+.top-border {
+    border-top: 3px solid #D2D6DE !important;
+    border-radius: 4px !important;
+}
+
+
+/* required indicator */
+
+.important {
+    font-weight: bold;
+    color: red;
+}
+
+
+/* table */
+
+.table th {
+    background-color: #00599D;
+    color: #fff !important;
+}
+
+
+/* datatatble filter */
+
+
+/* div.dataTables_filter label {
+    margin-left: 8px !important;
+} */
+
+
+/* pagination links */
+
+.page-item.active .page-link {
+    background-color: #00599D;
+    border-color: #00599D;
+}
+
+.page-link {
+    color: #00599D;
+}
+
+
+/* copy button */
+
+button.buttons-copy {
+    background-color: #00599D;
+    color: #fff;
+    border-color: #00599D;
+}
+
+button.buttons-copy:hover {
+    background-color: #00599D !important;
+    border-color: #00599D !important;
+}
+
+
+/* excel button */
+
+button.buttons-excel {
+    background-color: green;
+    color: #fff;
+    border-color: green;
+}
+
+button.buttons-excel:hover {
+    background-color: green !important;
+    border-color: green !important;
+}
+
+
+/* pdf button */
+
+button.buttons-pdf {
+    background-color: #D33333;
+    color: #fff;
+    border-color: #D33333;
+}
+
+button.buttons-pdf:hover {
+    background-color: #D33333 !important;
+    border-color: #D33333 !important;
+}
+
+.dataTables_scrollBody {
+    margin-bottom: 20px !important;
+}
+
+
+/* collection button */
+
+
+/* button.buttons-collection {
+    background-color: #F1B44C;
+    color: #fff;
+    border-color: #F1B44C;
+}
+
+button.buttons-collection:hover {
+    background-color: #F1B44C !important;
+    border-color: #F1B44C !important;
+} */
+
+.dataTables_scrollBody {
+    margin-bottom: 20px !important;
+}
+
+
+/* fix for row containing a button dropdown causes vertical scrolling when scrollX is enabled */
+
+div.dataTables_scrollBody.dropdown-visible {
+    overflow: visible !important;
+}
+
+.table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
+    background-color: #00599D !important;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before {
+    background-color: #D33333 !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #00599D !important;
+    color: #fff;
+}

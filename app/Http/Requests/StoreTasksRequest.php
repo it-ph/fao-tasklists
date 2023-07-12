@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreTasksRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'cluster_id' => ['required'],
+            'client_id' => ['required'],
+            'agent_id' => ['required'],
+            'shift_date' => ['required'],
+            'dashboard_activity_id' => ['required'],
+            'client_activity_id' => ['required'],
+            'description' => ['required'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'cluster_id.required' => 'Cluster Name is required.',
+            'client_id.required' => 'Client Name is required.',
+            'agent_id.required' => 'Employee Name is required.',
+            'shift_date.required' => 'Accounting Period is required.',
+            'dashboard_activity_id.required' => 'Accounting Period is required.',
+            'client_activity_id.required' => 'Client Activity Name is required.',
+            'description.required' => 'Description is required.',
+        ];
+    }
+}
