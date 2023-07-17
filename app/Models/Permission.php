@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +16,11 @@ class Permission extends Model
     protected $table = 'permissions';
     protected $guarded = [];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    public function scopePermission($query)
+    {
+        $query->where('tl_id',Auth::id())->orwhere('om_id',Auth::id());
+    }
 
     public function theuser()
     {

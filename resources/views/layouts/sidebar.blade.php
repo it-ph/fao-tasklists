@@ -10,7 +10,6 @@
                 {{-- MAIN NAVIGATION --}}
                 <li class="menu-title" key="t-menu">Main Navigation</li>
 
-
         {{-- Start of Active Users --}}
                 <li>
                     <a href="{{ url('home') }}" class="waves-effect">
@@ -29,11 +28,20 @@
         {{-- End of Active Users --}}
 
         {{-- Start of ADMIN / TL / OM --}}
-            @if(!Auth::user()->isAccountant())
+            @if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin())
                 <li>
                     <a href="{{ url('task') }}" class="waves-effect">
                         <i class="bx bx-task"></i>
                         <span key="t-tasks-list">Task Lists</span>
+                    </a>
+                </li>
+
+                {{--REPORTS --}}
+                <li class="menu-title" key="t-menu">Reports</li>
+                <li>
+                    <a href="{{ url('reports') }}" class="waves-effect">
+                        <i class="bx bxs-report"></i>
+                        <span key="t-reports">Reports</span>
                     </a>
                 </li>
 
@@ -72,7 +80,7 @@
                 <li>
                     <a href="{{ url('client-activities') }}@if(Auth::user()->isAccountant())/?user_id={{ Auth::user()->id }}&employeename=@isset(Auth::user()->employeeprofile){{ strtolower(Auth::user()->employeeprofile->fullname) }} {{ strtolower(Auth::user()->employeeprofile->last_name) }}@endisset @endif" class="waves-effect">
                         <i class="bx bx-list-ul" @if(\Request::has('employeename')) style="color:#fff" @endif></i>
-                        <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(!Auth::user()->isAccountant()) Users' @endif Client Activities</span>
+                        <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin()) Users' @endif Client Activities</span>
                     </a>
                 </li>
 

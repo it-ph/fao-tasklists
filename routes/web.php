@@ -8,6 +8,7 @@ use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ImportController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ClusterController;
 use App\Http\Controllers\TaskLogController;
 use App\Http\Controllers\PermissionController;
@@ -72,6 +73,10 @@ Route::group(['middleware' => ['auth','web'],],function () {
     Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
     Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
 
+    // Report
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('export', [ExportController::class, 'export'])->name('export');
+
     // Client Activity Import / Export
     Route::resource('client-activities', ClientActivityController::class);
     Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
@@ -91,21 +96,6 @@ Route::group(['middleware' => ['auth','web'],],function () {
  * END OF AUTHORIZE & ACTIVE USERS
  *
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //Language Translation
 Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);

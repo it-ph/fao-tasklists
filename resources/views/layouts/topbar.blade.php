@@ -3,16 +3,6 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                {{-- <a href="{{ url('home') }}" class="logo logo-dark">
-                    <span class="logo-sm">
-                        <img src="{{ asset('images/logo.png') }}" alt="" height="23">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ asset('images/logo.png') }}" alt="" height="23">
-                        <span style="color:#fff; font-size: 14px">FAO TASKLISTS</span>
-                    </span>
-                </a> --}}
-
                 <a href="{{ url('home') }}" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/logo-white.png') }}" alt="" height="23">
@@ -30,13 +20,13 @@
         </div>
 
         <div class="d-flex">
-            <div class="dropdown d-none d-lg-inline-block ms-1">
+            {{-- <div class="dropdown d-none d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
                     <i class="bx bx-fullscreen text-white"></i>
                 </button>
-            </div>
+            </div> --}}
 
-            <div class="dropdown d-inline-block">
+            {{-- <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada text-white"></i>
@@ -55,21 +45,6 @@
                         <a href="" class="text-reset notification-item">
                             <div class="media">
                                 <div class="avatar-xs me-3">
-                                    <span class="avatar-title bg-secondary rounded-circle font-size-16">
-                                        <i class="bx bx-task"></i>
-                                    </span>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1" key="t-your-order">There are <strong>23</strong></h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">Not Started Tasks</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="" class="text-reset notification-item">
-                            <div class="media">
-                                <div class="avatar-xs me-3">
                                     <span class="avatar-title bg-warning rounded-circle font-size-16">
                                         <i class="bx bx-task"></i>
                                     </span>
@@ -77,7 +52,7 @@
                                 <div class="media-body">
                                     <h6 class="mt-0 mb-1" key="t-your-order">There are <strong>23</strong></h6>
                                     <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">In Progress - Without Issue</p>
+                                        <p class="mb-1" key="t-grammer">In Progress</p>
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +67,7 @@
                                 <div class="media-body">
                                     <h6 class="mt-0 mb-1" key="t-shipped">There are <strong>23</strong></h6>
                                     <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">In Progress - With Issue</p>
+                                        <p class="mb-1" key="t-grammer">Completed</p>
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +79,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
@@ -121,6 +96,7 @@
                         <div class="text-center">
                             <h5 class="name font-weight-bold mb-1">@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset</h5>
                             <p class="email text-muted mb-2">{{ Auth::user()->email }}</p>
+                            <p class="email text-muted mb-1">{{ ucwords(Auth::user()->thepermisssion->permission) }}</p>
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>

@@ -51,7 +51,7 @@
                                     <td>@isset($permission->theuser->employeeprofile) {{ strtolower($permission->theuser->email) }} @endisset</td>
                                     <td>@isset($permission->thecluster) {{ $permission->thecluster->name }} @endisset</td>
                                     <td>@isset($permission->theclient) {{ $permission->theclient->name }} @endisset</td>
-                                    <td>@isset($permission->thetl->theuser->employeeprofile) ? {{ $permission->thetl->theuser->employeeprofile->fullname }} {{ $permission->thetl->theuser->employeeprofile->last_name }} @endisset</td>
+                                    <td>@isset($permission->thetl->theuser->employeeprofile) {{ $permission->thetl->theuser->employeeprofile->fullname }} {{ $permission->thetl->theuser->employeeprofile->last_name }} @endisset</td>
                                     <td>@isset($permission->theom->theuser->employeeprofile) {{ $permission->theom->theuser->employeeprofile->fullname }} {{ $permission->theom->theuser->employeeprofile->last_name }} @endisset</td>
                                     <td>{{ ucwords($permission->permission) }}</td>
                                     <td class="text-center">

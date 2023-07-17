@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Tasks List @endsection
+@section('title') Task Lists @endsection
 
 @section('css')
     <!-- DataTables -->
@@ -85,8 +85,8 @@
                                     <td>{{ $task->thedashboardactivity->name }}</td>
                                     <td>{{ $task->theclientactivity->name }}</td>
                                     <td>{{ $task->description }}</td>
-                                    <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
-                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }}@endisset</td>
+                                    <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
+                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }}@endisset</td>
                                     <td>{{ $task->actual_handling_time }}</td>
                                     <td>{{ $task->volume }}</td>
                                     <td>{{ $task->remarks }}</td>
@@ -127,7 +127,7 @@
                     },
                     "pageLength": 10,
                     "pagingType": "full_numbers",
-                    "order": [2, "desc"],
+                    "order": [8, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                     // orderCellsTop: true,
                     // fixedHeader: true,

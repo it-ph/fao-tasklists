@@ -2,13 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Exports\TasksReportExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UploadTasksTemplateExport;
 use App\Exports\UploadClientActivityTemplateExport;
 
 class ExportController extends Controller
 {
+    public function export(Request $request)
+    {
+        $date_range_selected = explode("-", $request['daterange']);
+
+        $request['date_from'] = trim($date_range_selected[0]);
+        $request['date_to'] = trim($date_range_selected[1]);
+
+        $this->validate($request,
+        [
+            'daterange' => 'required',
+            'date_from' => 'required',
+            'date_to' => 'required',
+
+        ],
+        [   'daterange.required'=>'Date Range is Required!',
+            'date_from.required'=>'Date From is Required!',
+            'date_to.required' => 'Date To is Required!'
+        ]);
+
+        $date_from =  Carbon::parse($request['date_from'])->format('Y-m-d');
+        $date_to =  Carbon::parse($request['date_to'])->format('Y-m-d');
+
+        // for update  tl/om must only view the task of accountans under them - where('tl_id', Auth::id())->orwhere('om_id', Auth::id())
+        $tasks = Task::query()
+                    ->whereRaw(
+                        "created_at >= ? AND created_at <= ?",
+                        [
+                            $date_from." 00:00:00",
+                            $date_to." 23:59:59"
+                        ]
+                    )
+                    ->orderBy('start_date','DESC')
+                    ->get();
+
+        if($date_from == $date_to )
+        {
+            $filename = "TASKLISTS_REPORT_". $date_from .".xlsx";
+        }else
+        {
+            $filename = "TASKLISTS_REPORT_". $date_from .'_to_'.$date_to.".xlsx";
+        }
+
+        return Excel::download(new TasksReportExport($tasks), $filename);
+    }
+
     public function uploadTasksTemplate()
     {
         return Excel::download(new UploadTasksTemplateExport, 'FAO-tasklists-upload-template.xlsx');

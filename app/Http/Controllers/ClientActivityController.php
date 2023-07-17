@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
 use Illuminate\Support\Facades\Auth;
@@ -29,15 +30,52 @@ class ClientActivityController extends GlobalVariableController
         if($request['user_id'])
         {
             $client_activities = new ClientActivityCollection(ClientActivity::where('agent_id', $request['user_id'])->get());
+
             return view('pages.admin.client-activities.user-client-activities', compact('client_activities'));
         }
         else
         {
+            // lists of users based on authenticated tl or om
             if(Auth::user()->isAccountant())
             {
                 return view('errors.401');
             }
-            return view('pages.admin.client-activities.list');
+            elseif(Auth::user()->isAdmin())
+            {
+
+                $permissions = Permission::with([
+                    'theuser:id,email',
+                    'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+                    'thecluster:id,name',
+                    'theclient:id,name',
+                    'thetl.theuser','thetl.theuser.employeeprofile',
+                    'theom.theuser','theom.theuser.employeeprofile',
+                    'theuser.theclientactivities:agent_id'
+                ])
+                ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
+                ->where('permission','<>','superadmin')
+                ->get();
+            }
+            else
+            {
+                $permissions = Permission::with([
+                    'theuser:id,email',
+                    'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+                    'thecluster:id,name',
+                    'theclient:id,name',
+                    'thetl.theuser','thetl.theuser.employeeprofile',
+                    'theom.theuser','theom.theuser.employeeprofile',
+                    'theuser.theclientactivities:agent_id'
+                ])
+                ->permission()
+                ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
+                // ->where('tl_id',Auth::id())
+                // ->orwhere('om_id',Auth::id())
+                ->where('permission','<>','superadmin')
+                ->get();
+            }
+
+            return view('pages.admin.client-activities.list', compact('permissions'));
         }
     }
 

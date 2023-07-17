@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Tasks List @endsection
+@section('title') Task Lists @endsection
 
 @section('css')
     <!-- DataTables -->
@@ -43,8 +43,8 @@
                     <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Action</th>
                                 <th>Status</th>
+                                <th>Action</th>
                                 <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Cluster</th>
@@ -62,6 +62,13 @@
                         <tbody>
                             @foreach ($tasks as $task)
                                 <tr>
+                                    <td>
+                                        @if($task->status == "In Progress")
+                                            <span class="text-success"><strong>{{ $task->status }}</strong></span>
+                                        @elseif($task->status == "Completed")
+                                            <span class="text-primary"><strong>{{ $task->status }}</strong></span>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         {{-- Accessible by assigned AGENT only --}}
                                         @if($task->agent_id == Auth::id())
@@ -70,13 +77,6 @@
                                             <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
                                                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#stopTaskModal-{{ $task->id }}"><i class="fas fa-stop"></i></button>
                                             @endif
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($task->status == "In Progress")
-                                            <span class="text-success"><strong>{{ $task->status }}</strong></span>
-                                        @elseif($task->status == "Completed")
-                                            <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                         @endif
                                     </td>
                                     <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
@@ -133,7 +133,7 @@
                     },
                     "pageLength": 10,
                     "pagingType": "full_numbers",
-                    "order": [2, "desc"],
+                    "order": [9, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                     // orderCellsTop: true,
                     // fixedHeader: true,

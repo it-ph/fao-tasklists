@@ -70,7 +70,6 @@ class TasksController extends GlobalVariableController
     // ADMIN, TL, & OM ACCESS
     public function index(Request $request)
     {
-        // $tasks = new TaskCollection(Task::with(['thecluster','theclient','theagent.employeeprofile','thedashboardactivity','theclientactivity','thetasklogs'])->get());
         $status = $request['status'];
 
         if(!in_array(strtolower($status),['','all','in progress','completed']))
@@ -78,6 +77,7 @@ class TasksController extends GlobalVariableController
             return view('errors.404');
         }
 
+        // for update  tl/om must only view the task of accountans under them - where('tl_id', Auth::id())->orwhere('om_id', Auth::id())
         if(in_array($status,(['','all'])))
         {
             $tasks = Task::query()
@@ -126,7 +126,7 @@ class TasksController extends GlobalVariableController
     public function store(StoreTasksRequest $request)
     {
         $request['created_by'] = Auth::id();
-        $request['start_date'] = \Carbon\Carbon::now();
+        $request['start_date'] = Carbon::now();
         $task = new TaskResource(Task::create($request->all()));
         return redirect()->back()->with('with_success', "Task created successfully!");
     }
@@ -193,14 +193,25 @@ class TasksController extends GlobalVariableController
     // Stop Task
     public function stopTask(Request $request, $taskId)
     {
+        $this->validate($request,
+            [
+                'volume' => 'required',
+                'remarks' => 'required',
+            ],
+            $message = array(
+                'volume.required' => 'Volume is required!',
+                'remarks.required' => 'Remarks is required!',
+            )
+        );
+
         $task = Task::findOrFail($taskId);
         $status = "Completed";
         $actual_handling_time = "";
         $volume = $request['volume'];
         $remarks = $request['remarks'];
 
-        $start = \Carbon\Carbon::parse($task->start_date);
-        $now = \Carbon\Carbon::now();
+        $start = Carbon::parse($task->start_date);
+        $now = Carbon::now();
         $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
 
         $task->update([

@@ -14,8 +14,8 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="volume" class="col-form-label custom-label"><strong>VOLUME:</span></strong></label>
-                                    <input type="text" class="form-control" name="volume" placeholder="Enter Volume">
+                                    <label for="volume" class="col-form-label custom-label"><strong>VOLUME:<span class="important">*</span></strong></label>
+                                    <input type="text" class="form-control" name="volume" value="{{ old('volume') }}" placeholder="Enter Volume">
                                 </div>
                             </div>
                         </div>
@@ -25,8 +25,8 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:</span></strong></label>
-                                    <textarea class="form-control" name="remarks" placeholder="Enter remarks here."></textarea>
+                                    <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">*</span></strong></label>
+                                    <textarea class="form-control" name="remarks" placeholder="Enter remarks here.">{{ old('remarks') }}</textarea>
                                 </div>
                             </div>
                         </div>
