@@ -63,6 +63,11 @@ class User extends Authenticatable
         return $this->hasMany(ClientActivity::class, 'agent_id');
     }
 
+    public function thetasks()
+    {
+        return $this->hasMany(Task::class, 'agent_id');
+    }
+
     /**
      *  START OF USER PERMISSIONS
      */

@@ -11,6 +11,7 @@ class Task extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $connection = 'mysql';
     protected $table = 'tasks';
     protected $guarded = [];
     protected $dates = ['go_live_date', 'status_date', 'start_date', 'end_date', 'created_at', 'updated_at', 'deleted_at'];
