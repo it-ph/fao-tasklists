@@ -68,6 +68,15 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'agent_id');
     }
 
+    public function isStatusActive()
+    {
+        if($this->employment_status  == 'active')
+        {
+            return true;
+        }
+        return false;
+    }
+
     /**
      *  START OF USER PERMISSIONS
      */
@@ -181,6 +190,29 @@ class User extends Authenticatable
                 'superadmin',
                 'admin',
                 $permission
+            ])
+            ->where('user_id',$this->id)
+            ->first();
+
+        if($hasPermission)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // admin, team leader or operations manager
+    public function isTLOMOrAdmin()
+    {
+        $tl = 'team leader';
+        $om = 'operations manager';
+        $hasPermission = Permission::query()
+            ->whereIn('permission',[
+                'superadmin',
+                'admin',
+                $tl,
+                $om
             ])
             ->where('user_id',$this->id)
             ->first();

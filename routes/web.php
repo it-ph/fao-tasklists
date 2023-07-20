@@ -56,41 +56,51 @@ Route::get('/clear-cache', function() {
  *  START OF AUTHORIZE & ACTIVE USERS
  */
 // change 2FA - twofactor >> SSO - MsGraphAuthenticated >> VerifyAccess
-Route::group(['middleware' => ['auth','web'],],function () {
+Route::group(['middleware' => ['auth','web','active.user'],],function () {
 
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [HomeController::class, 'index'])->name('index');
-
-    // ADMIN, TL, & OM
-    // Task Import / Export
-    Route::get('tasks-upload', [TasksController::class, 'upload'])->name('upload');
-    Route::get('tasks-upload-task-template', [ExportController::class, 'uploadTasksTemplate'])->name('upload.tasks.template');
-    Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
-
-    // Agent Task: Start / Update / Stop
-    Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
-    Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
-    Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
-    Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
-
-    // Report
-    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::post('export', [ExportController::class, 'export'])->name('export');
 
     // Client Activity Import / Export
     Route::resource('client-activities', ClientActivityController::class);
     Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
     Route::post('client-activity-import', [ImportController::class, 'importClientActivity'])->name('client-activity-import');
 
-    // ADMIN ONLY
-    // Resource
-    Route::resource('clusters', ClusterController::class);
-    Route::resource('clients', ClientController::class);
-    Route::resource('permissions', PermissionController::class);
-    Route::resource('dashboard-activities', DashboardActivityController::class);
-    Route::resource('user-clients', UserClientController::class);
-    Route::resource('task', TasksController::class);
-    Route::resource('task/logs', TaskLogController::class);
+    /**
+     * START OF ADMIN, TL, OM
+     */
+
+    Route::group(['middleware' => ['tlom.admin'],], function ()
+        {
+            // Task Import / Export - removed
+            Route::get('tasks-upload', [TasksController::class, 'upload'])->name('upload');
+            Route::get('tasks-upload-task-template', [ExportController::class, 'uploadTasksTemplate'])->name('upload.tasks.template');
+            Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
+
+            // Agent Task: Start / Update / Stop
+            Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
+            Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
+            Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
+            Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
+
+            // Report
+            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+            Route::post('export', [ExportController::class, 'export'])->name('export');
+
+            // Resource
+            Route::resource('clusters', ClusterController::class);
+            Route::resource('clients', ClientController::class);
+            Route::resource('permissions', PermissionController::class);
+            Route::resource('dashboard-activities', DashboardActivityController::class);
+            Route::resource('user-clients', UserClientController::class);
+            Route::resource('task', TasksController::class);
+            Route::resource('task/logs', TaskLogController::class);
+
+        }
+    );
+    /**
+     * END OF ADMIN, TL, OM
+     */
 });
 /**
  * END OF AUTHORIZE & ACTIVE USERS

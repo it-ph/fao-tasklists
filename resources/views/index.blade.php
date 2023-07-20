@@ -20,53 +20,30 @@
                 <div class="bg-primary bg-soft">
                     <div class="row">
                         <div class="col-12">
-                            <div class="text-white p-3">
-                                <h5 class="text-white">Welcome Back to FAO Tasklists!</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body pt-1">
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <div class="pt-4">
-                                <h3 class="text-truncate">@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset</h3>
-                                <p class="text-muted mb-0 text-truncate">{{ ucwords(Auth::user()->thepermisssion->permission) }}</p>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-7">
-                            <div class="pt-4">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <h3>{{ $in_progress }}</h3>
-                                        <p class="text-muted mb-0">In Progress</p>
-                                    </div>
-                                    <div class="col-6">
-                                        <h3>{{ $completed }}</h3>
-                                        <p class="text-muted mb-0">Completed</p>
-                                    </div>
-                                </div>
+                            <div class="text-white m-3">
+                                <h5 class="text-white">Welcome Back, @isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset!</h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {{-- <div class="col-xl-8">
+        <div class="col-xl-12">
             <div class="row">
                 <div class="col-md-4">
                     <div class="card mini-stats-wid">
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="text-muted fw-medium">Orders</p>
-                                    <h4 class="mb-0">1,235</h4>
+                                    <a href="{{ route("my-task.index", ['status' => "In Progress"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View In Progress Tasks">
+                                        <p class="text-muted fw-medium">In Progress</p>
+                                        <h4 class="mb-0">{{ number_format($in_progress) }}</h4>
+                                    </a>
                                 </div>
 
-                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
-                                    <span class="avatar-title">
-                                        <i class="bx bx-copy-alt font-size-24"></i>
+                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-success">
+                                        <i class="bx bx-task font-size-24"></i>
                                     </span>
                                 </div>
                             </div>
@@ -78,13 +55,15 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="text-muted fw-medium">Revenue</p>
-                                    <h4 class="mb-0">$35, 723</h4>
+                                    <a href="{{ route("my-task.index", ['status' => "Completed"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Completed Tasks">
+                                        <p class="text-muted fw-medium">Completed</p>
+                                        <h4 class="mb-0">{{ number_format($completed) }}</h4>
+                                    </a>
                                 </div>
 
                                 <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
                                     <span class="avatar-title rounded-circle bg-primary">
-                                        <i class="bx bx-archive-in font-size-24"></i>
+                                        <i class="bx bx-task font-size-24"></i>
                                     </span>
                                 </div>
                             </div>
@@ -96,13 +75,15 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <p class="text-muted fw-medium">Average Price</p>
-                                    <h4 class="mb-0">$16.2</h4>
+                                    <a href="{{ route("my-task.index") }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View All Tasks">
+                                        <p class="text-muted fw-medium">Total Tasks</p>
+                                        <h4 class="mb-0">{{ number_format($in_progress + $completed) }}</h4>
+                                    </a>
                                 </div>
 
                                 <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                                    <span class="avatar-title rounded-circle bg-primary">
-                                        <i class="bx bx-purchase-tag-alt font-size-24"></i>
+                                    <span class="avatar-title rounded-circle bg-secondary">
+                                        <i class="bx bx-task font-size-24"></i>
                                     </span>
                                 </div>
                             </div>
@@ -111,7 +92,7 @@
                 </div>
             </div>
             <!-- end row -->
-        </div> --}}
+        </div>
     </div>
     <!-- end row -->
 
