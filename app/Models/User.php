@@ -70,7 +70,11 @@ class User extends Authenticatable
 
     public function isStatusActive()
     {
-        if($this->employment_status  == 'active')
+        $hasPermission = Permission::query()
+            ->where('user_id', $this->id)
+            ->first();
+
+        if($this->employment_status  == 'active' && $hasPermission)
         {
             return true;
         }

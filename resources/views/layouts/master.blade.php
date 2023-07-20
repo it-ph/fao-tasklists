@@ -47,6 +47,32 @@
 
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
+
+    <script>
+        $('#log-out').click(function(){
+            Swal.fire({
+                title: 'Sign Out?',
+                text: "Are you sure you want to sign-out?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                confirmButtonClass: 'btn btn-primary mt-2',
+                cancelButtonClass: 'btn btn-danger ms-2 mt-2',
+                buttonsStyling: false,
+                allowOutsideClick: false
+            }).then(function(result) {
+                if (result.value) {
+                    Swal.fire({
+                        title: 'Thank you!',
+                        icon: 'success',
+                        allowOutsideClick: false
+                    });
+                    window.location.href = "{{ URL::to('logout') }}"
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

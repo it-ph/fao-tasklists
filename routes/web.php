@@ -11,6 +11,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ClusterController;
 use App\Http\Controllers\TaskLogController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserClientController;
 use App\Http\Controllers\ClientActivityController;
@@ -29,10 +30,10 @@ Route::get('/', function () {
 // Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
 
 // SSO
-// Route::group(['middleware' => ['web', 'guest']], function(){
-//     Route::get('login', 'Auth\AuthController@login')->name('login');
-    // Route::get('connect', 'Auth\AuthController@connect')->name('connect');
-// });
+Route::group(['middleware' => ['web', 'guest']], function(){
+    Route::get('login', [AuthController::class, 'login'])->name('login');
+    Route::get('connect', [AuthController::class, 'connect'])->name('connect');
+});
 
 // Route::group(['middleware' => ['web', 'MsGraphAuthenticated']], function(){
 //     Route::get('/home', 'HomeController@index')->name('home');
@@ -56,7 +57,7 @@ Route::get('/clear-cache', function() {
  *  START OF AUTHORIZE & ACTIVE USERS
  */
 // change 2FA - twofactor >> SSO - MsGraphAuthenticated >> VerifyAccess
-Route::group(['middleware' => ['auth','web','active.user'],],function () {
+Route::group(['middleware' => ['verify.access','web','active.user'],],function () {
 
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [HomeController::class, 'index'])->name('index');

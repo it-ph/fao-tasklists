@@ -58,9 +58,10 @@
                             </div>
                             <div class="card-body pt-3">
                                 <div class="p-2">
-                                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                                    {{-- <form class="form-horizontal" method="POST" action="{{ route('login') }}"> --}}
+                                    <form class="form-horizontal" method="GET" action="{{ route('connect') }}">
                                         @csrf
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <label for="username" class="form-label">Email Address</label>
                                             <input name="email" type="email"
                                                 class="form-control @error('email') is-invalid @enderror"
@@ -95,15 +96,11 @@
                                             <label class="form-check-label" for="remember">
                                                 Remember me
                                             </label>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="mt-3 d-grid">
-                                            <button class="btn btn-primary btn-block w-100 text-uppercase" type="submit">SIGN IN</button>
+                                            <button class="btn btn-primary btn-block w-100 text-uppercase" type="submit">SIGN IN (SINGLE SIGN-ON)</button>
                                         </div>
-
-                                        {{-- <div class="mt-3 d-grid">
-                                            <a href="{{ route('connect') }}" class="btn btn-primary btn-block w-100 text-uppercase"> SIGN IN (SINGLE SIGN-ON)</a>
-                                        </div> --}}
                                     </form>
                                 </div>
 
