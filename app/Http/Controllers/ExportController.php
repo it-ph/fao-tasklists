@@ -36,6 +36,14 @@ class ExportController extends Controller
 
         // for update  tl/om must only view the task of accountans under them - where('tl_id', Auth::id())->orwhere('om_id', Auth::id())
         $tasks = Task::query()
+                    ->with([
+                        'thecluster:id,name',
+                        'theclient:id,name',
+                        'theagent:id,email',
+                        'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
+                        'thedashboardactivity:id,name',
+                        'theclientactivity:id,name'
+                    ])
                     ->whereRaw(
                         "created_at >= ? AND created_at <= ?",
                         [
