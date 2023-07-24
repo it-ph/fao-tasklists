@@ -67,10 +67,8 @@ class ClientActivityController extends GlobalVariableController
                     'theom.theuser','theom.theuser.employeeprofile',
                     'theuser.theclientactivities:agent_id'
                 ])
-                ->permission()
+                // ->permission() - filter by tl_id, om_id
                 ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
-                // ->where('tl_id',Auth::id())
-                // ->orwhere('om_id',Auth::id())
                 ->where('permission','<>','superadmin')
                 ->get();
             }

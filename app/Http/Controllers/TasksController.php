@@ -36,6 +36,7 @@ class TasksController extends GlobalVariableController
                 ->with([
                     'thecluster:id,name',
                     'theclient:id,name',
+                    'theagent:id,email',
                     'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
                     'thedashboardactivity:id,name',
                     'theclientactivity:id,name'
@@ -49,6 +50,7 @@ class TasksController extends GlobalVariableController
                 ->with([
                     'thecluster:id,name',
                     'theclient:id,name',
+                    'theagent:id,email',
                     'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
                     'thedashboardactivity:id,name',
                     'theclientactivity:id,name'
@@ -59,8 +61,8 @@ class TasksController extends GlobalVariableController
         }
 
         $user_client_activities = ClientActivity::query()
-            ->where('agent_id', Auth::id())
             ->select('id','agent_id','name')
+            ->where('agent_id', Auth::id())
             ->orderBy('name', 'ASC')
             ->get();
 
@@ -84,6 +86,7 @@ class TasksController extends GlobalVariableController
                 ->with([
                     'thecluster:id,name',
                     'theclient:id,name',
+                    'theagent:id,email',
                     'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
                     'thedashboardactivity:id,name',
                     'theclientactivity:id,name'
@@ -96,6 +99,7 @@ class TasksController extends GlobalVariableController
                 ->with([
                     'thecluster:id,name',
                     'theclient:id,name',
+                    'theagent:id,email',
                     'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
                     'thedashboardactivity:id,name',
                     'theclientactivity:id,name'

@@ -25,20 +25,11 @@ Route::get('/', function () {
     return redirect()->guest('/login');
 });
 
-// 2FA
-// Route::get('verify/resend', 'Auth\TwoFactorController@resend')->name('verify.resend');
-// Route::resource('verify', 'Auth\TwoFactorController')->only(['index', 'store']);
-
 // SSO
 Route::group(['middleware' => ['web', 'guest']], function(){
     Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::get('connect', [AuthController::class, 'connect'])->name('connect');
 });
-
-// Route::group(['middleware' => ['web', 'MsGraphAuthenticated']], function(){
-//     Route::get('/home', 'HomeController@index')->name('home');
-//     Route::get('logout', 'Auth\AuthController@logout')->name('logout');
-// });
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
@@ -51,12 +42,9 @@ Route::get('/clear-cache', function() {
     return "Cache is cleared";
 });
 
-// Route::get('{any}', [App\Http\Controllers\HomeController::class, 'any'])->name('any');
-
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
  */
-// change 2FA - twofactor >> SSO - MsGraphAuthenticated >> VerifyAccess
 Route::group(['middleware' => ['verify.access','web','active.user'],],function () {
 
     Route::get('home', [HomeController::class, 'index'])->name('home');

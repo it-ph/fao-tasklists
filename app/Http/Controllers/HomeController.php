@@ -55,26 +55,4 @@ class HomeController extends Controller
 
         return view('index', compact('tasks','in_progress','completed'));
     }
-
-    // public function any(Request $request)
-    // {
-    //     if (view()->exists($request->path())) {
-    //         return view($request->path());
-    //     }
-
-    //     return view('errors.404');
-    // }
-
-    // // /*Language Translation*/
-    // public function lang($locale)
-    // {
-    //     if ($locale) {
-    //         App::setLocale($locale);
-    //         Session::put('lang', $locale);
-    //         Session::save();
-    //         return redirect()->back()->with('locale', $locale);
-    //     } else {
-    //         return redirect()->back();
-    //     }
-    // }
 }
