@@ -16,6 +16,7 @@ class NewMicrosoft365SignInListener
 
         $user = User::query()
             ->where('email',$event->token['info']['mail'])
+            ->orwhere('email',$event->token['info']['userPrincipalName'])
             ->first();
 
         $has_permission = Permission::query()
