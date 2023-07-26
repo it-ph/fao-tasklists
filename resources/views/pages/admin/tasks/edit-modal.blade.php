@@ -32,8 +32,8 @@
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="month" name="shift_date" value="{{ date('Y-m', strtotime($task->shift_date)) }}">
+                                    <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="month" name="date_received" value="{{ date('Y-m', strtotime($task->date_received)) }}">
                                 </div>
                             </div>
                         </div>
@@ -93,10 +93,10 @@
                                 <div class="form-group">
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="client_activity_id" style="width:100%;">
-                                        <option value="">-- Select Client Activity -- </option>
-                                            @foreach ($client_activities as $client_activity )
-                                                @if($client_activity)
-                                                    <option value="{{ $client_activity->id }}" @if($task->client_activity_id == $client_activity->id) selected @endif>{{ ucwords($client_activity->name) }}</option>
+                                        <option value="" disabled>-- Select Client Activity -- </option>
+                                            @foreach ($user_client_activities as $user_client_activity)
+                                                @if($user_client_activity)
+                                                    <option value="{{ $user_client_activity->id }}" @if($task->client_activity_id == $user_client_activity->id) selected @endif>{{ ucwords($user_client_activity->name) }}</option>
                                                 @endif
                                             @endforeach
                                     </select>

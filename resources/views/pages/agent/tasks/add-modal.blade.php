@@ -22,8 +22,8 @@
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" value="{{ old('shift_date') }}">
+                                    <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="date" name="date_received" value="{{ old('date_received') }}">
                                 </div>
                             </div>
                         </div>
@@ -34,8 +34,21 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="cluster_id" value="{{ Auth::user()->thepermisssion->cluster_id }}">
-                                    <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->thecluster->name }}">
+                                    @if(Auth::user()->thepermisssion->cluster_id)
+                                        <input class="form-control" type="hidden" name="cluster_id" value="{{ Auth::user()->thepermisssion->cluster_id }}">
+                                        <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->thecluster->name }}">
+                                    @else
+                                        <select class="form-control select2" name="cluster_id" style="width:100%;">
+                                            <option value="" selected disabled>-- Select Cluster -- </option>
+                                                @foreach ($clusters as $cluster )
+                                                    @if($cluster)
+                                                        <option {{ old('cluster_id') == $cluster->id ? "selected" : "" }}
+                                                            value="{{ $cluster->id }}">{{ ucwords($cluster->name) }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                        </select>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -43,8 +56,21 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_id" class="col-form-label custom-label"><strong>CLIENT NAME:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="client_id" value="{{ Auth::user()->thepermisssion->client_id }}">
-                                    <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->theclient->name }}">
+                                    @if(Auth::user()->thepermisssion->client_id)
+                                        <input class="form-control" type="hidden" name="client_id" value="{{ Auth::user()->thepermisssion->client_id }}">
+                                        <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->theclient->name }}">
+                                    @else
+                                        <select class="form-control select2" name="client_id" style="width:100%;">
+                                            <option value="" selected disabled>-- Select Client -- </option>
+                                                @foreach ($clients as $client )
+                                                    @if($client)
+                                                        <option {{ old('client_id') == $client->id ? "selected" : "" }}
+                                                            value="{{ $client->id }}">{{ ucwords($client->name) }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                        </select>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -57,7 +83,7 @@
                                     <label for="dashboard_activity_id" class="col-form-label custom-label"><strong>DASHBOARD ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="dashboard_activity_id" style="width:100%;">
                                         <option value="" selected disabled>-- Select Dashboard Activity -- </option>
-                                            @foreach ($dashboard_activities as $dashboard_activity )
+                                            @foreach ($dashboard_activities as $dashboard_activity)
                                                 @if($dashboard_activity)
                                                     <option {{ old('dashboard_activity_id') == $dashboard_activity->id ? "selected" : "" }}
                                                         value="{{ $dashboard_activity->id }}">{{ ucwords($dashboard_activity->name) }}
@@ -74,7 +100,7 @@
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="client_activity_id" style="width:100%;">
                                         <option value="" selected disabled>-- Select Client Activity -- </option>
-                                            @foreach ($user_client_activities as $user_client_activity )
+                                            @foreach ($user_client_activities as $user_client_activity)
                                                 @if($user_client_activity)
                                                     <option {{ old('client_activity_id') == $user_client_activity->id ? "selected" : "" }}
                                                         value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }}

@@ -19,7 +19,7 @@ class TaskResource extends JsonResource
             'clusterId' => $this->cluster_id,
             'clientId' => $this->client_id,
             'agentId' => $this->agent_id,
-            'shiftDate' => $this->shift_date,
+            'dateReceived' => $this->date_received,
             'dashboardActivityId' => $this->dashboard_activity_id,
             'clientActivityId' => $this->client_activity_id,
             'description' => $this->description,

@@ -18,7 +18,7 @@ class CreateTasksTable extends Migration
             $table->integer('agent_id');
             $table->integer('cluster_id');
             $table->integer('client_id');
-            $table->datetime('shift_date');
+            $table->datetime('date_received');
             $table->integer('dashboard_activity_id');
             $table->integer('client_activity_id');
             $table->longText('description');

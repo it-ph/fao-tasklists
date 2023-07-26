@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="user_id" style="width:100%;">
-                            <option value="">-- Select Employee -- </option>
+                            <option value="" selected disabled>-- Select Employee -- </option>
                                 @foreach ($users as $user )
                                     @if($user)
                                         @isset($user->employeeprofile)
@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="cluster_id" style="width:100%;">
-                            <option value="">-- Select Cluster -- </option>
+                            <option value="" selected disabled>-- Select Cluster -- </option>
                                 @foreach ($clusters as $cluster )
                                     @if($cluster)
                                         <option {{ old('cluster_id') == $cluster->id ? "selected" : "" }}
@@ -42,7 +42,7 @@
                     <div class="form-group">
                         <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="client_id" style="width:100%;">
-                            <option value="">-- Select Client -- </option>
+                            <option value="" selected disabled>-- Select Client -- </option>
                                 @foreach ($clients as $client )
                                     @if($client)
                                         <option {{ old('client_id') == $client->id ? "selected" : "" }}
@@ -56,14 +56,12 @@
                     <div class="form-group">
                         <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEAD:</strong></label>
                         <select class="form-control select2" name="tl_id" style="width:100%;">
-                            <option value="">-- Select Team Lead -- </option>
+                            <option value="" selected disabled>-- Select Team Lead -- </option>
                                 @foreach ($tls as $tl )
                                     @if($tl)
-                                        @isset($tl->theuser->employeeprofile)
-                                            <option {{ old('tl_id') == $tl->theuser->user_id ? "selected" : "" }}
-                                                value="{{ $tl->theuser->user_id }}">@isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
-                                            </option>
-                                        @endisset
+                                        <option value="{{ $tl->theuser->user_id }}">
+                                            @isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
+                                        </option>
                                     @endif
                                 @endforeach
                         </select>
@@ -72,14 +70,12 @@
                     <div class="form-group">
                         <label for="om_id" class="col-form-label custom-label"><strong>OPERATIONS MANAGER:</strong></label>
                         <select class="form-control select2" name="om_id" style="width:100%;">
-                            <option value="">-- Select Operatios Manager -- </option>
+                            <option value="" selected  disabled>-- Select Operations Manager -- </option>
                                 @foreach ($oms as $om )
                                     @if($om)
-                                        @isset($om->theuser->employeeprofile)
-                                            <option {{ old('om_id') == $om->theuser->user_id ? "selected" : "" }}
-                                                value="{{ $om->theuser->id }}">@isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname )}} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
-                                            </option>
-                                        @endisset
+                                        <option value="{{ $om->theuser->id }}">
+                                            @isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname )}} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
+                                        </option>
                                     @endif
                                 @endforeach
                         </select>
@@ -89,6 +85,7 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
+                            <option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>
                             <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant" >Accountant</option>
                             <option {{ old('permission') == "team lead" ? "selected" : "" }} value="team lead">Team Lead</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>

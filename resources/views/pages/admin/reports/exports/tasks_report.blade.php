@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th style="width: 200px; text-align: center; font-weight: bold; background-color: #00599D; border: 1px solid #000000; color: white">EMPLOYEE NAME</th>
-        <th style="width: 120px; text-align: center; font-weight: bold; background-color: #00599D; border: 1px solid #000000; color: white">SHIFT DATE</th>
+        <th style="width: 120px; text-align: center; font-weight: bold; background-color: #00599D; border: 1px solid #000000; color: white">DATE RECEIVED</th>
         <th style="width: 170px; text-align: center; font-weight: bold; background-color: #00599D; border: 1px solid #000000; color: white">CLUSTER</th>
         <th style="width: 170px; text-align: center; font-weight: bold; background-color: #00599D; border: 1px solid #000000; color: white">CLIENT</th>
         <th style="width: 170px; text-align: center; font-weight: bold; background-color: #00599D; border: 1px solid #000000; color: white">DASHBOARD ACTIVITY</th>
@@ -22,7 +22,7 @@
                 <td style="vertical-align: top; border: 1px solid #000000;">
                     @isset($task->theagent->employeeprofile) {{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }} @endisset
                 </td>
-                <td style="vertical-align: top; text-align:center; border: 1px solid #000000;">{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
+                <td style="vertical-align: top; text-align:center; border: 1px solid #000000;">{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                 <td style="vertical-align: top; border: 1px solid #000000;">{{ $task->thecluster->name }}</td>
                 <td style="vertical-align: top; border: 1px solid #000000;">{{ $task->theclient->name }}</td>
                 <td style="vertical-align: top; word-wrap: break-word; white-space: nowrap; border: 1px solid #000000;">{{ $task->thedashboardactivity->name }}</td>

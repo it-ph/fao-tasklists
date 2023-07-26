@@ -46,7 +46,7 @@
                                 <th>Status</th>
                                 <th>Action</th>
                                 <th>Employee Name</th>
-                                <th>Shift Date</th>
+                                <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
                                 <th>Dashboard Activity</th>
@@ -80,7 +80,7 @@
                                         @endif
                                     </td>
                                     <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
-                                    <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
+                                    <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                     <td>{{ $task->thecluster->name }}</td>
                                     <td>{{ $task->theclient->name }}</td>
                                     <td>{{ $task->thedashboardactivity->name }}</td>
