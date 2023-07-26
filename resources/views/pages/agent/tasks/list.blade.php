@@ -76,6 +76,8 @@
                                             @if($task->status == "In Progress")
                                                 <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
                                                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#stopTaskModal-{{ $task->id }}"><i class="fas fa-stop"></i></button>
+                                            @else
+                                                -
                                             @endif
                                         @endif
                                     </td>

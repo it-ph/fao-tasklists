@@ -86,12 +86,12 @@
                                     <td>{{ $task->theclientactivity->name }}</td>
                                     <td>{{ $task->description }}</td>
                                     <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
-                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }}@endisset</td>
+                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }} @else - @endisset</td>
                                     <td>{{ $task->actual_handling_time }}</td>
                                     <td>{{ $task->volume }}</td>
                                     <td>{{ $task->remarks }}</td>
                                 </tr>
-                                @include('pages.admin.tasks.edit-modal')
+                                {{-- @include('pages.admin.tasks.edit-modal') --}}
                             @endforeach
                         </tbody>
                     </table>
@@ -99,7 +99,7 @@
             </div>
         </div> <!-- end col -->
     </div>
-    @include('pages.admin.tasks.add-modal')
+    {{-- @include('pages.admin.tasks.add-modal') --}}
 @endsection
 
 @section('script')

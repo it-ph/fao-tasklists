@@ -108,7 +108,13 @@ class TasksController extends GlobalVariableController
                 ->get();
         }
 
-        return view('pages.admin.tasks.list', compact('tasks'));
+        $user_client_activities = ClientActivity::query()
+            ->select('id','agent_id','name')
+            ->where('agent_id', Auth::id())
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        return view('pages.admin.tasks.list', compact('tasks','user_client_activities'));
     }
 
     /**
