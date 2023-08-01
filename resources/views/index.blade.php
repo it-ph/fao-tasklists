@@ -30,7 +30,7 @@
         </div>
         <div class="col-xl-12">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card mini-stats-wid">
                         <div class="card-body">
                             <div class="media">
@@ -41,7 +41,7 @@
                                     </a>
                                 </div>
 
-                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                                <div class="avatar-sm rounded-circle bg-success align-self-center mini-stat-icon">
                                     <span class="avatar-title rounded-circle bg-success">
                                         <i class="bx bx-task font-size-24"></i>
                                     </span>
@@ -50,7 +50,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="card mini-stats-wid">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="media-body">
+                                    <a href="{{ route("my-task.index", ['status' => "On Hold"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View On Hold Tasks">
+                                        <p class="text-muted fw-medium">On Hold</p>
+                                        <h4 class="mb-0">{{ number_format($on_hold) }}</h4>
+                                    </a>
+                                </div>
+
+                                <div class="avatar-sm rounded-circle bg-warning align-self-center mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-warning">
+                                        <i class="bx bx-task font-size-24"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="card mini-stats-wid">
                         <div class="card-body">
                             <div class="media">
@@ -70,18 +90,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card mini-stats-wid">
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
                                     <a href="{{ route("my-task.index") }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View All Tasks">
                                         <p class="text-muted fw-medium">Total Tasks</p>
-                                        <h4 class="mb-0">{{ number_format($in_progress + $completed) }}</h4>
+                                        <h4 class="mb-0">{{ number_format($in_progress + $on_hold + $completed) }}</h4>
                                     </a>
                                 </div>
 
-                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
+                                <div class="avatar-sm rounded-circle bg-secondary align-self-center mini-stat-icon">
                                     <span class="avatar-title rounded-circle bg-secondary">
                                         <i class="bx bx-task font-size-24"></i>
                                     </span>
@@ -107,7 +127,7 @@
                                 <tr>
                                     <th>Status</th>
                                     <th>Employee Name</th>
-                                    <th>Shift Date</th>
+                                    <th>Date Received</th>
                                     <th>Cluster</th>
                                     <th>Client</th>
                                     <th>Dashboard Activity</th>
@@ -115,6 +135,7 @@
                                     <th>Description</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
+                                    <th>Date Completed</th>
                                     <th>Actual Handling Time</th>
                                     <th>Volume</th>
                                     <th>Remarks</th>
@@ -126,19 +147,22 @@
                                         <td>
                                             @if($task->status == "In Progress")
                                                 <span class="text-success"><strong>{{ $task->status }}</strong></span>
+                                            @elseif($task->status == "On Hold")
+                                                <span class="text-warning"><strong>{{ $task->status }}</strong></span>
                                             @elseif($task->status == "Completed")
                                                 <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                             @endif
                                         </td>
                                         <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
-                                        <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
+                                        <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                         <td>{{ $task->thecluster->name }}</td>
                                         <td>{{ $task->theclient->name }}</td>
                                         <td>{{ $task->thedashboardactivity->name }}</td>
                                         <td>{{ $task->theclientactivity->name }}</td>
                                         <td>{{ $task->description }}</td>
                                         <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
-                                        <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }}@endisset</td>
+                                        <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }} @else - @endisset</td>
+                                        <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
                                         <td>{{ $task->actual_handling_time }}</td>
                                         <td>{{ $task->volume }}</td>
                                         <td>{{ $task->remarks }}</td>

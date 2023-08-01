@@ -24,40 +24,30 @@ class TasksController extends GlobalVariableController
     public function agentTask(Request $request)
     {
         $status = $request['status'];
-
-        if(!in_array(strtolower($status),['','all','in progress','completed']))
+        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
         {
             return view('errors.404');
         }
 
+        $tasks = Task::query()
+            ->with([
+                'thecluster:id,name',
+                'theclient:id,name',
+                'theagent:id,email',
+                'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
+                'thedashboardactivity:id,name',
+                'theclientactivity:id,name'
+            ])
+            ->where('agent_id', Auth::id());
+
+        // filter by status
         if(in_array($status,(['','all'])))
         {
-            $tasks = Task::query()
-                ->with([
-                    'thecluster:id,name',
-                    'theclient:id,name',
-                    'theagent:id,email',
-                    'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                    'thedashboardactivity:id,name',
-                    'theclientactivity:id,name'
-                ])
-                ->where('agent_id', Auth::id())
-                ->get();
+            $tasks = $tasks->get();
         }
         else
         {
-            $tasks = Task::query()
-                ->with([
-                    'thecluster:id,name',
-                    'theclient:id,name',
-                    'theagent:id,email',
-                    'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                    'thedashboardactivity:id,name',
-                    'theclientactivity:id,name'
-                ])
-                ->where('agent_id', Auth::id())
-                ->where('status',$status)
-                ->get();
+            $tasks = $tasks->where('status',$status)->get();
         }
 
         $user_client_activities = ClientActivity::query()
@@ -72,40 +62,52 @@ class TasksController extends GlobalVariableController
     // ADMIN, TL, & OM ACCESS
     public function index(Request $request)
     {
-        $status = $request['status'];
+        // accountant
+        if(Auth::user()->isAccountant())
+        {
+            return redirect()->route('unauthorized');
+        }
 
-        if(!in_array(strtolower($status),['','all','in progress','completed']))
+        $status = $request['status'];
+        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
         {
             return view('errors.404');
         }
 
-        // for update  tl/om must only view the task of accountans under them - where('tl_id', Auth::id())->orwhere('om_id', Auth::id())
+        $tasks = Task::query()
+            ->with([
+                'thecluster:id,name',
+                'theclient:id,name',
+                'theagent:id,email',
+                'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
+                'thedashboardactivity:id,name',
+                'theclientactivity:id,name'
+            ]);
+
+        // admin
+        if(Auth::user()->isAdmin())
+        {
+            $tasks = $tasks;
+        }
+        // operations manager
+        elseif(Auth::user()->isOperationsManager())
+        {
+            $tasks = $tasks->OMPermission();
+        }
+        // team leader
+        elseif(Auth::user()->isTeamLeader())
+        {
+            $tasks = $tasks->TLPermission();
+        }
+
+        // filter by status
         if(in_array($status,(['','all'])))
         {
-            $tasks = Task::query()
-                ->with([
-                    'thecluster:id,name',
-                    'theclient:id,name',
-                    'theagent:id,email',
-                    'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                    'thedashboardactivity:id,name',
-                    'theclientactivity:id,name'
-                ])
-                ->get();
+            $tasks = $tasks->get();
         }
         else
         {
-            $tasks = Task::query()
-                ->with([
-                    'thecluster:id,name',
-                    'theclient:id,name',
-                    'theagent:id,email',
-                    'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                    'thedashboardactivity:id,name',
-                    'theclientactivity:id,name'
-                ])
-                ->where('status',$status)
-                ->get();
+            $tasks = $tasks->where('status',$status)->get();
         }
 
         $user_client_activities = ClientActivity::query()
@@ -233,5 +235,77 @@ class TasksController extends GlobalVariableController
         ]);
 
         return redirect()->back()->with('with_success', "Task has been completed successfully!");
+    }
+
+    // Pause Task
+    public function pauseTask(Request $request, $taskId)
+    {
+        dd('pause');
+        // $this->validate($request,
+        //     [
+        //         'volume' => 'required',
+        //         'remarks' => 'required',
+        //     ],
+        //     $message = array(
+        //         'volume.required' => 'Volume is required!',
+        //         'remarks.required' => 'Remarks is required!',
+        //     )
+        // );
+
+        // $task = Task::findOrFail($taskId);
+        // $status = "Completed";
+        // $actual_handling_time = "";
+        // $volume = $request['volume'];
+        // $remarks = $request['remarks'];
+
+        // $start = Carbon::parse($task->start_date);
+        // $now = Carbon::now();
+        // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
+
+        // $task->update([
+        //     'status' => $status,
+        //     'end_date' => Carbon::now(),
+        //     'actual_handling_time' => $actual_handling_time,
+        //     'volume' => $volume,
+        //     'remarks' => $remarks
+        // ]);
+
+        // return redirect()->back()->with('with_success', "Task has been completed successfully!");
+    }
+
+    // Resume Task
+    public function resumeTask(Request $request, $taskId)
+    {
+        dd('resume');
+        // $this->validate($request,
+        //     [
+        //         'volume' => 'required',
+        //         'remarks' => 'required',
+        //     ],
+        //     $message = array(
+        //         'volume.required' => 'Volume is required!',
+        //         'remarks.required' => 'Remarks is required!',
+        //     )
+        // );
+
+        // $task = Task::findOrFail($taskId);
+        // $status = "Completed";
+        // $actual_handling_time = "";
+        // $volume = $request['volume'];
+        // $remarks = $request['remarks'];
+
+        // $start = Carbon::parse($task->start_date);
+        // $now = Carbon::now();
+        // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
+
+        // $task->update([
+        //     'status' => $status,
+        //     'end_date' => Carbon::now(),
+        //     'actual_handling_time' => $actual_handling_time,
+        //     'volume' => $volume,
+        //     'remarks' => $remarks
+        // ]);
+
+        // return redirect()->back()->with('with_success', "Task has been completed successfully!");
     }
 }

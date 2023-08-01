@@ -48,11 +48,16 @@ class HomeController extends Controller
             ->where('agent_id', Auth::id())
             ->count();
 
+        $on_hold = Task::query()
+            ->where('status','On Hold')
+            ->where('agent_id', Auth::id())
+            ->count();
+
         $completed = Task::query()
             ->where('status','Completed')
             ->where('agent_id', Auth::id())
             ->count();
 
-        return view('index', compact('tasks','in_progress','completed'));
+        return view('index', compact('tasks','in_progress','on_hold','completed'));
     }
 }

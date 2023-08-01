@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use App\Exports\TasksReportExport;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UploadTasksTemplateExport;
 use App\Exports\UploadClientActivityTemplateExport;
@@ -34,26 +35,41 @@ class ExportController extends Controller
         $date_from =  Carbon::parse($request['date_from'])->format('Y-m-d');
         $date_to =  Carbon::parse($request['date_to'])->format('Y-m-d');
 
-        // for update  tl/om must only view the task of accountans under them - where('tl_id', Auth::id())->orwhere('om_id', Auth::id())
         $tasks = Task::query()
-                    ->with([
-                        'thecluster:id,name',
-                        'theclient:id,name',
-                        'theagent:id,email',
-                        'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                        'thedashboardactivity:id,name',
-                        'theclientactivity:id,name'
-                    ])
-                    ->whereRaw(
-                        "created_at >= ? AND created_at <= ?",
-                        [
-                            $date_from." 00:00:00",
-                            $date_to." 23:59:59"
-                        ]
-                    )
-                    ->orderBy('start_date','DESC')
-                    ->get();
+            ->with([
+                'thecluster:id,name',
+                'theclient:id,name',
+                'theagent:id,email',
+                'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
+                'thedashboardactivity:id,name',
+                'theclientactivity:id,name'
+            ])
+            ->whereRaw(
+                "created_at >= ? AND created_at <= ?",
+                [
+                    $date_from." 00:00:00",
+                    $date_to." 23:59:59"
+                ]
+            )
+            ->orderBy('start_date','DESC');
 
+        // admin
+        if(Auth::user()->isAdmin())
+        {
+            $tasks = $tasks->get();
+        }
+        // operations manager
+        elseif(Auth::user()->isOperationsManager())
+        {
+            $tasks = $tasks->OMPermission()->get();
+        }
+        // team leader
+        elseif(Auth::user()->isTeamLeader())
+        {
+            $tasks = $tasks->TLPermission()->get();
+        }
+
+        // set filename base on date filter
         if($date_from == $date_to )
         {
             $filename = "TASKLISTS_REPORT_". $date_from .".xlsx";

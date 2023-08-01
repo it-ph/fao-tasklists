@@ -54,9 +54,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEAD:</strong></label>
+                        <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEADER:</strong></label>
                         <select class="form-control select2" name="tl_id" style="width:100%;">
-                            <option value="" selected disabled>-- Select Team Lead -- </option>
+                            <option value="" selected disabled>-- Select Team Leader -- </option>
                                 @foreach ($tls as $tl )
                                     @if($tl)
                                         <option value="{{ $tl->theuser->user_id }}">
@@ -85,9 +85,9 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            <option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>
+                            {{-- <option {{ old('permission') /== "admin" ? "selected" : "" }} value="admin" >Admin</option> --}}
                             <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant" >Accountant</option>
-                            <option {{ old('permission') == "team lead" ? "selected" : "" }} value="team lead">Team Lead</option>
+                            <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
                         </select>
                     </div>

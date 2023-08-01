@@ -50,6 +50,15 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [HomeController::class, 'index'])->name('index');
 
+    // Agent Task: Start / Update / Stop
+    Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
+    Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
+    Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
+    Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
+    Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
+    Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
+    Route::resource('task', TasksController::class);
+
     // Client Activity Import / Export
     Route::resource('client-activities', ClientActivityController::class);
     Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
@@ -66,12 +75,6 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::get('tasks-upload-task-template', [ExportController::class, 'uploadTasksTemplate'])->name('upload.tasks.template');
             Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
 
-            // Agent Task: Start / Update / Stop
-            Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
-            Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
-            Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
-            Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
-
             // Report
             Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
             Route::post('export', [ExportController::class, 'export'])->name('export');
@@ -82,7 +85,6 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::resource('permissions', PermissionController::class);
             Route::resource('dashboard-activities', DashboardActivityController::class);
             Route::resource('user-clients', UserClientController::class);
-            Route::resource('task', TasksController::class);
             Route::resource('task/logs', TaskLogController::class);
 
         }

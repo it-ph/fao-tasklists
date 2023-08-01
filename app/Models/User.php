@@ -147,7 +147,7 @@ class User extends Authenticatable
     // Operations Manager
     public function isOperationsManager()
     {
-        $permission = 'team leader';
+        $permission = 'operations manager';
         $hasPermission = Permission::query()
             ->whereIn('permission',[
                 'superadmin',

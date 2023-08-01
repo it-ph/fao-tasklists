@@ -34,6 +34,7 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route("my-task.index", ['status' => "all"]) }}">All Tasks</a>
                                     <a class="dropdown-item" href="{{ route("my-task.index", ['status' => "In Progress"]) }}">In Progress</a>
+                                    <a class="dropdown-item" href="{{ route("my-task.index", ['status' => "On Hold"]) }}">On Hold</a>
                                     <a class="dropdown-item" href="{{ route("my-task.index", ['status' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
@@ -54,6 +55,7 @@
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Date Completed</th>
                                 <th>Actual Handling Time</th>
                                 <th>Volume</th>
                                 <th>Remarks</th>
@@ -65,6 +67,8 @@
                                     <td>
                                         @if($task->status == "In Progress")
                                             <span class="text-success"><strong>{{ $task->status }}</strong></span>
+                                        @elseif($task->status == "On Hold")
+                                            <span class="text-warning"><strong>{{ $task->status }}</strong></span>
                                         @elseif($task->status == "Completed")
                                             <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                         @endif
@@ -74,8 +78,20 @@
                                         @if($task->agent_id == Auth::id())
                                             {{-- STATUS: In Progress --}}
                                             @if($task->status == "In Progress")
-                                                <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
+                                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
+                                                <form id="pauseTaskForm-{{ $task->id }}" action="{{ route('task.pause',$task) }}" method="POST" style="display: none">
+                                                    @csrf
+                                                    @method("PUT")
+                                                </form>
+                                                <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" onclick="pause('pauseTaskForm-{{ $task->id }}')"><i class="fa fa-pause"></i></button>
                                                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#stopTaskModal-{{ $task->id }}"><i class="fas fa-stop"></i></button>
+                                            @elseif($task->status == "On Hold")
+                                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
+                                                <form id="resumeTaskForm-{{ $task->id }}" action="{{ route('task.resume',$task) }}" method="POST" style="display: none">
+                                                    @csrf
+                                                    @method("PUT")
+                                                </form>
+                                                <button type="button" class="btn btn-success btn-sm waves-effect waves-light" onclick="resume('resumeTaskForm-{{ $task->id }}')"><i class="fa fa-play"></i></button>
                                             @else
                                                 -
                                             @endif
@@ -89,7 +105,8 @@
                                     <td>{{ $task->theclientactivity->name }}</td>
                                     <td>{{ $task->description }}</td>
                                     <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
-                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }}@endisset</td>
+                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }} @else - @endisset</td>
+                                    <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
                                     <td>{{ $task->actual_handling_time }}</td>
                                     <td>{{ $task->volume }}</td>
                                     <td>{{ $task->remarks }}</td>
@@ -97,8 +114,12 @@
 
                                 {{-- load only if task is In Progress --}}
                                 @if($task->status == "In Progress")
-                                    @include('pages.agent.tasks.stop-modal')
                                     @include('pages.agent.tasks.edit-modal')
+                                    @include('pages.agent.tasks.pause-modal')
+                                    @include('pages.agent.tasks.stop-modal')
+                                @elseif($task->status == "On Hold")
+                                    @include('pages.agent.tasks.edit-modal')
+                                    @include('pages.agent.tasks.resume-modal')
                                 @endif
                             @endforeach
                         </tbody>

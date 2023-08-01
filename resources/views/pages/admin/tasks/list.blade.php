@@ -34,6 +34,7 @@
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route("task.index", ['status' => "all"]) }}">All Tasks</a>
                                     <a class="dropdown-item" href="{{ route("task.index", ['status' => "In Progress"]) }}">In Progress</a>
+                                    <a class="dropdown-item" href="{{ route("task.index", ['status' => "On Hold"]) }}">On Hold</a>
                                     <a class="dropdown-item" href="{{ route("task.index", ['status' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
@@ -54,6 +55,7 @@
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
+                                <th>Date Completed</th>
                                 <th>Actual Handling Time</th>
                                 <th>Volume</th>
                                 <th>Remarks</th>
@@ -74,9 +76,12 @@
                                     <td>
                                         @if($task->status == "In Progress")
                                             <span class="text-success"><strong>{{ $task->status }}</strong></span>
+                                        @elseif($task->status == "On Hold")
+                                            <span class="text-warning"><strong>{{ $task->status }}</strong></span>
                                         @elseif($task->status == "Completed")
                                             <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                         @endif
+                                        {{ $task->theagent->thepermission }}
                                     </td>
                                     <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
                                     <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
@@ -87,6 +92,7 @@
                                     <td>{{ $task->description }}</td>
                                     <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
                                     <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }} @else - @endisset</td>
+                                    <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
                                     <td>{{ $task->actual_handling_time }}</td>
                                     <td>{{ $task->volume }}</td>
                                     <td>{{ $task->remarks }}</td>

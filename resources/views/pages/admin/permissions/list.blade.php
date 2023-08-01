@@ -38,7 +38,7 @@
                                 <th>Email Address</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Team Lead</th>
+                                <th>Team Leader</th>
                                 <th>Operations Manager</th>
                                 <th>Permission</th>
                                 <th width="5%"></th>

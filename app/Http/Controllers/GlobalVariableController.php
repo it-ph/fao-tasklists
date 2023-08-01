@@ -61,7 +61,7 @@ class GlobalVariableController extends Controller
                 'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
             ])
             ->select('id','user_id','permission')
-            ->whereIn('permission',['admin','team lead'])
+            ->whereIn('permission',['admin','team leader','operations manager'])
             ->get();
 
         $this->oms = Permission::with([
@@ -69,7 +69,7 @@ class GlobalVariableController extends Controller
                 'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
             ])
             ->select('id','user_id','permission')
-            ->whereIn('permission',['admin','operations manager'])
+            ->whereIn('permission',['admin','team leader','operations manager'])
             ->get();
 
         View::share('clusters', $this->clusters);
