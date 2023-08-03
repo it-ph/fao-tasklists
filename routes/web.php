@@ -54,8 +54,8 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
     Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
     Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
-    Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
-    Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
+    // Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
+    // Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
     Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
     Route::resource('task', TasksController::class);
 

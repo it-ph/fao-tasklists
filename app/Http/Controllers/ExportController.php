@@ -45,7 +45,7 @@ class ExportController extends Controller
                 'theclientactivity:id,name'
             ])
             ->whereRaw(
-                "created_at >= ? AND created_at <= ?",
+                "shift_date >= ? AND shift_date <= ?",
                 [
                     $date_from." 00:00:00",
                     $date_to." 23:59:59"

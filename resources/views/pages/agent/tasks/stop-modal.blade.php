@@ -14,6 +14,21 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
+                                    <label for="status" class="col-form-label custom-label"><strong>STATUS:<span class="important">*</span></strong></label>
+                                    <select name="status" class="form-control" required>
+                                        <option value="" selected disabled>In Progress (current)</option>
+                                        <option value="On Hold">On Hold</option>
+                                        <option value="Completed">Completed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-2">
+                                <div class="form-group">
                                     <label for="volume" class="col-form-label custom-label"><strong>VOLUME:<span class="important">*</span></strong></label>
                                     <input type="text" class="form-control" name="volume" value="{{ old('volume') }}" placeholder="Enter Volume">
                                 </div>

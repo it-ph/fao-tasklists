@@ -10,12 +10,23 @@
                 <form id="storeTaskForm" action="{{ route('task.store') }}" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
                                     <input class="form-control" type="hidden" name="agent_id" value="{{ Auth::id() }}">
                                     <input class="form-control" type="text" disabled value="@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="date" name="shift_date" value="{{ old('shift_date') }}">
                                 </div>
                             </div>
                         </div>

@@ -15,7 +15,7 @@ class Task extends Model
     protected $connection = 'mysql';
     protected $table = 'tasks';
     protected $guarded = [];
-    protected $dates = ['go_live_date', 'status_date', 'start_date', 'end_date', 'created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['shift_date', 'date_received', 'start_date', 'end_date', 'created_at', 'updated_at', 'deleted_at'];
 
     public function scopeTLPermission($query)
     {

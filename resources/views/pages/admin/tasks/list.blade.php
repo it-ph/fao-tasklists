@@ -47,6 +47,7 @@
                                 {{-- <th>Action</th> --}}
                                 <th>Status</th>
                                 <th>Employee Name</th>
+                                <th>Shift Date</th>
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
@@ -64,15 +65,6 @@
                         <tbody>
                             @foreach ($tasks as $task)
                                 <tr>
-                                    {{-- <td class="text-center">
-                                        ADMIN/TL/OM
-                                        <form id="deleteTaskForm-{{ $task->id }}" class="form-horizontal" action="{{ route('task.destroy',$task) }}" method="POST">
-                                            @csrf
-                                            @method("DELETE")
-                                        </form>
-                                        <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="idelete('deleteTaskForm-{{ $task->id }}')"><i class="fas fa-times"></i></button>
-                                    </td> --}}
                                     <td>
                                         @if($task->status == "In Progress")
                                             <span class="text-success"><strong>{{ $task->status }}</strong></span>
@@ -84,6 +76,7 @@
                                         {{ $task->theagent->thepermission }}
                                     </td>
                                     <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
+                                    <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
                                     <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                     <td>{{ $task->thecluster->name }}</td>
                                     <td>{{ $task->theclient->name }}</td>
@@ -92,12 +85,17 @@
                                     <td>{{ $task->description }}</td>
                                     <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
                                     <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }} @else - @endisset</td>
-                                    <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
+                                    <td>
+                                        @if($task->status == "On Hold")
+                                            -
+                                        @else
+                                            @isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else -  @endisset
+                                        @endif
+                                    </td>
                                     <td>{{ $task->actual_handling_time }}</td>
                                     <td>{{ $task->volume }}</td>
                                     <td>{{ $task->remarks }}</td>
                                 </tr>
-                                {{-- @include('pages.admin.tasks.edit-modal') --}}
                             @endforeach
                         </tbody>
                     </table>
@@ -105,7 +103,6 @@
             </div>
         </div> <!-- end col -->
     </div>
-    {{-- @include('pages.admin.tasks.add-modal') --}}
 @endsection
 
 @section('script')
@@ -133,7 +130,7 @@
                     },
                     "pageLength": 10,
                     "pagingType": "full_numbers",
-                    "order": [8, "desc"],
+                    "order": [2, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                     // orderCellsTop: true,
                     // fixedHeader: true,

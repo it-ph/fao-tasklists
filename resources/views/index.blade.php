@@ -127,6 +127,7 @@
                                 <tr>
                                     <th>Status</th>
                                     <th>Employee Name</th>
+                                    <th>Shift Date</th>
                                     <th>Date Received</th>
                                     <th>Cluster</th>
                                     <th>Client</th>
@@ -154,6 +155,7 @@
                                             @endif
                                         </td>
                                         <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
+                                        <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
                                         <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                         <td>{{ $task->thecluster->name }}</td>
                                         <td>{{ $task->theclient->name }}</td>
@@ -162,7 +164,13 @@
                                         <td>{{ $task->description }}</td>
                                         <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
                                         <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }} @else - @endisset</td>
-                                        <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
+                                        <td>
+                                            @if($task->status == "On Hold")
+                                                -
+                                            @else
+                                                @isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @endisset
+                                            @endif
+                                        </td>
                                         <td>{{ $task->actual_handling_time }}</td>
                                         <td>{{ $task->volume }}</td>
                                         <td>{{ $task->remarks }}</td>
@@ -205,7 +213,7 @@
                     },
                     "pageLength": 10,
                     "pagingType": "full_numbers",
-                    "order": [8, "desc"],
+                    "order": [2, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                 });
             });

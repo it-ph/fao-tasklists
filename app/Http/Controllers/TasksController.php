@@ -207,17 +207,19 @@ class TasksController extends GlobalVariableController
     {
         $this->validate($request,
             [
+                'status' => 'required',
                 'volume' => 'required',
                 'remarks' => 'required',
             ],
             $message = array(
+                'status.required' => 'Status is required!',
                 'volume.required' => 'Volume is required!',
                 'remarks.required' => 'Remarks is required!',
             )
         );
 
         $task = Task::findOrFail($taskId);
-        $status = "Completed";
+        $status = $request['status'];
         $actual_handling_time = "";
         $volume = $request['volume'];
         $remarks = $request['remarks'];
@@ -240,7 +242,6 @@ class TasksController extends GlobalVariableController
     // Pause Task
     public function pauseTask(Request $request, $taskId)
     {
-        dd('pause');
         // $this->validate($request,
         //     [
         //         'volume' => 'required',
@@ -252,8 +253,8 @@ class TasksController extends GlobalVariableController
         //     )
         // );
 
-        // $task = Task::findOrFail($taskId);
-        // $status = "Completed";
+        $task = Task::findOrFail($taskId);
+        $status = "On Hold";
         // $actual_handling_time = "";
         // $volume = $request['volume'];
         // $remarks = $request['remarks'];
@@ -262,21 +263,20 @@ class TasksController extends GlobalVariableController
         // $now = Carbon::now();
         // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
 
-        // $task->update([
-        //     'status' => $status,
-        //     'end_date' => Carbon::now(),
-        //     'actual_handling_time' => $actual_handling_time,
-        //     'volume' => $volume,
-        //     'remarks' => $remarks
-        // ]);
+        $task->update([
+            'status' => $status,
+            // 'end_date' => Carbon::now(),
+            // 'actual_handling_time' => $actual_handling_time,
+            // 'volume' => $volume,
+            // 'remarks' => $remarks
+        ]);
 
-        // return redirect()->back()->with('with_success', "Task has been completed successfully!");
+        return redirect()->back()->with('with_success', "Task has been completed successfully!");
     }
 
     // Resume Task
     public function resumeTask(Request $request, $taskId)
     {
-        dd('resume');
         // $this->validate($request,
         //     [
         //         'volume' => 'required',
@@ -288,8 +288,8 @@ class TasksController extends GlobalVariableController
         //     )
         // );
 
-        // $task = Task::findOrFail($taskId);
-        // $status = "Completed";
+        $task = Task::findOrFail($taskId);
+        $status = "In Progress";
         // $actual_handling_time = "";
         // $volume = $request['volume'];
         // $remarks = $request['remarks'];
@@ -298,14 +298,14 @@ class TasksController extends GlobalVariableController
         // $now = Carbon::now();
         // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
 
-        // $task->update([
-        //     'status' => $status,
-        //     'end_date' => Carbon::now(),
-        //     'actual_handling_time' => $actual_handling_time,
-        //     'volume' => $volume,
-        //     'remarks' => $remarks
-        // ]);
+        $task->update([
+            'status' => $status,
+            // 'end_date' => Carbon::now(),
+            // 'actual_handling_time' => $actual_handling_time,
+            // 'volume' => $volume,
+            // 'remarks' => $remarks
+        ]);
 
-        // return redirect()->back()->with('with_success', "Task has been completed successfully!");
+        return redirect()->back()->with('with_success', "Task has been completed successfully!");
     }
 }
