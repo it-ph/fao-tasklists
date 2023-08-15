@@ -212,7 +212,7 @@ class TasksController extends GlobalVariableController
                 'remarks' => 'required',
             ],
             $message = array(
-                'status.required' => 'Status is required!',
+                'status.required' => 'Set Status to On Hold or Completed!',
                 'volume.required' => 'Volume is required!',
                 'remarks.required' => 'Remarks is required!',
             )
@@ -236,7 +236,7 @@ class TasksController extends GlobalVariableController
             'remarks' => $remarks
         ]);
 
-        return redirect()->back()->with('with_success', "Task has been completed successfully!");
+        return redirect()->back()->with('with_success', "Task has been ".$task->status." successfully!");
     }
 
     // Pause Task

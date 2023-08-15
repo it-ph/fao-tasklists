@@ -68,6 +68,18 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'agent_id');
     }
 
+    public function hasActiveTask()
+    {
+        $hasActiveTask = Task::query()
+            ->where('agent_id', $this->id)
+            ->where('status', 'In Progress')
+            ->count();
+
+        $hasActiveTask = $hasActiveTask ? true : false;
+
+        return $hasActiveTask;
+    }
+
     public function isStatusActive()
     {
         $hasPermission = Permission::query()

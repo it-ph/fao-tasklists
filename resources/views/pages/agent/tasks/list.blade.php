@@ -38,7 +38,11 @@
                                     <a class="dropdown-item" href="{{ route("my-task.index", ['status' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addTaskModal"><i class="fas fa-plus"></i> Create</button>
+                            @if(Auth::user()->hasActiveTask())
+                                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="has_active_task()"><i class="fas fa-plus"></i> Create</button>
+                            @else
+                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addTaskModal"><i class="fas fa-plus"></i> Create</button>
+                            @endif
                         </div>
                     </div>
                     <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">

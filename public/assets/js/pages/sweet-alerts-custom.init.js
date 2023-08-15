@@ -165,3 +165,15 @@ function resume(form) {
         }
     });
 }
+
+function has_active_task() {
+    Swal.fire({
+        title: 'Invalid Action',
+        text: "Please On Hold or Complete your current task before creating a new one!",
+        icon: 'error',
+        confirmButtonText: 'Okay!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    });
+}
