@@ -26,7 +26,6 @@ class StorePermissionRequest extends FormRequest
         return [
             'user_id' => ['required','unique:permissions,user_id'],
             'cluster_id' => ['required'],
-            'client_id' => ['required'],
             'permission' => ['required'],
         ];
     }
@@ -37,7 +36,6 @@ class StorePermissionRequest extends FormRequest
             'user_id.required' => 'Employee Name is required.',
             'user_id.unique' => 'Employee Name is already exists.',
             'cluster_id.required' => 'Cluster is required.',
-            'client_id.required' => 'Client is required.',
             'permission.required' => 'Permission is required.',
         ];
     }

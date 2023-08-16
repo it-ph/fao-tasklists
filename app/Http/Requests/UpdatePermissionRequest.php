@@ -26,7 +26,6 @@ class UpdatePermissionRequest extends FormRequest
         return [
             'user_id' => ['required'],
             'cluster_id' => ['required'],
-            'client_id' => ['required'],
             'permission' => ['required'],
         ];
     }
@@ -36,7 +35,6 @@ class UpdatePermissionRequest extends FormRequest
         return [
             'user_id.required' => 'Employee Name is required.',
             'cluster_id.required' => 'Cluster is required.',
-            'client_id.required' => 'Client is required.',
             'permission.required' => 'Permission is required.',
         ];
     }

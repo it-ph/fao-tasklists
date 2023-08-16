@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:<span class="important">*</span></strong></label>
+                        <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:</strong></label>
                         <select class="form-control select2" name="client_id" style="width:100%;">
                             <option value="" selected disabled>-- Select Client -- </option>
                                 @foreach ($clients as $client )
@@ -59,7 +59,7 @@
                             <option value="" selected disabled>-- Select Team Leader -- </option>
                                 @foreach ($tls as $tl )
                                     @if($tl)
-                                        <option value="{{ $tl->theuser->user_id }}">
+                                        <option value="{{ $tl->theuser->id }}">
                                             @isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
                                         </option>
                                     @endif
