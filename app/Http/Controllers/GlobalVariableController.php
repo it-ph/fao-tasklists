@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\Cluster;
 use App\Models\Permission;
+use App\Models\UserProfile;
 use App\Models\ClientActivity;
 use App\Models\DashboardActivity;
 use Illuminate\Support\Facades\View;
@@ -56,21 +57,25 @@ class GlobalVariableController extends Controller
             ->where('permission','<>','superadmin')
             ->get();
 
-        $this->tls = Permission::with([
-                'theuser:id,email',
-                'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
-            ])
-            ->select('id','user_id','permission')
-            ->whereIn('permission',['admin','team leader','operations manager'])
-            ->get();
+        $hr_portal = (new UserProfile())->getConnection()->getDatabaseName();
+        $permissions = Permission::query()
+                ->from('permissions as ftp')
+                ->leftjoin($hr_portal.'.hr_employee_profile as hr','ftp.user_id', '=', 'hr.emp_id')
+                ->select(['ftp.id','ftp.user_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id','hr.emp_code'])
+                ->whereIn('ftp.permission',['admin','team leader','operations manager'])
+                ->orderBy('hr.fullname')
+                ->get();
 
-        $this->oms = Permission::with([
-                'theuser:id,email',
-                'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
-            ])
-            ->select('id','user_id','permission')
-            ->whereIn('permission',['admin','team leader','operations manager'])
-            ->get();
+        // $this->tls = Permission::with([
+        //         'theuser:id,email',
+        //         'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+        //     ])
+        //     ->select('id','user_id','permission')
+        //     ->whereIn('permission',['admin','team leader','operations manager'])
+        //     ->get();
+
+        $this->tls = $permissions;
+        $this->oms = $permissions;
 
         View::share('clusters', $this->clusters);
         View::share('clients', $this->clients);

@@ -70,6 +70,10 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
     Route::group(['middleware' => ['tlom.admin'],], function ()
         {
+            // Dashboard Activity
+            Route::get('dashboard-activity-upload-template', [ExportController::class, 'uploadDashboardActivityTemplate'])->name('upload.dashboard-activity.template');
+            Route::post('dashboard-activity-import', [ImportController::class, 'importDashboardActivity'])->name('dashboard-activity-import');
+
             // Task Import / Export - removed
             Route::get('tasks-upload', [TasksController::class, 'upload'])->name('upload');
             Route::get('tasks-upload-task-template', [ExportController::class, 'uploadTasksTemplate'])->name('upload.tasks.template');

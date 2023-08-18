@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UploadTasksTemplateExport;
 use App\Exports\UploadClientActivityTemplateExport;
+use App\Exports\UploadDashboardActivityTemplateExport;
 
 class ExportController extends Controller
 {
@@ -89,5 +90,10 @@ class ExportController extends Controller
     public function uploadClientActivityTemplate()
     {
         return Excel::download(new UploadClientActivityTemplateExport, 'client-activity-upload-template.xlsx');
+    }
+
+    public function uploadDashboardActivityTemplate()
+    {
+        return Excel::download(new UploadDashboardActivityTemplateExport, 'dashboard-activity-upload-template.xlsx');
     }
 }

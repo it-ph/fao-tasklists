@@ -9,6 +9,7 @@ use App\Http\Resources\PermissionCollection;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Http\Controllers\GlobalVariableController;
+use App\Models\ClientActivity;
 
 class PermissionController extends GlobalVariableController
 {
@@ -94,8 +95,9 @@ class PermissionController extends GlobalVariableController
     {
         $has_related_permission = Permission::where('tl_id', $permission['user_id'])->orwhere('om_id', $permission['user_id'])->first();
         $has_related_task = Task::where('agent_id', $permission['user_id'])->first();
+        $has_related_client_activity = ClientActivity::where('agent_id', $permission['user_id'])->first();
 
-        if($has_related_permission || $has_related_task)
+        if($has_related_permission || $has_related_task || $has_related_client_activity)
         {
             return redirect()->back()->withErrors("User cannot be deleted due to existence of related record.");
         }

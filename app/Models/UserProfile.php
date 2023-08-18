@@ -9,6 +9,6 @@ class UserProfile extends Model
 {
     use HasFactory;
 
-    protected $conneection = 'mysql2';
+    protected $connection = 'mysql2';
     protected $table = 'hr_employee_profile';
 }

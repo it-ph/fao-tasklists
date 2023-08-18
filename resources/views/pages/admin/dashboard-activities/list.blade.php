@@ -27,6 +27,8 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
+                            <a href="{{ url('dashboard-activity-upload-template') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
+                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadDashboardActivityModal"><i class="fas fa-upload"></i> Upload</button>
                             <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addDashboardActivityModal"><i class="fas fa-plus"></i> Create</button>
                         </div>
                     </div>
@@ -66,6 +68,7 @@
     </div>
 
     @include('pages.admin.dashboard-activities.add-modal')
+    @include('pages.admin.dashboard-activities.upload-modal')
 @endsection
 
 @section('script')
