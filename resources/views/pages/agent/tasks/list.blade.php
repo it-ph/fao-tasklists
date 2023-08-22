@@ -6,6 +6,11 @@
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .dataTables_scrollBody thead tr[role="row"]{
+            visibility: collapse !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -172,7 +177,7 @@
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                     // orderCellsTop: true,
                     // fixedHeader: true,
-                    // "scrollX": true,
+                    "scrollX": true,
                 });
             });
     </script>
