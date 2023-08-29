@@ -108,7 +108,7 @@ const TASK = (() => {
                 "columnDefs": [{ type: 'date', 'targets': [3] }],
                 "scrollX": true,
                 fixedColumns: {
-                    left: 3
+                    left: 4
                 },
             });
             $('#loader').hide();
