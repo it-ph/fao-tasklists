@@ -50,20 +50,7 @@ class TasksController extends GlobalVariableController
             $tasks = $tasks->where('status',$status)->get();
         }
 
-        if(Auth::user()->isAdmin())
-        {
-            $clients = Client::query()
-                ->with('thecluster')
-                ->get();
-        }
-        else
-        {
-            $clients = Client::query()
-                ->with('thecluster')
-                ->cluster()
-                ->get();
-        }
-
+        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')
             ->where('agent_id', Auth::id())
