@@ -104,7 +104,7 @@ const TASK = (() => {
                 },
                 "pageLength": 10,
                 "pagingType": "full_numbers",
-                "order": [3, "asc"],
+                "order": [3, "desc"],
                 "columnDefs": [{ type: 'date', 'targets': [3] }],
                 "scrollX": true,
                 fixedColumns: {
