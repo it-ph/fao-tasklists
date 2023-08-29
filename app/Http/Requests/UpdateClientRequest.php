@@ -24,7 +24,9 @@ class UpdateClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required']
+            'name' => ['required'],
+            'cluster_id' => ['required']
+
         ];
     }
 
@@ -32,6 +34,7 @@ class UpdateClientRequest extends FormRequest
     {
         return [
             'name.required' => 'Client Name is required.',
+            'name.required' => 'Cluster Name is required.',
         ];
     }
 }

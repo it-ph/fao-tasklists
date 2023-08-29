@@ -27,7 +27,11 @@
                     <form action="{{ route('export') }}" method="POST">
                         @csrf
                         <label class="mt-1"><strong>Date Range</strong> <span style="font-weight: bold; color: red">*</span></label>
-                        <input class="form-control input-daterange-datepicker" type="text" name="daterange" value=" {{\Carbon\Carbon::now()->subDays(7)->format('m-d-Y')}} - {{date('m-d-Y')}}">
+                        @if(Auth::user()->isAccountant())
+                            <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->format('m-d-Y')}} - {{date('m-d-Y')}}">
+                        @else
+                            <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->subDays(7)->format('m-d-Y')}} - {{date('m-d-Y')}}">
+                        @endif
                         <button type="submit" data-toggle="tooltip" title="Click to Download Report" class="mt-3 btn btn-primary float-end"> <strong> <i class="fa fa-download"></i>  DOWNLOAD </strong></button>
                     </form>
                 </div>

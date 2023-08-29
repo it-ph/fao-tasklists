@@ -14,6 +14,22 @@
                         <label for="name" class="col-form-label custom-label"><strong>CLIENT NAME:<span class="important">*</span></strong></label>
                         <input type="text" class="form-control" name="name" value ="{{ $client->name }}" required>
                     </div>
+                    <div class="form-group">
+                        <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
+                        @if(Auth::user()->thepermisssion->cluster_id)
+                            <input class="form-control" type="hidden" name="cluster_id" value="{{ Auth::user()->thepermisssion->cluster_id }}">
+                            <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->thecluster->name }}">
+                        @else
+                            <select class="form-control select2" name="cluster_id" style="width:100%;">
+                                <option value="" selected disabled>-- Select Cluster -- </option>
+                                    @foreach ($clusters as $cluster )
+                                        @if($cluster)
+                                            <option value="{{ $cluster->id }}" @if($cluster->id == $client->cluster_id) ? selected @endif>{{ ucwords($cluster->name) }}</option>
+                                        @endif
+                                    @endforeach
+                            </select>
+                        @endif
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

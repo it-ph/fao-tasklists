@@ -14,8 +14,8 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="status" class="col-form-label custom-label"><strong>STATUS:<span class="important">*</span></strong></label>
-                                    <select name="status" class="form-control" required>
+                                    <label for="status" class="col-form-label custom-label"><strong>STATUS:<span class="important">*(change status)</span></strong></label>
+                                    <select name="status" class="form-control">
                                         <option value="" selected disabled>In Progress (current)</option>
                                         <option value="On Hold">On Hold</option>
                                         <option value="Completed">Completed</option>
@@ -30,7 +30,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="volume" class="col-form-label custom-label"><strong>VOLUME:<span class="important">*</span></strong></label>
-                                    <input type="text" class="form-control" name="volume" value="{{ old('volume') }}" placeholder="Enter Volume">
+                                    <input type="number" class="form-control" name="volume" value="{{ old('volume') }}" placeholder="Enter Volume">
                                 </div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">*</span></strong></label>
+                                    <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">(optional)</span></strong></label>
                                     <textarea class="form-control" name="remarks" placeholder="Enter remarks here.">{{ old('remarks') }}</textarea>
                                 </div>
                             </div>

@@ -42,7 +42,6 @@ class ExportController extends Controller
                 'theclient:id,name',
                 'theagent:id,email',
                 'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                'thedashboardactivity:id,name',
                 'theclientactivity:id,name'
             ])
             ->whereRaw(
@@ -68,6 +67,11 @@ class ExportController extends Controller
         elseif(Auth::user()->isTeamLeader())
         {
             $tasks = $tasks->TLPermission()->get();
+        }
+        // accountant
+        elseif(Auth::user()->isAccountant())
+        {
+            $tasks = $tasks->AccountantPermission()->get();
         }
 
         // set filename base on date filter

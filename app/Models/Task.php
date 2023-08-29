@@ -17,6 +17,11 @@ class Task extends Model
     protected $guarded = [];
     protected $dates = ['shift_date', 'date_received', 'start_date', 'end_date', 'created_at', 'updated_at', 'deleted_at'];
 
+    public function scopeOMPermission($query)
+    {
+        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+    }
+
     public function scopeTLPermission($query)
     {
         return $query->whereHas('thepermission', function ($q){
@@ -26,9 +31,9 @@ class Task extends Model
             ->orwhere('agent_id',Auth::id());
     }
 
-    public function scopeOMPermission($query)
+    public function scopeAccountantPermission($query)
     {
-        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+        return $query->where('agent_id',Auth::id());
     }
 
     public function thecluster()

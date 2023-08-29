@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\View;
 
 class GlobalVariableController extends Controller
 {
-    public $clusters,$clients,$dashboard_activities,$client_activities,$users,$permissions,$tls,$oms;
+    public $clusters,$clients,$client_activities,$users,$permissions,$tls,$oms;
 
     public function __construct()
     {
@@ -23,11 +23,6 @@ class GlobalVariableController extends Controller
             ->get();
 
         $this->clients = Client::query()
-            ->select('id','name')
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        $this->dashboard_activities = DashboardActivity::query()
             ->select('id','name')
             ->orderBy('name', 'ASC')
             ->get();
@@ -79,7 +74,6 @@ class GlobalVariableController extends Controller
 
         View::share('clusters', $this->clusters);
         View::share('clients', $this->clients);
-        View::share('dashboard_activities', $this->dashboard_activities);
         View::share('client_activities', $this->client_activities);
         View::share('users', $this->users);
         View::share('permissions', $this->permissions);

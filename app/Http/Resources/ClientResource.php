@@ -17,6 +17,8 @@ class ClientResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'clusterId' => $this->cluster_id,
+            'thecluster' => new ClusterResource($this->thecluster),
         ];
     }
 }

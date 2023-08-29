@@ -55,9 +55,7 @@
                                             <option value="" selected disabled>-- Select Cluster -- </option>
                                                 @foreach ($clusters as $cluster )
                                                     @if($cluster)
-                                                        <option {{ old('cluster_id') == $cluster->id ? "selected" : "" }}
-                                                            value="{{ $cluster->id }}">{{ ucwords($cluster->name) }}
-                                                        </option>
+                                                        <option value="{{ $cluster->id }}" @if($cluster->id == $task->cluster_id) ? selected @endif>{{ ucwords($cluster->name) }}</option>
                                                     @endif
                                                 @endforeach
                                         </select>
@@ -77,9 +75,7 @@
                                             <option value="" selected disabled>-- Select Client -- </option>
                                                 @foreach ($clients as $client )
                                                     @if($client)
-                                                        <option {{ old('client_id') == $client->id ? "selected" : "" }}
-                                                            value="{{ $client->id }}">{{ ucwords($client->name) }}
-                                                        </option>
+                                                        <option value="{{ $client->id }}" @if($client->id == $task->client_id) selected @endif>{{ ucwords($client->name) }}</option>
                                                     @endif
                                                 @endforeach
                                         </select>
@@ -90,7 +86,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="dashboard_activity_id" class="col-form-label custom-label"><strong>DASHBOARD ACTIVITY:<span class="important">*</span></strong></label>
@@ -104,8 +100,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+                        </div> --}}
+                        <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
@@ -151,7 +147,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="start_date" class="col-form-label custom-label"><strong>START TIME:</span></strong></label>
-                                    <input type="text" class="form-control" name="start_date" value="@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset" readonly>
+                                    <input type="text" class="form-control" name="start_date" value="@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset" readonly>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +155,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="end_date" class="col-form-label custom-label"><strong>END TIME:</span></strong></label>
-                                    <input type="text" class="form-control" name="end_date" value="@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }}@endisset" readonly>
+                                    <input type="text" class="form-control" name="end_date" value="@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }}@endisset" readonly>
                                 </div>
                             </div>
                         </div>

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Permission;
+use App\Models\UserProfile;
+use App\Models\ClientActivity;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\PermissionCollection;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Http\Controllers\GlobalVariableController;
-use App\Models\ClientActivity;
 
 class PermissionController extends GlobalVariableController
 {
@@ -26,6 +27,21 @@ class PermissionController extends GlobalVariableController
     public function index()
     {
         return view('pages.admin.permissions.list');
+    }
+
+    public function getTLOMs($cluster_id)
+    {
+        $hr_portal = (new UserProfile())->getConnection()->getDatabaseName();
+        $permissions = Permission::query()
+                ->from('permissions as ftp')
+                ->leftjoin($hr_portal.'.hr_employee_profile as hr','ftp.user_id', '=', 'hr.emp_id')
+                ->select(['ftp.id','ftp.user_id','ftp.cluster_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id','hr.emp_code'])
+                ->where('ftp.cluster_id',$cluster_id)
+                ->whereIn('ftp.permission',['admin','team leader','operations manager'])
+                ->orderBy('hr.fullname')
+                ->get();
+
+        return $permissions;
     }
 
     /**

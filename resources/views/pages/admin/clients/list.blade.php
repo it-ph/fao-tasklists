@@ -35,6 +35,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Cluster</th>
                                 <th>Updated At</th>
                                 <th width="5%"></th>
                             </tr>
@@ -44,6 +45,7 @@
                             @foreach ($clients as $client)
                                 <tr>
                                     <td>{{ $client->name }}</td>
+                                    <td>@isset($client->thecluster){{ $client->thecluster->name }}@endif</td>
                                     <td>{{ date('m/d/Y h:i:s A', strtotime($client->updated_at)) }}</td>
                                     <td class="text-center">
                                         <form id="deleteClientForm-{{ $client->id }}" class="form-horizontal" action="{{ route('clients.destroy',$client) }}" method="POST">

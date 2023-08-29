@@ -4,21 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\DashboardActivity;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\DashboardActivityResource;
+use App\Http\Controllers\GlobalVariableController;
 use App\Http\Resources\DashboardActivityCollection;
 use App\Http\Requests\StoreDashboardActivityRequest;
 use App\Http\Requests\UpdateDashboardActivityRequest;
 
-class DashboardActivityController extends Controller
+class DashboardActivityController extends GlobalVariableController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
-        $dashboard_activities = new DashboardActivityCollection(DashboardActivity::all());
+        if(Auth::user()->isAdmin())
+        {
+            $dashboard_activities = new DashboardActivityCollection(DashboardActivity::query()
+                ->with('thecluster')
+                ->get());
+        }
+        else
+        {
+            $dashboard_activities = new DashboardActivityCollection(DashboardActivity::query()
+                ->with('thecluster')
+                ->cluster()
+                ->get());
+        }
+
+
         return view('pages.admin.dashboard-activities.list', compact('dashboard_activities'));
     }
 

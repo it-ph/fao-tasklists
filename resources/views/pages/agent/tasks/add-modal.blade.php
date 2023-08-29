@@ -26,7 +26,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" value="{{ old('shift_date') }}">
+                                    <input class="form-control" type="date" name="shift_date" value="{{ date('Y-m-d') }}">
                                 </div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="dashboard_activity_id" class="col-form-label custom-label"><strong>DASHBOARD ACTIVITY:<span class="important">*</span></strong></label>
@@ -104,8 +104,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+                        </div> --}}
+                        <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>

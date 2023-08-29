@@ -64,6 +64,10 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
     Route::post('client-activity-import', [ImportController::class, 'importClientActivity'])->name('client-activity-import');
 
+    // Report
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('export', [ExportController::class, 'export'])->name('export');
+
     /**
      * START OF ADMIN, TL, OM
      */
@@ -80,13 +84,17 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
 
             // Report
-            Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-            Route::post('export', [ExportController::class, 'export'])->name('export');
+            // Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+            // Route::post('export', [ExportController::class, 'export'])->name('export');
 
             // Resource
             Route::resource('clusters', ClusterController::class);
             Route::resource('clients', ClientController::class);
+            Route::get('clients/get_clients/{clusterId}', [ClientController::class,'getClients'])->name('clients.get_clients');
+
             Route::resource('permissions', PermissionController::class);
+            Route::get('permissions/get_tloms/{clusterId}', [PermissionController::class,'getTLOMs'])->name('permissions.get_tloms');
+
             Route::resource('dashboard-activities', DashboardActivityController::class);
             Route::resource('user-clients', UserClientController::class);
             Route::resource('task/logs', TaskLogController::class);

@@ -24,7 +24,8 @@ class StoreClientRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required','unique:clients,name']
+            'name' => ['required','unique:clients,name'],
+            'cluster_id' => ['required']
         ];
     }
 
@@ -33,6 +34,7 @@ class StoreClientRequest extends FormRequest
         return [
             'name.required' => 'Client Name is required.',
             'name.unique' => 'Client Name already exists.',
+            'name.required' => 'Cluster Name is required.',
         ];
     }
 }

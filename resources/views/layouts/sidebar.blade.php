@@ -25,6 +25,19 @@
                     </a>
                 </li>
 
+            @if(Auth::user()->isAccountant())
+                {{--REPORTS --}}
+                <li class="menu-title" key="t-menu">Reports</li>
+                <li>
+                    <a href="{{ url('reports') }}" class="waves-effect">
+                        <i class="bx bxs-report"></i>
+                        <span key="t-reports">Reports</span>
+                    </a>
+                </li>
+                {{-- MANAGE --}}
+                <li class="menu-title" key="t-apps">Manage</li>
+            @endif
+
         {{-- End of Active Users --}}
 
         {{-- Start of ADMIN / TL / OM --}}
@@ -69,12 +82,12 @@
                     </a>
                 </li>
 
-                <li>
+                {{-- <li>
                     <a href="{{ url('dashboard-activities') }}" class="waves-effect">
                         <i class="bx bx-list-ul"></i>
                         <span key="t-dashboard-activities">Dashboard Activities</span>
                     </a>
-                </li>
+                </li> --}}
             @endif
 
                 <li>

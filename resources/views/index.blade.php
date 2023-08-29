@@ -4,7 +4,8 @@
 
 @section('css')
     <!-- DataTables -->
-    <link href="{{ URL::asset('/assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/fixedColumns.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -97,7 +98,7 @@
                                 <div class="media-body">
                                     <a href="{{ route("my-task.index") }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View All Tasks">
                                         <p class="text-muted fw-medium">Total Tasks</p>
-                                        <h4 class="mb-0">{{ number_format($in_progress + $on_hold + $completed) }}</h4>
+                                        <h4 class="mb-0">{{ number_format($all) }}</h4>
                                     </a>
                                 </div>
 
@@ -122,7 +123,7 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">My Latest Tasks</h4>
                     <div class="table-responsive">
-                        <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                        <table id="datatable" class="table table-bordered nowrap w-100">
                             <thead>
                                 <tr>
                                     <th>Status</th>
@@ -131,7 +132,7 @@
                                     <th>Date Received</th>
                                     <th>Cluster</th>
                                     <th>Client</th>
-                                    <th>Dashboard Activity</th>
+                                    {{-- <th>Dashboard Activity</th> --}}
                                     <th>Client Activity</th>
                                     <th>Description</th>
                                     <th>Start Date</th>
@@ -159,7 +160,7 @@
                                         <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                         <td>{{ $task->thecluster->name }}</td>
                                         <td>{{ $task->theclient->name }}</td>
-                                        <td>{{ $task->thedashboardactivity->name }}</td>
+                                        {{-- <td>{{ $task->thedashboardactivity->name }}</td> --}}
                                         <td>{{ $task->theclientactivity->name }}</td>
                                         <td>{{ $task->description }}</td>
                                         <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
@@ -188,15 +189,16 @@
 @endsection
 @section('script')
     <!-- apexcharts -->
-    <script src="{{ URL::asset('/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    {{-- <script src="{{ URL::asset('/assets/libs/apexcharts/apexcharts.min.js') }}"></script> --}}
 
     <!-- dashboard init -->
-    <script src="{{ URL::asset('/assets/js/pages/dashboard.init.js') }}"></script>
+    {{-- <script src="{{ URL::asset('/assets/js/pages/dashboard.init.js') }}"></script> --}}
 
     <!-- Required datatable js -->
-    <script src="{{ URL::asset('/assets/libs/datatables/datatables.min.js') }}"></script>
-    <script src="{{ URL::asset('/assets/libs/jszip/jszip.min.js') }}"></script>
-    <script src="{{ URL::asset('/assets/libs/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -215,6 +217,10 @@
                     "pagingType": "full_numbers",
                     "order": [2, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
+                    fixedColumns: {
+                        left: 3
+                    },
+                    "scrollX": true,
                 });
             });
     </script>

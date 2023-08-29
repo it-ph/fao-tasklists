@@ -5,12 +5,8 @@
 @section('css')
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/fixedColumns.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <style>
-        .dataTables_scrollBody thead tr[role="row"]{
-            visibility: collapse !important;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -50,7 +46,7 @@
                             @endif
                         </div>
                     </div>
-                    <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">
+                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Status</th>
@@ -60,7 +56,7 @@
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Dashboard Activity</th>
+                                {{-- <th>Dashboard Activity</th> --}}
                                 <th>Client Activity</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
@@ -88,13 +84,13 @@
                                         @if($task->agent_id == Auth::id())
                                             {{-- STATUS: In Progress --}}
                                             @if($task->status == "In Progress")
-                                                <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
+                                                <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
                                                 {{-- <form id="pauseTaskForm-{{ $task->id }}" action="{{ route('task.pause',$task) }}" method="POST" style="display: none">
                                                     @csrf
                                                     @method("PUT")
                                                 </form>
                                                 <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" onclick="pause('pauseTaskForm-{{ $task->id }}')"><i class="fa fa-pause"></i></button> --}}
-                                                <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#stopTaskModal-{{ $task->id }}"><i class="fas fa-stop"></i></button>
+                                                <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: On Hold / Complete" data-bs-toggle="modal" data-bs-target="#stopTaskModal-{{ $task->id }}"><i class="fas fa-stop"></i></button>
                                             {{-- @elseif($task->status == "On Hold")
                                                 <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}"><i class="fas fa-pencil-alt"></i></button>
                                                 <form id="resumeTaskForm-{{ $task->id }}" action="{{ route('task.resume',$task) }}" method="POST" style="display: none">
@@ -112,11 +108,11 @@
                                     <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                     <td>{{ $task->thecluster->name }}</td>
                                     <td>{{ $task->theclient->name }}</td>
-                                    <td>{{ $task->thedashboardactivity->name }}</td>
+                                    {{-- <td>{{ $task->thedashboardactivity->name }}</td> --}}
                                     <td>{{ $task->theclientactivity->name }}</td>
                                     <td>{{ $task->description }}</td>
-                                    <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
-                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }} @else - @endisset</td>
+                                    <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
+                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }} @else - @endisset</td>
                                     <td>
                                         @if($task->status == "On Hold")
                                             -
@@ -151,6 +147,7 @@
 @section('script')
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <!-- Datatable init js -->
@@ -174,9 +171,10 @@
                     "pageLength": 10,
                     "pagingType": "full_numbers",
                     "order": [3, "desc"],
-                    "columnDefs": [{ type: 'date', 'targets': [2] }],
-                    // orderCellsTop: true,
-                    // fixedHeader: true,
+                    "columnDefs": [{ type: 'date', 'targets': [3] }],
+                    fixedColumns: {
+                        left: 4
+                    },
                     "scrollX": true,
                 });
             });

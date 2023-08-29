@@ -5,6 +5,7 @@
 @section('css')
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/fixedColumns.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <style>
         .dataTables_scrollBody thead tr[role="row"]{
@@ -46,7 +47,7 @@
                             {{-- <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addTaskModal"><i class="fas fa-plus"></i> Create</button> --}}
                         </div>
                     </div>
-                    <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">
+                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
                         <thead>
                             <tr>
                                 {{-- <th>Action</th> --}}
@@ -56,7 +57,7 @@
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Dashboard Activity</th>
+                                {{-- <th>Dashboard Activity</th> --}}
                                 <th>Client Activity</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
@@ -85,7 +86,7 @@
                                     <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                     <td>{{ $task->thecluster->name }}</td>
                                     <td>{{ $task->theclient->name }}</td>
-                                    <td>{{ $task->thedashboardactivity->name }}</td>
+                                    {{-- <td>{{ $task->thedashboardactivity->name }}</td> --}}
                                     <td>{{ $task->theclientactivity->name }}</td>
                                     <td>{{ $task->description }}</td>
                                     <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
@@ -113,6 +114,7 @@
 @section('script')
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <!-- Datatable init js -->
@@ -137,8 +139,9 @@
                     "pagingType": "full_numbers",
                     "order": [2, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
-                    // orderCellsTop: true,
-                    // fixedHeader: true,
+                    fixedColumns: {
+                        left: 3
+                    },
                     "scrollX": true,
                 });
             });

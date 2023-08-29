@@ -27,7 +27,7 @@
 
                     <div class="form-group">
                         <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                        <select class="form-control select2" name="cluster_id" style="width:100%;">
+                        <select class="form-control select2" name="cluster_id" id="cluster_id" style="width:100%;" onchange="getClientTLOMs()">
                             <option value="" selected disabled>-- Select Cluster -- </option>
                                 @foreach ($clusters as $cluster )
                                     @if($cluster)
@@ -41,43 +41,43 @@
 
                     <div class="form-group">
                         <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:</strong></label>
-                        <select class="form-control select2" name="client_id" style="width:100%;">
+                        <select class="form-control select2" name="client_id" id="client_id" style="width:100%;">
                             <option value="" selected disabled>-- Select Client -- </option>
-                                @foreach ($clients as $client )
+                                {{-- @foreach ($clients as $client )
                                     @if($client)
                                         <option {{ old('client_id') == $client->id ? "selected" : "" }}
                                             value="{{ $client->id }}">{{ ucwords($client->name) }}
                                         </option>
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEADER:</strong></label>
-                        <select class="form-control select2" name="tl_id" style="width:100%;">
+                        <select class="form-control select2" name="tl_id" id="tl_id" style="width:100%;">
                             <option value="" selected disabled>-- Select Team Leader -- </option>
-                                @foreach ($tls as $tl )
+                                {{-- @foreach ($tls as $tl )
                                     @if($tl)
                                         <option value="{{ $tl->theuser->id }}">
                                             @isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
                                         </option>
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="om_id" class="col-form-label custom-label"><strong>OPERATIONS MANAGER:</strong></label>
-                        <select class="form-control select2" name="om_id" style="width:100%;">
+                        <select class="form-control select2" name="om_id" id="om_id" style="width:100%;">
                             <option value="" selected  disabled>-- Select Operations Manager -- </option>
-                                @foreach ($oms as $om )
+                                {{-- @foreach ($oms as $om )
                                     @if($om)
                                         <option value="{{ $om->theuser->id }}">
                                             @isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname )}} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
                                         </option>
                                     @endif
-                                @endforeach
+                                @endforeach --}}
                         </select>
                     </div>
 

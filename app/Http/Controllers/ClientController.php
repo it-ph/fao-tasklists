@@ -6,22 +6,47 @@ use App\Models\Task;
 use App\Models\Client;
 use App\Models\Permission;
 use App\Models\UserClient;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\ClientCollection;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Http\Controllers\GlobalVariableController;
 
-class ClientController extends Controller
+class ClientController extends GlobalVariableController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
-        $clients = new ClientCollection(Client::all());
+        if(Auth::user()->isAdmin())
+        {
+            $clients = new ClientCollection(Client::query()
+                ->with('thecluster')
+                ->get());
+        }
+        else
+        {
+            $clients = new ClientCollection(Client::query()
+                ->with('thecluster')
+                ->cluster()
+                ->get());
+        }
+
         return view('pages.admin.clients.list', compact('clients'));
+    }
+
+    public function getClients($cluster_id)
+    {
+        $clients = Client::query()
+            ->with('thecluster')
+            ->where('cluster_id', $cluster_id)
+            ->get();
+
+        return $clients;
     }
 
     /**

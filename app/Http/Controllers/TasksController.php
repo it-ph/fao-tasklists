@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Task;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
 use App\Http\Resources\TaskResource;
@@ -35,7 +36,6 @@ class TasksController extends GlobalVariableController
                 'theclient:id,name',
                 'theagent:id,email',
                 'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                'thedashboardactivity:id,name',
                 'theclientactivity:id,name'
             ])
             ->where('agent_id', Auth::id());
@@ -50,13 +50,27 @@ class TasksController extends GlobalVariableController
             $tasks = $tasks->where('status',$status)->get();
         }
 
+        if(Auth::user()->isAdmin())
+        {
+            $clients = Client::query()
+                ->with('thecluster')
+                ->get();
+        }
+        else
+        {
+            $clients = Client::query()
+                ->with('thecluster')
+                ->cluster()
+                ->get();
+        }
+
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')
             ->where('agent_id', Auth::id())
             ->orderBy('name', 'ASC')
             ->get();
 
-        return view('pages.agent.tasks.list', compact('tasks','user_client_activities'));
+        return view('pages.agent.tasks.list', compact('tasks','clients','user_client_activities'));
     }
 
     // ADMIN, TL, & OM ACCESS
@@ -80,7 +94,6 @@ class TasksController extends GlobalVariableController
                 'theclient:id,name',
                 'theagent:id,email',
                 'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                'thedashboardactivity:id,name',
                 'theclientactivity:id,name'
             ]);
 
@@ -209,12 +222,10 @@ class TasksController extends GlobalVariableController
             [
                 'status' => 'required',
                 'volume' => 'required',
-                'remarks' => 'required',
             ],
             $message = array(
                 'status.required' => 'Set Status to On Hold or Completed!',
                 'volume.required' => 'Volume is required!',
-                'remarks.required' => 'Remarks is required!',
             )
         );
 

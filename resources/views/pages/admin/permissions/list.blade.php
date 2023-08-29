@@ -87,4 +87,85 @@
     <!-- Select2 -->
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
+    <script>
+        function getClientTLOMs()
+        {
+            var cluster_id = $('#cluster_id').val();
+            if(cluster_id)
+            {
+                // load Clients
+                $.ajax({
+                    type: 'GET',
+                    url: `{{ url('clients/get_clients/${cluster_id}') }}`,
+                    dataType: 'json',
+                    success: function(result){
+                        console.log(result);
+                        if(result.length > 0)
+                                        {
+                            $('#client_id').empty();
+                            $('#client_id').append('<option value="">'+ '-- Select Client --' +'</option>');
+                            $.each(result, function(index, value){
+                                // console.log(value);
+                                $('#client_id').append('<option value="'+ value.id +'">' + value.name +'</option>');
+                            });
+
+                        }
+                        else
+                        {
+                            $('#client_id option[value=""]').prop('selected', true);
+                        }
+
+                    },
+
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+                // load TL / OM
+                $.ajax({
+                    type: 'GET',
+                    url: `{{ url('permissions/get_tloms/${cluster_id}') }}`,
+                    dataType: 'json',
+                    success: function(result){
+                        console.log(result);
+                        if(result.length > 0)
+                                        {
+                            $('#tl_id').empty();
+                            $('#tl_id').append('<option value="">'+ '-- Select Team Leader --' +'</option>');
+                            $.each(result, function(index, value){
+                                // console.log(value);
+                                $('#tl_id').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                            });
+
+                            $('#om_id').empty();
+                            $('#om_id').append('<option value="">'+ '-- Select Operations Manager --' +'</option>');
+                            $.each(result, function(index, value){
+                                // console.log(value);
+                                $('#om_id').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                            });
+
+                        }
+                        else
+                        {
+                            $('#tl_id option[value=""]').prop('selected', true);
+                            $('#tom_id option[value=""]').prop('selected', true);
+                        }
+
+                    },
+
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+            else
+            {
+                $('#tl_id option[value=""]').prop('selected', true);
+                $('#tom_id option[value=""]').prop('selected', true);
+                $('#client_id option[value=""]').prop('selected', true);
+            }
+        }
+    </script>
 @endsection
+

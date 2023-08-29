@@ -29,7 +29,6 @@ class StoreTasksRequest extends FormRequest
             'agent_id' => ['required'],
             'shift_date' => ['required'],
             'date_received' => ['required'],
-            'dashboard_activity_id' => ['required'],
             'client_activity_id' => ['required'],
             'description' => ['required'],
         ];
@@ -43,7 +42,6 @@ class StoreTasksRequest extends FormRequest
             'agent_id.required' => 'Employee Name is required.',
             'shift_date.required' => 'Shift Date is required.',
             'date_received.required' => 'Date Received is required.',
-            'dashboard_activity_id.required' => 'Dashboard Activity is required.',
             'client_activity_id.required' => 'Client Activity is required.',
             'description.required' => 'Description is required.',
         ];

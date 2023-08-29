@@ -35,7 +35,6 @@ class HomeController extends Controller
                 'thecluster:id,name',
                 'theclient:id,name',
                 'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                'thedashboardactivity:id,name',
                 'theclientactivity:id,name'
             ])
             ->where('agent_id', Auth::id())
@@ -58,6 +57,8 @@ class HomeController extends Controller
             ->where('agent_id', Auth::id())
             ->count();
 
-        return view('index', compact('tasks','in_progress','on_hold','completed'));
+        $all = $in_progress + $on_hold + $completed;
+
+        return view('index', compact('tasks','in_progress','on_hold','completed','all'));
     }
 }
