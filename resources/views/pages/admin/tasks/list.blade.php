@@ -137,7 +137,7 @@
                     },
                     "pageLength": 10,
                     "pagingType": "full_numbers",
-                    "order": [2, "desc"],
+                    "order": [2, "asc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                     fixedColumns: {
                         left: 3

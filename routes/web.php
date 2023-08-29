@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExportController;
@@ -43,6 +45,15 @@ Route::get('/clear-cache', function() {
 });
 
 /**
+ *
+ * REDIS CACHE CLEAR
+ */
+Route::GET('redis/clear-cache', function () {
+    Redis::flushdb();
+    echo 'redis cache cleared successfully!';
+});
+
+/**
  *  START OF AUTHORIZE & ACTIVE USERS
  */
 Route::group(['middleware' => ['verify.access','web','active.user'],],function () {
@@ -51,7 +62,20 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     Route::get('index', [HomeController::class, 'index'])->name('index');
 
     // Agent Task: Start / Update / Stop
-    Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
+    Route::get('/my-tasks/{status?}', [PageController::class, 'showAgentTasks'])->name('my-tasks.index');
+    // Route::get('/tasks/{status?}', [PageController::class, 'AgentTasks'])->name('tasks.index');
+    Route::group(['prefix' => 'my-task'],
+            function ()
+        {
+            Route::get('/{status?}', [TasksController::class,'agentTask'])->name('my-task.index');
+            Route::post('/store', [TasksController::class,'store'])->name('my-task.store');
+            Route::get('/show/{id}', [TasksController::class,'show'])->name('my-task.show');
+            Route::post('/update/{id}', [TasksController::class,'update'])->name('my-task.update');
+            Route::post('/stop/{id}', [TasksController::class,'stopTask'])->name('my-task.stop');
+
+        });
+
+    // Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
     Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
     Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
     // Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');

@@ -4,21 +4,25 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Task;
-use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
-use App\Http\Resources\TaskResource;
+use App\Traits\ResponseTraits;
+use App\Services\TasksServices;
+use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\TaskCollection;
-use App\Http\Requests\StoreTasksRequest;
-use App\Http\Requests\UpdateTasksRequest;
+use Illuminate\Support\Facades\Redis;
+use App\Http\Requests\StopTaskRequest;
 use App\Http\Controllers\GlobalVariableController;
 
 class TasksController extends GlobalVariableController
 {
+    use ResponseTraits;
+
     public function __construct()
     {
         parent::__construct();
+        $this->model = new Task();
+        $this->service = new TasksServices();
     }
 
     // AGENT ACCESS
@@ -30,34 +34,15 @@ class TasksController extends GlobalVariableController
             return view('errors.404');
         }
 
-        $tasks = Task::query()
-            ->with([
-                'thecluster:id,name',
-                'theclient:id,name',
-                'theagent:id,email',
-                'theagent.employeeprofile:emp_id,emp_code,fullname,last_name',
-                'theclientactivity:id,name'
-            ])
-            ->where('agent_id', Auth::id());
+        $result = $this->successResponse('Tasks loaded successfully!');
+        try {
+            $result["data"] = $this->service->load($status);
 
-        // filter by status
-        if(in_array($status,(['','all'])))
-        {
-            $tasks = $tasks->get();
-        }
-        else
-        {
-            $tasks = $tasks->where('status',$status)->get();
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
         }
 
-        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
-        $user_client_activities = ClientActivity::query()
-            ->select('id','agent_id','name')
-            ->where('agent_id', Auth::id())
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        return view('pages.agent.tasks.list', compact('tasks','clients','user_client_activities'));
+        return $this->returnResponse($result);
     }
 
     // ADMIN, TL, & OM ACCESS
@@ -110,91 +95,55 @@ class TasksController extends GlobalVariableController
             $tasks = $tasks->where('status',$status)->get();
         }
 
-        $user_client_activities = ClientActivity::query()
-            ->select('id','agent_id','name')
-            ->where('agent_id', Auth::id())
-            ->orderBy('name', 'ASC')
-            ->get();
-
-        return view('pages.admin.tasks.list', compact('tasks','user_client_activities'));
+        return view('pages.admin.tasks.list', compact('tasks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(TaskRequest $request)
     {
-        //
-    }
+        $result = $this->successResponse('Task created successfully!');
+        try {
+            $request['created_by'] = Auth::id();
+            $request['start_date'] = Carbon::now();
+            $this->model->create($request->all());
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTasksRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTasksRequest $request)
-    {
-        $request['created_by'] = Auth::id();
-        $request['start_date'] = Carbon::now();
-        $task = new TaskResource(Task::create($request->all()));
-        return redirect()->back()->with('with_success', "Task created successfully!");
-    }
+            // clear cache
+            Redis::del('in_progress_tasks_of_agent_'.Auth::id());
+            Redis::del('all_tasks_of_agent_'.Auth::id());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task $task
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
-    {
-        // return new TaskResource($task->loadMissing(['thecluster','theclient','theagent.employeeprofile','thedashboardactivity','theclientactivity']));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Task $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateTasksRequest  $request
-     * @param  \App\Models\Task $task
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateTasksRequest $request, Task $task)
-    {
-        $task->update($request->all());
-        return redirect()->back()->with('with_success', "Task updated successfully!");
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Task $task
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Task $task)
-    {
-        if($task->status != "Not Started")
-        {
-            return redirect()->back()->withErrors("Task cannot be deleted. Task is either already In Progress or Completed.");
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
         }
-        else
-        {
-            $task->delete();
-            return redirect()->back()->with('with_success', "Task deleted successfully!");
+
+        return $this->returnResponse($result);
+    }
+
+    public function show($id)
+    {
+        $result = $this->successResponse('Task retrieved successfully!');
+        try {
+            $result["data"] = $this->model::findOrfail($id);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
         }
+
+        return $this->returnResponse($result);
+    }
+
+    public function update(TaskRequest $request, $id)
+    {
+        $result = $this->successResponse('Task updated successfully!');
+        try {
+            $this->model->findOrfail($id)->update($request->all());
+
+            // clear cache
+            Redis::del('in_progress_tasks_of_agent_'.Auth::id());
+            Redis::del('all_tasks_of_agent_'.Auth::id());
+
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     public function upload()
@@ -202,55 +151,44 @@ class TasksController extends GlobalVariableController
         return view('pages.admin.tasks.upload');
     }
 
-    // Stop Task
-    public function stopTask(Request $request, $taskId)
+    public function stopTask(StopTaskRequest $request, $id)
     {
-        $this->validate($request,
-            [
-                'status' => 'required',
-                'volume' => 'required',
-            ],
-            $message = array(
-                'status.required' => 'Set Status to On Hold or Completed!',
-                'volume.required' => 'Volume is required!',
-            )
-        );
+        $result = $this->successResponse("Task has been ".$request['status']." successfully!");
+        try {
+            $task = $this->model->findOrfail($id);
+            $status = $request['status'];
+            $actual_handling_time = "";
+            $volume = $request['volume'];
+            $remarks = $request['remarks'];
 
-        $task = Task::findOrFail($taskId);
-        $status = $request['status'];
-        $actual_handling_time = "";
-        $volume = $request['volume'];
-        $remarks = $request['remarks'];
+            $start = Carbon::parse($task->start_date);
+            $now = Carbon::now();
+            $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
 
-        $start = Carbon::parse($task->start_date);
-        $now = Carbon::now();
-        $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
+            $task->update([
+                'status' => $status,
+                'end_date' => Carbon::now(),
+                'actual_handling_time' => $actual_handling_time,
+                'volume' => $volume,
+                'remarks' => $remarks
+            ]);
 
-        $task->update([
-            'status' => $status,
-            'end_date' => Carbon::now(),
-            'actual_handling_time' => $actual_handling_time,
-            'volume' => $volume,
-            'remarks' => $remarks
-        ]);
+            // clear cache
+            Redis::del('in_progress_tasks_of_agent_'.Auth::id());
+            Redis::del($status.'_tasks_of_agent_'.Auth::id());
+            Redis::del('all_tasks_of_agent_'.Auth::id());
 
-        return redirect()->back()->with('with_success', "Task has been ".$task->status." successfully!");
+
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     // Pause Task
     public function pauseTask(Request $request, $taskId)
     {
-        // $this->validate($request,
-        //     [
-        //         'volume' => 'required',
-        //         'remarks' => 'required',
-        //     ],
-        //     $message = array(
-        //         'volume.required' => 'Volume is required!',
-        //         'remarks.required' => 'Remarks is required!',
-        //     )
-        // );
-
         $task = Task::findOrFail($taskId);
         $status = "On Hold";
         // $actual_handling_time = "";
@@ -275,17 +213,6 @@ class TasksController extends GlobalVariableController
     // Resume Task
     public function resumeTask(Request $request, $taskId)
     {
-        // $this->validate($request,
-        //     [
-        //         'volume' => 'required',
-        //         'remarks' => 'required',
-        //     ],
-        //     $message = array(
-        //         'volume.required' => 'Volume is required!',
-        //         'remarks.required' => 'Remarks is required!',
-        //     )
-        // );
-
         $task = Task::findOrFail($taskId);
         $status = "In Progress";
         // $actual_handling_time = "";

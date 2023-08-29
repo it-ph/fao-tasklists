@@ -48,7 +48,18 @@
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
 
+    <!-- Base Url -->
+    <script type="text/javascript">
+        var APP_URL = {!! json_encode(url('/')) !!}
+    </script>
+
+    @yield('custom-js')
+
     <script>
+        toastr.options = {
+            "positionClass": "toast-bottom-right",
+        }
+
         $('#log-out').click(function(){
             Swal.fire({
                 title: 'Sign Out?',

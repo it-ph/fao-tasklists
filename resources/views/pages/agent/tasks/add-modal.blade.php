@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="storeTaskForm" action="{{ route('task.store') }}" method="POST">
+                <form id="storeTaskForm" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
@@ -27,6 +27,7 @@
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
                                     <input class="form-control" type="date" name="shift_date" value="{{ date('Y-m-d') }}">
+                                    <label id="shift_dateError" class="error"></label>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +35,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="date_received" value="{{ old('date_received') }}">
+                                    <input class="form-control" type="date" name="date_received" id="date_received" value="{{ old('date_received') }}">
+                                    <label id="date_receivedError" class="error"></label>
                                 </div>
                             </div>
                         </div>
@@ -88,23 +90,6 @@
                     </div>
 
                     <div class="row">
-                        {{-- <div class="col-md-6">
-                            <div class="mb-2">
-                                <div class="form-group">
-                                    <label for="dashboard_activity_id" class="col-form-label custom-label"><strong>DASHBOARD ACTIVITY:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="dashboard_activity_id" style="width:100%;">
-                                        <option value="" selected disabled>-- Select Dashboard Activity -- </option>
-                                            @foreach ($dashboard_activities as $dashboard_activity)
-                                                @if($dashboard_activity)
-                                                    <option {{ old('dashboard_activity_id') == $dashboard_activity->id ? "selected" : "" }}
-                                                        value="{{ $dashboard_activity->id }}">{{ ucwords($dashboard_activity->name) }}
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
@@ -119,6 +104,7 @@
                                                 @endif
                                             @endforeach
                                     </select>
+                                    <label id="client_activity_idError" class="error"></label>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +116,7 @@
                                 <div class="form-group">
                                     <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
                                     <textarea class="form-control" name="description" placeholder="Type the description here">{{ old('description') }}</textarea>
+                                    <label id="descriptionError" class="error"></label>
                                 </div>
                             </div>
                         </div>
@@ -197,11 +184,11 @@
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="store('storeTaskForm')"><i class="fa fa-save"></i> Save and Start</button>
+                <button type="submit" id="btn_save"  class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Save and Start</button>
                 <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                </form>
             </div>
         </div>
     </div>

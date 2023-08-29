@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <a href="{{ route("my-task.index", ['status' => "In Progress"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View In Progress Tasks">
+                                    <a href="{{ route("my-tasks.index", ['status' => "In Progress"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View In Progress Tasks">
                                         <p class="text-muted fw-medium">In Progress</p>
                                         <h4 class="mb-0">{{ number_format($in_progress) }}</h4>
                                     </a>
@@ -56,7 +56,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <a href="{{ route("my-task.index", ['status' => "On Hold"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View On Hold Tasks">
+                                    <a href="{{ route("my-tasks.index", ['status' => "On Hold"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View On Hold Tasks">
                                         <p class="text-muted fw-medium">On Hold</p>
                                         <h4 class="mb-0">{{ number_format($on_hold) }}</h4>
                                     </a>
@@ -76,7 +76,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <a href="{{ route("my-task.index", ['status' => "Completed"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Completed Tasks">
+                                    <a href="{{ route("my-tasks.index", ['status' => "Completed"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Completed Tasks">
                                         <p class="text-muted fw-medium">Completed</p>
                                         <h4 class="mb-0">{{ number_format($completed) }}</h4>
                                     </a>
@@ -96,7 +96,7 @@
                         <div class="card-body">
                             <div class="media">
                                 <div class="media-body">
-                                    <a href="{{ route("my-task.index") }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View All Tasks">
+                                    <a href="{{ route("my-tasks.index", ['status' => "all"]) }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View All Tasks">
                                         <p class="text-muted fw-medium">Total Tasks</p>
                                         <h4 class="mb-0">{{ number_format($all) }}</h4>
                                     </a>
@@ -215,7 +215,7 @@
                     },
                     "pageLength": 10,
                     "pagingType": "full_numbers",
-                    "order": [2, "desc"],
+                    "order": [2, "asc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],
                     fixedColumns: {
                         left: 3

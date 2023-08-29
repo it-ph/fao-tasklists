@@ -1,4 +1,4 @@
-<div class="modal fade" id="editTaskModal-{{ $task->id }}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+<div class="modal fade" id="editTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
     aria-labelledby="editTaskModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -7,16 +7,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editTaskForm-{{ $task->id }}" action="{{ route('task.update',$task) }}" method="POST">
+                <form id="editTaskForm" method="POST">
                     @csrf
-                    @method("PUT")
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="agent_id" value="{{ Auth::id() }}">
+                                    <input class="form-control" type="hidden" name="agent_id" id="agent_id" value="{{ Auth::id() }}">
                                     <input class="form-control" type="text" disabled value="@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset">
                                 </div>
                             </div>
@@ -28,7 +26,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" value="{{ date('Y-m-d', strtotime($task->shift_date)) }}">
+                                    <input class="form-control" type="date" name="shift_date" id="shift_date_edit">
+                                    <label id="shift_date_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +35,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="date_received" value="{{ date('Y-m-d', strtotime($task->date_received)) }}">
+                                    <input class="form-control" type="date" name="date_received" id="date_received_edit">
+                                    <label id="date_received_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                                             <option value="" selected disabled>-- Select Cluster -- </option>
                                                 @foreach ($clusters as $cluster )
                                                     @if($cluster)
-                                                        <option value="{{ $cluster->id }}" @if($cluster->id == $task->cluster_id) ? selected @endif>{{ ucwords($cluster->name) }}</option>
+                                                        <option value="{{ $cluster->id }}">{{ ucwords($cluster->name) }}</option>
                                                     @endif
                                                 @endforeach
                                         </select>
@@ -71,11 +71,11 @@
                                         <input class="form-control" type="hidden" name="client_id" value="{{ Auth::user()->thepermisssion->client_id }}">
                                         <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->theclient->name }}">
                                     @else
-                                        <select class="form-control select2" name="client_id" style="width:100%;">
+                                        <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
                                             <option value="" selected disabled>-- Select Client -- </option>
                                                 @foreach ($clients as $client )
                                                     @if($client)
-                                                        <option value="{{ $client->id }}" @if($client->id == $task->client_id) selected @endif>{{ ucwords($client->name) }}</option>
+                                                        <option value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
                                                     @endif
                                                 @endforeach
                                         </select>
@@ -86,30 +86,17 @@
                     </div>
 
                     <div class="row">
-                        {{-- <div class="col-md-6">
-                            <div class="mb-2">
-                                <div class="form-group">
-                                    <label for="dashboard_activity_id" class="col-form-label custom-label"><strong>DASHBOARD ACTIVITY:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="dashboard_activity_id" style="width:100%;">
-                                        <option value="" disabled>-- Select Dashboard Activity -- </option>
-                                            @foreach ($dashboard_activities as $dashboard_activity)
-                                                @if($dashboard_activity)
-                                                    <option value="{{ $dashboard_activity->id }}" @if($task->dashboard_activity_id == $dashboard_activity->id) selected @endif>{{ ucwords($dashboard_activity->name) }}</option>
-                                                @endif
-                                            @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="client_activity_id" style="width:100%;">
-                                        <option value="" disabled>-- Select Client Activity -- </option>
-                                            @foreach ($user_client_activities as $user_client_activity)
+                                    <select class="form-control select2" name="client_activity_id" id="client_activity_id_edit" style="width:100%;">
+                                        <option value="" selected disabled>-- Select Client Activity -- </option>
+                                        @foreach ($user_client_activities as $user_client_activity)
                                                 @if($user_client_activity)
-                                                    <option value="{{ $user_client_activity->id }}" @if($task->client_activity_id == $user_client_activity->id) selected @endif>{{ ucwords($user_client_activity->name) }}</option>
+                                                    <option {{ old('client_activity_id') == $user_client_activity->id ? "selected" : "" }}
+                                                        value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }}
+                                                    </option>
                                                 @endif
                                             @endforeach
                                     </select>
@@ -122,7 +109,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
-                                    <textarea class="form-control" name="description">{!! $task->description !!}</textarea>
+                                    <textarea class="form-control" name="description" id="description_edit" placeholder="Type the description here"></textarea>
+                                    <label id="description_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
@@ -135,10 +123,10 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="status" class="col-form-label custom-label"><strong>STATUS:</strong></label>
-                                    <select class="form-control" name="status" disabled>
+                                    <select class="form-control" name="status" id="status_edit" disabled>
                                         <option value="" disabled selected>-- Select Status --</option>
-                                        <option value="In Progress" @if($task->status == "In Progress") selected @endif>In Progress @if($task->status == "In Progress") (current) @endif</option>
-                                        <option value="Completed" @if($task->status == "Completed") selected @endif>Completed @if($task->status == "Completed") (current) @endif</option>
+                                        <option value="In Progress" selected>In Progress (current)</option>
+                                        <option value="Completed">Completed</option>
                                     </select>
                                 </div>
                             </div>
@@ -147,7 +135,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="start_date" class="col-form-label custom-label"><strong>START TIME:</span></strong></label>
-                                    <input type="text" class="form-control" name="start_date" value="@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset" readonly>
+                                    <input type="text" class="form-control" name="start_date" id="start_date_edit" readonly>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +143,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="end_date" class="col-form-label custom-label"><strong>END TIME:</span></strong></label>
-                                    <input type="text" class="form-control" name="end_date" value="@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }}@endisset" readonly>
+                                    <input type="text" class="form-control" name="end_date" id="end_date_edit" readonly>
                                 </div>
                             </div>
                         </div>
@@ -163,7 +151,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="actual_handling_time" class="col-form-label custom-label"><strong>ACTUAL HANDLING TIME:</span></strong></label>
-                                    <input type="text" class="form-control" name="actual_handling_time" value="{{ $task->actual_handling_time }}" placeholder="00:00:00:00" readonly>
+                                    <input type="text" class="form-control" name="actual_handling_time" id="actual_handling_time_edit" placeholder="00:00:00:00" readonly>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +162,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="volume" class="col-form-label custom-label"><strong>VOLUME:</span></strong></label>
-                                    <input type="text" class="form-control" name="volume" value="{{ $task->volume }}" readonly>
+                                    <input type="text" class="form-control" name="volume" id="volume_edit" readonly>
                                 </div>
                             </div>
                         </div>
@@ -185,16 +173,16 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:</span></strong></label>
-                                    <textarea class="form-control" name="remarks" readonly>{!! $task->remarks !!}</textarea>
+                                    <textarea class="form-control" name="remarks" id="remarks_edit" readonly></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="update('editTaskForm-{{ $task->id }}')"><i class="fa fa-save"></i> Update</button>
+                <button type="submit" id="btn_update" class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Update</button>
                 <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                </form>
             </div>
         </div>
     </div>

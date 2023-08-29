@@ -19,9 +19,9 @@
                 </li>
 
                 <li>
-                    <a href="{{ url('my-task') }}" class="waves-effect">
-                        <i class="bx bx-task"></i>
-                        <span key="t-tasks">My Tasks</span>
+                    <a href="{{ url('my-tasks/all') }}" class="waves-effect">
+                        <i class="bx bx-task" @if(\Request::routeIs('my-tasks.index')) style="color:#fff" @endif></i>
+                        <span key="t-tasks" @if(\Request::routeIs('my-tasks.index')) style="color:#fff" @endif>My Tasks</span>
                     </a>
                 </li>
 
@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 {{-- MANAGE --}}
-                <li class="menu-title" key="t-apps">Manage</li>
+                {{-- <li class="menu-title" key="t-apps">Manage</li> --}}
             @endif
 
         {{-- End of Active Users --}}
@@ -82,20 +82,14 @@
                     </a>
                 </li>
 
-                {{-- <li>
-                    <a href="{{ url('dashboard-activities') }}" class="waves-effect">
-                        <i class="bx bx-list-ul"></i>
-                        <span key="t-dashboard-activities">Dashboard Activities</span>
-                    </a>
-                </li> --}}
-            @endif
-
                 <li>
                     <a href="{{ url('client-activities') }}@if(Auth::user()->isAccountant())/?user_id={{ Auth::user()->id }}&employeename=@isset(Auth::user()->employeeprofile){{ strtolower(Auth::user()->employeeprofile->fullname) }} {{ strtolower(Auth::user()->employeeprofile->last_name) }}@endisset @endif" class="waves-effect">
                         <i class="bx bx-list-ul" @if(\Request::has('employeename')) style="color:#fff" @endif></i>
                         <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin()) Users' @endif Client Activities</span>
                     </a>
                 </li>
+            @endif
+
 
             </ul>
         {{-- End of ADMIN / TL / OM --}}
