@@ -73,16 +73,15 @@
                                         <input class="form-control" type="hidden" name="client_id" value="{{ Auth::user()->thepermisssion->client_id }}">
                                         <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->theclient->name }}">
                                     @else
-                                        <select class="form-control select2" name="client_id" style="width:100%;">
+                                        <select class="form-control select2" name="client_id" id="client_id" style="width:100%;">
                                             <option value="" selected disabled>-- Select Client -- </option>
                                                 @foreach ($clients as $client )
                                                     @if($client)
-                                                        <option {{ old('client_id') == $client->id ? "selected" : "" }}
-                                                            value="{{ $client->id }}">{{ ucwords($client->name) }}
-                                                        </option>
+                                                        <option value="{{ $client->id }}">{{ ucwords($client->name) }} </option>
                                                     @endif
                                                 @endforeach
                                         </select>
+                                        <label id="client_idError" class="error"></label>
                                     @endif
                                 </div>
                             </div>
@@ -94,13 +93,11 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="client_activity_id" style="width:100%;">
+                                    <select class="form-control select2" name="client_activity_id" id="client_activity_id" style="width:100%;">
                                         <option value="" selected disabled>-- Select Client Activity -- </option>
                                             @foreach ($user_client_activities as $user_client_activity)
                                                 @if($user_client_activity)
-                                                    <option {{ old('client_activity_id') == $user_client_activity->id ? "selected" : "" }}
-                                                        value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }}
-                                                    </option>
+                                                    <option value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }} </option>
                                                 @endif
                                             @endforeach
                                     </select>

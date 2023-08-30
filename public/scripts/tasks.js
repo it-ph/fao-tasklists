@@ -40,6 +40,7 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#storeTaskForm')[0].reset();
+                        $("#client_id").val(null).trigger("change");
                         $("#client_activity_id").val(null).trigger("change");
                         $('#create_button').load(' #create_button');
                         $('.error').hide();
@@ -56,7 +57,7 @@ const TASK = (() => {
                         toastr.error(response.data.message);
                     }
                     $('#btn_save').empty();
-                    $('#btn_save').append('<i class="fa fa-save"></i> Save');
+                    $('#btn_save').append('<i class="fa fa-save"></i> Save and Start');
                     $('#btn_save').prop("disabled", false);
                 }).catch(error => {
                     toastr.error(error);
@@ -234,7 +235,7 @@ const TASK = (() => {
             showCancelButton: true,
             confirmButtonColor: "#00599D",
             cancelButtonColor: "#F46A6A",
-            confirmButtonText: 'Yes, update it!',
+            confirmButtonText: 'Yes, stop it!',
             cancelButtonText: 'No, cancel!',
             allowOutsideClick: false
         }).then((result) => {
