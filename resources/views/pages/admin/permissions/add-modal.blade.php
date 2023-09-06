@@ -85,7 +85,7 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            {{-- <option {{ old('permission') /== "admin" ? "selected" : "" }} value="admin" >Admin</option> --}}
+                            @if(Auth::user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif
                             <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant" >Accountant</option>
                             <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>

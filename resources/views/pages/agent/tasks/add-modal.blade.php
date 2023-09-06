@@ -26,7 +26,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" value="{{ date('Y-m-d') }}">
+                                    <input class="form-control" type="date" name="shift_date">
                                     <label id="shift_dateError" class="error"></label>
                                 </div>
                             </div>

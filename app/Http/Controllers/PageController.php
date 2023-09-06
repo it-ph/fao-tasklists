@@ -28,7 +28,7 @@ class PageController extends GlobalVariableController
     public function showAgentTasks(Request $request)
     {
         $status = $request['status'];
-        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
+        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
 
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')
