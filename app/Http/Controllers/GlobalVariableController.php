@@ -44,8 +44,12 @@ class GlobalVariableController extends Controller
                 'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
                 'thecluster:id,name',
                 'theclient:id,name',
-                'thetl.theuser','thetl.theuser.employeeprofile',
-                'theom.theuser','theom.theuser.employeeprofile',
+                'thetl:id,user_id',
+                'thetl.theuser:id,email',
+                'thetl.theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+                'theom:id,user_id',
+                'theom.theuser:id,email',
+                'theom.theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
             ])
             ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
             ->where('permission','<>','superadmin')
