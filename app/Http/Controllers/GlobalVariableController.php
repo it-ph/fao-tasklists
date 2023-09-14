@@ -33,7 +33,7 @@ class GlobalVariableController extends Controller
             ->get();
 
         $this->users = User::query()
-            ->with('employeeprofile:emp_id,emp_code,fullname,last_name')
+            ->with('employeeprofile:emp_id,fullname,last_name')
             ->select('id','email','employment_status')
             ->where('employment_status','active')
             ->orderBy('email', 'ASC')
@@ -41,15 +41,15 @@ class GlobalVariableController extends Controller
 
         $this->permissions = Permission::with([
                 'theuser:id,email',
-                'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+                'theuser.employeeprofile:emp_id,fullname,last_name',
                 'thecluster:id,name',
                 'theclient:id,name',
-                'thetl:id,user_id',
+                'thetl:user_id',
                 'thetl.theuser:id,email',
-                'thetl.theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
-                'theom:id,user_id',
+                'thetl.theuser.employeeprofile:emp_id,fullname,last_name',
+                'theom:user_id',
                 'theom.theuser:id,email',
-                'theom.theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+                'theom.theuser.employeeprofile:emp_id,fullname,last_name',
             ])
             ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
             ->where('permission','<>','superadmin')
@@ -59,7 +59,7 @@ class GlobalVariableController extends Controller
         $permissions = Permission::query()
                 ->from('permissions as ftp')
                 ->leftjoin($hr_portal.'.hr_employee_profile as hr','ftp.user_id', '=', 'hr.emp_id')
-                ->select(['ftp.id','ftp.user_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id','hr.emp_code'])
+                ->select(['ftp.id','ftp.user_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id'])
                 ->whereIn('ftp.permission',['admin','team leader','operations manager'])
                 ->orderBy('hr.fullname')
                 ->get();

@@ -29,15 +29,15 @@ class PermissionController extends GlobalVariableController
     {
         $permissions = Permission::with([
             'theuser:id,email',
-            'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+            'theuser.employeeprofile:emp_id,fullname,last_name',
             'thecluster:id,name',
             'theclient:id,name',
-            'thetl:id,user_id',
+            'thetl:user_id',
             'thetl.theuser:id,email',
-            'thetl.theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
-            'theom:id,user_id',
+            'thetl.theuser.employeeprofile:emp_id,fullname,last_name',
+            'theom:user_id',
             'theom.theuser:id,email',
-            'theom.theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
+            'theom.theuser.employeeprofile:emp_id,fullname,last_name',
         ])
         ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
         ->where('permission','<>','superadmin');
