@@ -46,7 +46,6 @@ class GlobalVariableController extends Controller
                 'theclient:id,name',
                 'thetl.theuser','thetl.theuser.employeeprofile',
                 'theom.theuser','theom.theuser.employeeprofile',
-                'theuser.theclientactivities:agent_id'
             ])
             ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
             ->where('permission','<>','superadmin')
@@ -60,14 +59,6 @@ class GlobalVariableController extends Controller
                 ->whereIn('ftp.permission',['admin','team leader','operations manager'])
                 ->orderBy('hr.fullname')
                 ->get();
-
-        // $this->tls = Permission::with([
-        //         'theuser:id,email',
-        //         'theuser.employeeprofile:emp_id,emp_code,fullname,last_name',
-        //     ])
-        //     ->select('id','user_id','permission')
-        //     ->whereIn('permission',['admin','team leader','operations manager'])
-        //     ->get();
 
         $this->tls = $permissions;
         $this->oms = $permissions;

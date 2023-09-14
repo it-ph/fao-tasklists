@@ -34,7 +34,6 @@ class PermissionController extends GlobalVariableController
             'theclient:id,name',
             'thetl.theuser','thetl.theuser.employeeprofile',
             'theom.theuser','theom.theuser.employeeprofile',
-            'theuser.theclientactivities:agent_id'
         ])
         ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
         ->where('permission','<>','superadmin');
