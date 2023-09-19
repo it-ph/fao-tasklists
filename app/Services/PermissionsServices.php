@@ -42,8 +42,8 @@ class PermissionsServices
         }
 
         foreach($permissions as $value) {
-            $employee_name = $value->theuser->employeeprofile->fullname.' '.$value->theuser->employeeprofile->last_name;
-            $email_address = $value->theuser->email;
+            $employee_name = $value->theuser ? $value->theuser->employeeprofile->fullname.' '.$value->theuser->employeeprofile->last_name : "";
+            $email_address = $value->theuser ? $value->theuser->email : "";
             $cluster = $value->thecluster ? $value->thecluster->name : "";
             $client = $value->theclient ? $value->theclient->name : "";
             $team_leader = $value->thetl ? $value->thetl->theuser->employeeprofile->fullname.' '.$value->thetl->theuser->employeeprofile->last_name : "";
