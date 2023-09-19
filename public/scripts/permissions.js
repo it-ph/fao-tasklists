@@ -100,8 +100,6 @@ const PERMISSION = (() => {
                 },
                 "pageLength": 10,
                 "pagingType": "full_numbers",
-                "order": [3, "desc"],
-                "columnDefs": [{ type: 'date', 'targets': [3] }],
             });
             $('#loader').hide();
             if (response.data.data.length > 0)
