@@ -43,12 +43,12 @@ class PermissionsServices
 
         foreach($permissions as $value) {
             $employee_name = $value->theuser ? $value->theuser->employeeprofile->fullname.' '.$value->theuser->employeeprofile->last_name : "";
-            $email_address = $value->theuser ? $value->theuser->email : "";
+            $email_address = $value->theuser ? strtolower($value->theuser->email) : "";
             $cluster = $value->thecluster ? $value->thecluster->name : "";
             $client = $value->theclient ? $value->theclient->name : "";
             $team_leader = $value->thetl ? $value->thetl->theuser->employeeprofile->fullname.' '.$value->thetl->theuser->employeeprofile->last_name : "";
             $operations_manager = $value->theom ? $value->theom->theuser->employeeprofile->fullname.' '.$value->theom->theuser->employeeprofile->last_name : "";
-            $permission = ucfirst($value->permission);
+            $permission = ucwords($value->permission);
             $action ='<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit User" onclick=PERMISSION.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Delete User" onclick=PERMISSION.destroy('.$value->id.')><i class="fas fa-times"></i></button>';
 
