@@ -1,4 +1,4 @@
-<div class="modal fade" id="editPermissionModal-{{ $permission->id }}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+<div class="modal fade" id="editPermissionModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
     aria-labelledby="editPermissionModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -7,47 +7,48 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editPermissionForm-{{ $permission->id }}" action="{{ route('permissions.update',$permission) }}" method="POST">
+                <form id="editPermissionForm" method="POST">
                     @csrf
-                    @method("PUT")
                     <div class="form-group">
                         <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                        <select class="form-control select2" name="user_id" style="width:100%;">
-                            <option value="">-- Select Employee -- </option>
+                        <select class="form-control select2" name="user_id" id="user_id_edit" style="width:100%;">
+                            <option value="" disabled>-- Select Employee -- </option>
                                 @foreach ($users as $user )
                                     @if($user)
                                         @isset($user->employeeprofile)
                                             <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                                value="{{ $user->id }}" @if($permission->user_id == $user->id) selected @endif>@isset($user->employeeprofile){{ ucwords($user->employeeprofile->fullname) }} {{ ucwords($user->employeeprofile->last_name) }}@endisset
+                                                value="{{ $user->id }}">@isset($user->employeeprofile){{ ucwords($user->employeeprofile->fullname) }} {{ ucwords($user->employeeprofile->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
                                 @endforeach
                         </select>
+                        <label id="user_id_editError" class="error"></label>
                     </div>
 
                     <div class="form-group">
                         <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                        <select class="form-control select2" name="cluster_id" style="width:100%;">
-                            <option value="">-- Select Cluster -- </option>
+                        <select class="form-control select2" name="cluster_id" id="cluster_id_edit" style="width:100%;">
+                            <option value="" disabled>-- Select Cluster -- </option>
                                 @foreach ($clusters as $cluster )
                                     @if($cluster)
                                         <option {{ old('cluster_id') == $cluster->id ? "selected" : "" }}
-                                            value="{{ $cluster->id }}" @if($permission->cluster_id == $cluster->id) selected @endif>{{ ucwords($cluster->name) }}
+                                            value="{{ $cluster->id }}">{{ ucwords($cluster->name) }}
                                         </option>
                                     @endif
                                 @endforeach
                         </select>
+                        <label id="cluster_id_editError" class="error"></label>
                     </div>
 
                     <div class="form-group">
                         <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:</strong></label>
-                        <select class="form-control select2" name="client_id" style="width:100%;">
+                        <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
                             <option value="">-- Select Client -- </option>
                                 @foreach ($clients as $client )
                                     @if($client)
                                         <option {{ old('client_id') == $client->id ? "selected" : "" }}
-                                            value="{{ $client->id }}" @if($permission->client_id == $client->id) selected @endif>{{ ucwords($client->name) }}
+                                            value="{{ $client->id }}">{{ ucwords($client->name) }}
                                         </option>
                                     @endif
                                 @endforeach
@@ -56,13 +57,13 @@
 
                     <div class="form-group">
                         <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEADER:</strong></label>
-                        <select class="form-control select2" name="tl_id" style="width:100%;">
+                        <select class="form-control select2" name="tl_id" id="tl_id_edit" style="width:100%;">
                             <option value="">-- Select Team Leader -- </option>
                                 @foreach ($tls as $tl )
                                     @if($tl)
                                         @isset($tl->theuser->employeeprofile)
                                             <option {{ old('tl_id') == $tl->theuser->id ? "selected" : "" }}
-                                                value="{{ $tl->theuser->id }}" @if($permission->tl_id == $tl->theuser->id) selected @endif>@isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
+                                                value="{{ $tl->theuser->id }}">@isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -72,13 +73,13 @@
 
                     <div class="form-group">
                         <label for="om_id" class="col-form-label custom-label"><strong>OPERATIONS MANAGER:</strong></label>
-                        <select class="form-control select2" name="om_id" style="width:100%;">
+                        <select class="form-control select2" name="om_id" id="om_id_edit" style="width:100%;">
                             <option value="">-- Select Operations Manager -- </option>
                                 @foreach ($oms as $om )
                                     @if($om)
                                         @isset($om->theuser->employeeprofile)
                                             <option {{ old('om_id') == $om->theuser->id ? "selected" : "" }}
-                                                value="{{ $om->theuser->id }}" @if($permission->om_id == $om->theuser->id) selected @endif>@isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname) }} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
+                                                value="{{ $om->theuser->id }}">@isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname) }} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -88,19 +89,20 @@
 
                     <div class="form-group">
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
-                        <select class="form-control" name="permission">
+                        <select class="form-control" name="permission" id="permission_edit">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            <option {{ old("permission") == "admin" ? "selected" : "" }} value="admin" @if($permission->permission == "admin") selected @endif @if(!Auth::user()->isAdmin()) disabled @endif>Admin</option>
-                            <option {{ old("permission") == "accountant" ? "selected" : "" }} value="accountant" @if($permission->permission == "accountant") selected @endif>Accountant</option>
-                            <option {{ old("permission") == "team leader" ? "selected" : "" }} value="team leader" @if($permission->permission == "team leader") selected @endif>Team Leader</option>
-                            <option {{ old("permission") == "operations manager" ? "selected" : "" }} value="operations manager" @if($permission->permission == "operations manager") selected @endif>Operations Manager</option>
+                            <option {{ old("permission") == "admin" ? "selected" : "" }} value="admin"@if(!Auth::user()->isAdmin()) disabled @endif>Admin</option>
+                            <option {{ old("permission") == "accountant" ? "selected" : "" }} value="accountant">Accountant</option>
+                            <option {{ old("permission") == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
+                            <option {{ old("permission") == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
                         </select>
+                        <label id="permission_editError" class="error"></label>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="update('editPermissionForm-{{ $permission->id }}')"><i class="fa fa-save"></i> Update</button>
+                <button type="submit" id="btn_update" class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Update</button>
                 <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                </form>
             </div>
         </div>
     </div>

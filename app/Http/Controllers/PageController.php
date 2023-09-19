@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,15 @@ class PageController extends GlobalVariableController
     {
         parent::__construct();
     }
+
+    /**
+     * Agent Tasks
+     */
+    public function showPermissions(Request $request)
+    {
+        return view('pages.admin.permissions.list');
+    }
+
     /**
      * Clusters
      */

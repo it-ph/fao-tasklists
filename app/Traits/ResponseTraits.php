@@ -69,6 +69,15 @@ trait ResponseTraits
         ];
     }
 
+    public function failedDeleteValidationResponse($message)
+    {
+        return [
+            'status'        => 'error',
+            'status_code'   => 500,
+            'message'       => $message,
+        ];
+    }
+
     public function generateRandomString($length = 30)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

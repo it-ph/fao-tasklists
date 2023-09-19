@@ -3,9 +3,13 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\ResponseTraits;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdatePermissionRequest extends FormRequest
 {
+    use ResponseTraits;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -37,5 +41,11 @@ class UpdatePermissionRequest extends FormRequest
             'cluster_id.required' => 'Cluster is required.',
             'permission.required' => 'Permission is required.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $response = $this->failedValidationResponse($validator->errors());
+        throw new HttpResponseException(response()->json($response, 200));
     }
 }

@@ -27,7 +27,7 @@
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
                                     <input class="form-control" type="date" name="shift_date">
-                                    <label id="shift_dateError" class="error"></label>
+                                    <label id="shift_dateError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
                                     <input class="form-control" type="date" name="date_received" id="date_received" value="{{ old('date_received') }}">
-                                    <label id="date_receivedError" class="error"></label>
+                                    <label id="date_receivedError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                                     @endif
                                                 @endforeach
                                         </select>
-                                        <label id="client_idError" class="error"></label>
+                                        <label id="client_idError" class="error" style="display:none"></label>
                                     @endif
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                                                 @endif
                                             @endforeach
                                     </select>
-                                    <label id="client_activity_idError" class="error"></label>
+                                    <label id="client_activity_idError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                 <div class="form-group">
                                     <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
                                     <textarea class="form-control" name="description" placeholder="Type the description here">{{ old('description') }}</textarea>
-                                    <label id="descriptionError" class="error"></label>
+                                    <label id="descriptionError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>

@@ -31,7 +31,7 @@
                             <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><i class="fas fa-plus"></i> Create</button>
                         </div>
                     </div>
-                    <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">
+                    <table id="tbl_permission" class="table table-bordered table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>
@@ -44,37 +44,17 @@
                                 <th width="5%"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($permissions as $permission)
-                                <tr>
-                                    <td>@isset($permission->theuser->employeeprofile) {{ $permission->theuser->employeeprofile->fullname }} {{ $permission->theuser->employeeprofile->last_name }} @endisset</td>
-                                    <td>@isset($permission->theuser->employeeprofile) {{ strtolower($permission->theuser->email) }} @endisset</td>
-                                    <td>@isset($permission->thecluster) {{ $permission->thecluster->name }} @endisset</td>
-                                    <td>@isset($permission->theclient) {{ $permission->theclient->name }} @endisset</td>
-                                    <td>@isset($permission->thetl->theuser->employeeprofile) {{ $permission->thetl->theuser->employeeprofile->fullname }} {{ $permission->thetl->theuser->employeeprofile->last_name }} @endisset</td>
-                                    <td>@isset($permission->theom->theuser->employeeprofile) {{ $permission->theom->theuser->employeeprofile->fullname }} {{ $permission->theom->theuser->employeeprofile->last_name }} @endisset</td>
-                                    <td>{{ ucwords($permission->permission) }}</td>
-                                    <td class="text-center">
-                                        <form id="deletePermissionForm-{{ $permission->id }}" class="form-horizontal" action="{{ route('permissions.destroy',$permission) }}" method="POST">
-                                            @csrf
-                                            @method("DELETE")
-                                            <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editPermissionModal-{{ $permission->id }}"><i class="fas fa-pencil-alt"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="idelete('deletePermissionForm-{{ $permission->id }}')"><i class="fas fa-times"></i></button>
-                                        </form>
-
-                                    </td>
-                                </tr>
-                                @include('pages.admin.permissions.edit-modal')
-                            @endforeach
-                        </tbody>
                     </table>
-
+                    <div id="div-spinner" class="text-center mt-4 mb-4">
+                        <span id="loader" style="font-size: 16px"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
+                    </div>
                 </div>
             </div>
         </div> <!-- end col -->
     </div>
 
     @include('pages.admin.permissions.add-modal')
+    @include('pages.admin.permissions.edit-modal')
 @endsection
 
 @section('script')
@@ -83,7 +63,7 @@
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <!-- Datatable init js -->
-    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script> --}}
     <!-- Select2 -->
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
@@ -166,6 +146,90 @@
                 $('#client_id option[value=""]').prop('selected', true);
             }
         }
+
+        function getClientTLOMsEdit()
+        {
+            var cluster_id = $('#cluster_id_edit').val();
+            if(cluster_id)
+            {
+                // load Clients
+                $.ajax({
+                    type: 'GET',
+                    url: `{{ url('clients/get_clients/${cluster_id}') }}`,
+                    dataType: 'json',
+                    success: function(result){
+                        console.log(result);
+                        if(result.length > 0)
+                                        {
+                            $('#client_id_edit').empty();
+                            $('#client_id_edit').append('<option value="">'+ '-- Select Client --' +'</option>');
+                            $.each(result, function(index, value){
+                                // console.log(value);
+                                $('#client_id_edit').append('<option value="'+ value.id +'">' + value.name +'</option>');
+                            });
+
+                        }
+                        else
+                        {
+                            $('#client_id_edit option[value=""]').prop('selected', true);
+                        }
+
+                    },
+
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+                // load TL / OM
+                $.ajax({
+                    type: 'GET',
+                    url: `{{ url('permissions/get_tloms/${cluster_id}') }}`,
+                    dataType: 'json',
+                    success: function(result){
+                        console.log(result);
+                        if(result.length > 0)
+                                        {
+                            $('#tl_id_edit').empty();
+                            $('#tl_id_edit').append('<option value="">'+ '-- Select Team Leader --' +'</option>');
+                            $.each(result, function(index, value){
+                                // console.log(value);
+                                $('#tl_id_edit').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                            });
+
+                            $('#om_id_edit').empty();
+                            $('#om_id_edit').append('<option value="">'+ '-- Select Operations Manager --' +'</option>');
+                            $.each(result, function(index, value){
+                                // console.log(value);
+                                $('#om_id_edit').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                            });
+
+                        }
+                        else
+                        {
+                            $('#tl_id_edit option[value=""]').prop('selected', true);
+                            $('#tom_id_edit option[value=""]').prop('selected', true);
+                        }
+
+                    },
+
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+            else
+            {
+                $('#tl_id_edit option[value=""]').prop('selected', true);
+                $('#tom_id_edit option[value=""]').prop('selected', true);
+                $('#client_id_edit option[value=""]').prop('selected', true);
+            }
+        }
     </script>
 @endsection
+
+@section('custom-js')
+    <script src="{{asset('scripts/permissions.js')}}"></script>
+@endsection
+
 

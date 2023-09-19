@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="storeClientActivityForm" action="{{ route('permissions.store') }}" method="POST">
+                <form id="storePermissionForm" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
@@ -23,6 +23,7 @@
                                     @endif
                                 @endforeach
                         </select>
+                        <label id="user_idError" class="error" style="display:none"></label>
                     </div>
 
                     <div class="form-group">
@@ -37,19 +38,13 @@
                                     @endif
                                 @endforeach
                         </select>
+                        <label id="cluster_idError" class="error" style="display:none"></label>
                     </div>
 
                     <div class="form-group">
                         <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:</strong></label>
                         <select class="form-control select2" name="client_id" id="client_id" style="width:100%;">
                             <option value="" selected disabled>-- Select Client -- </option>
-                                {{-- @foreach ($clients as $client )
-                                    @if($client)
-                                        <option {{ old('client_id') == $client->id ? "selected" : "" }}
-                                            value="{{ $client->id }}">{{ ucwords($client->name) }}
-                                        </option>
-                                    @endif
-                                @endforeach --}}
                         </select>
                     </div>
 
@@ -57,13 +52,6 @@
                         <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEADER:</strong></label>
                         <select class="form-control select2" name="tl_id" id="tl_id" style="width:100%;">
                             <option value="" selected disabled>-- Select Team Leader -- </option>
-                                {{-- @foreach ($tls as $tl )
-                                    @if($tl)
-                                        <option value="{{ $tl->theuser->id }}">
-                                            @isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
-                                        </option>
-                                    @endif
-                                @endforeach --}}
                         </select>
                     </div>
 
@@ -71,13 +59,6 @@
                         <label for="om_id" class="col-form-label custom-label"><strong>OPERATIONS MANAGER:</strong></label>
                         <select class="form-control select2" name="om_id" id="om_id" style="width:100%;">
                             <option value="" selected  disabled>-- Select Operations Manager -- </option>
-                                {{-- @foreach ($oms as $om )
-                                    @if($om)
-                                        <option value="{{ $om->theuser->id }}">
-                                            @isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname )}} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
-                                        </option>
-                                    @endif
-                                @endforeach --}}
                         </select>
                     </div>
 
@@ -90,12 +71,13 @@
                             <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
                         </select>
+                        <label id="permissionError" class="error" style="display:none"></label>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="store('storeClientActivityForm')"><i class="fa fa-save"></i> Save</button>
+                <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Save</button>
                 <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                </form>
             </div>
         </div>
     </div>

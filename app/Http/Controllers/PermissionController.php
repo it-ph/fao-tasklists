@@ -12,12 +12,17 @@ use App\Http\Resources\PermissionCollection;
 use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use App\Http\Controllers\GlobalVariableController;
+use App\Traits\ResponseTraits;
+use App\Services\PermissionsServices;
 
 class PermissionController extends GlobalVariableController
 {
+    use ResponseTraits;
+
     public function __construct()
     {
         parent::__construct();
+        $this->service = new PermissionsServices();
     }
 
     /**
@@ -27,38 +32,16 @@ class PermissionController extends GlobalVariableController
      */
     public function index()
     {
-        $permissions = Permission::with([
-            'theuser:id,email',
-            'theuser.employeeprofile:emp_id,fullname,last_name',
-            'thecluster:id,name',
-            'theclient:id,name',
-            'thetl:user_id',
-            'thetl.theuser:id,email',
-            'thetl.theuser.employeeprofile:emp_id,fullname,last_name',
-            'theom:user_id',
-            'theom.theuser:id,email',
-            'theom.theuser.employeeprofile:emp_id,fullname,last_name',
-        ])
-        ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
-        ->where('permission','<>','superadmin');
-
-        // admin
-        if(Auth::user()->isAdmin())
+        $result = $this->successResponse('Users loaded successfully!');
+        try
         {
-            $permissions = $permissions->get();
-        }
-        // operations manager
-        elseif(Auth::user()->isOperationsManager())
+            $result["data"] =  $this->service->load();
+        } catch (\Throwable $th)
         {
-            $permissions = $permissions->OMPermission()->get();
-        }
-        // team leader
-        elseif(Auth::user()->isTeamLeader())
-        {
-            $permissions = $permissions->TLPermission()->get();
+            return $this->errorResponse($th);
         }
 
-        return view('pages.admin.permissions.list',compact('permissions'));
+        return $this->returnResponse($result);
     }
 
     public function getTLOMs($cluster_id)
@@ -67,7 +50,7 @@ class PermissionController extends GlobalVariableController
         $permissions = Permission::query()
                 ->from('permissions as ftp')
                 ->leftjoin($hr_portal.'.hr_employee_profile as hr','ftp.user_id', '=', 'hr.emp_id')
-                ->select(['ftp.id','ftp.user_id','ftp.cluster_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id','hr.emp_code'])
+                ->select(['ftp.id','ftp.user_id','ftp.cluster_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id'])
                 ->where('ftp.cluster_id',$cluster_id)
                 ->whereIn('ftp.permission',['admin','team leader','operations manager'])
                 ->orderBy('hr.fullname')
@@ -94,8 +77,15 @@ class PermissionController extends GlobalVariableController
      */
     public function store(StorePermissionRequest $request)
     {
-        $permission = new PermissionResource(Permission::create($request->all()));
-        return redirect()->back()->with('with_success', "User created successfully!");
+        $result = $this->successResponse('User created successfully!');
+        try {
+            Permission::create($request->all());
+        } catch (\Throwable $th)
+        {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     /**
@@ -104,9 +94,17 @@ class PermissionController extends GlobalVariableController
      * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function show(Permission $permission)
+    public function show($id)
     {
-        // return new PermissionResource($permission->loadMissing(['theuser','theuser.employeeprofile','thecluster','thetl.theuser.employeeprofile','theom.theuser.employeeprofile']));
+        $result = $this->successResponse('User retrieved successfully!');
+        try
+        {
+            $result["data"] = Permission::findOrfail($id);
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     /**
@@ -127,10 +125,17 @@ class PermissionController extends GlobalVariableController
      * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePermissionRequest $request, Permission $permission)
+    public function update(UpdatePermissionRequest $request, $id)
     {
-        $permission = $permission->update($request->all());
-        return redirect()->back()->with('with_success', "User updated successfully!");
+        $result = $this->successResponse('User updated successfully!');
+        try {
+            Permission::findOrfail($id)->update($request->all());
+        } catch (\Throwable $th)
+        {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     /**
@@ -139,20 +144,28 @@ class PermissionController extends GlobalVariableController
      * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Permission $permission)
+    public function destroy($id)
     {
-        $has_related_permission = Permission::where('tl_id', $permission['user_id'])->orwhere('om_id', $permission['user_id'])->first();
-        $has_related_task = Task::where('agent_id', $permission['user_id'])->first();
-        $has_related_client_activity = ClientActivity::where('agent_id', $permission['user_id'])->first();
+        $permission = Permission::findOrfail($id);
+        $has_related_permission = Permission::where('tl_id', $permission->user_id)->orwhere('om_id', $permission->user_id)->first();
+        $has_related_task = Task::where('agent_id', $permission->user_id)->first();
+        $has_related_client_activity = ClientActivity::where('agent_id', $permission->user_id)->first();
 
         if($has_related_permission || $has_related_task || $has_related_client_activity)
         {
-            return redirect()->back()->withErrors("User cannot be deleted due to existence of related record.");
+            $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
         }
         else
         {
-            $permission->delete();
-            return redirect()->back()->with('with_success', "User deleted successfully!");
+            $result = $this->successResponse('User deleted successfully!');
+            try {
+                $permission->delete();
+            } catch (\Throwable $th)
+            {
+                return $this->errorResponse($th);
+            }
         }
+
+        return $this->returnResponse($result);
     }
 }

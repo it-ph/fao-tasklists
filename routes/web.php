@@ -63,7 +63,6 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
     // Agent Task: Start / Update / Stop
     Route::get('/my-tasks/{status?}', [PageController::class, 'showAgentTasks'])->name('my-tasks.index');
-    // Route::get('/tasks/{status?}', [PageController::class, 'AgentTasks'])->name('tasks.index');
     Route::group(['prefix' => 'my-task'],
             function ()
         {
@@ -75,7 +74,6 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
         });
 
-    // Route::get('my-task', [TasksController::class, 'agentTask'])->name('my-task.index');
     Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
     Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
     // Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
@@ -107,10 +105,6 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::get('tasks-upload-task-template', [ExportController::class, 'uploadTasksTemplate'])->name('upload.tasks.template');
             Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
 
-            // Report
-            // Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
-            // Route::post('export', [ExportController::class, 'export'])->name('export');
-
             // Resource
             Route::resource('clusters', ClusterController::class);
             Route::resource('clients', ClientController::class);
@@ -118,6 +112,17 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
             Route::resource('permissions', PermissionController::class);
             Route::get('permissions/get_tloms/{clusterId}', [PermissionController::class,'getTLOMs'])->name('permissions.get_tloms');
+
+            Route::get('permissions', [PageController::class, 'showPermissions'])->name('permissions.index');
+            Route::group(['prefix' => 'permission'],
+            function ()
+            {
+                Route::get('/all', [PermissionController::class,'index'])->name('permission.index');
+                Route::post('/store', [PermissionController::class,'store'])->name('permission.store');
+                Route::get('/show/{id}', [PermissionController::class,'show'])->name('permission.show');
+                Route::post('/update/{id}', [PermissionController::class,'update'])->name('permission.update');
+                Route::post('/delete/{id}', [PermissionController::class,'destroy'])->name('permission.delete');
+            });
 
             Route::resource('dashboard-activities', DashboardActivityController::class);
             Route::resource('user-clients', UserClientController::class);
