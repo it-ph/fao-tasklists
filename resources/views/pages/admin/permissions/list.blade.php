@@ -62,9 +62,6 @@
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
-    <!-- Datatable init js -->
-    {{-- <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script> --}}
-    <!-- Select2 -->
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
     <script>

@@ -38,26 +38,24 @@
                                 <button type="button" class="btn btn-primary waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false"><i class="fa fa-filter"></i> Filter <i class="mdi mdi-chevron-down"></i></button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route("task.index", ['status' => "all"]) }}">All Tasks</a>
-                                    <a class="dropdown-item" href="{{ route("task.index", ['status' => "In Progress"]) }}">In Progress</a>
-                                    <a class="dropdown-item" href="{{ route("task.index", ['status' => "On Hold"]) }}">On Hold</a>
-                                    <a class="dropdown-item" href="{{ route("task.index", ['status' => "Completed"]) }}">Completed</a>
+                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "all"]) }}">All Tasks</a>
+                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "In Progress"]) }}">In Progress</a>
+                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "On Hold"]) }}">On Hold</a>
+                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
-                            {{-- <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addTaskModal"><i class="fas fa-plus"></i> Create</button> --}}
                         </div>
                     </div>
-                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
+                    <p id="status" style="display:none">@if(\Request::get('status')) {{ (\Request::get('status')) }} @else all @endif</p>
+                    <table id="tbl_task" class="table table-bordered table-striped nowrap w-100">
                         <thead>
                             <tr>
-                                {{-- <th>Action</th> --}}
                                 <th>Status</th>
                                 <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                {{-- <th>Dashboard Activity</th> --}}
                                 <th>Client Activity</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
@@ -68,43 +66,10 @@
                                 <th>Remarks</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($tasks as $task)
-                                <tr>
-                                    <td>
-                                        @if($task->status == "In Progress")
-                                            <span class="text-success"><strong>{{ $task->status }}</strong></span>
-                                        @elseif($task->status == "On Hold")
-                                            <span class="text-warning"><strong>{{ $task->status }}</strong></span>
-                                        @elseif($task->status == "Completed")
-                                            <span class="text-primary"><strong>{{ $task->status }}</strong></span>
-                                        @endif
-                                        {{ $task->theagent->thepermission }}
-                                    </td>
-                                    <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
-                                    <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
-                                    <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
-                                    <td>{{ $task->thecluster->name }}</td>
-                                    <td>{{ $task->theclient->name }}</td>
-                                    {{-- <td>{{ $task->thedashboardactivity->name }}</td> --}}
-                                    <td>{{ $task->theclientactivity->name }}</td>
-                                    <td>{{ $task->description }}</td>
-                                    <td>@isset($task->start_date){{ date('m/d/Y h:i:s a', strtotime($task->start_date)) }}@endisset</td>
-                                    <td>@isset($task->end_date){{ date('m/d/Y h:i:s a', strtotime($task->end_date)) }} @else - @endisset</td>
-                                    <td>
-                                        @if($task->status == "On Hold")
-                                            -
-                                        @else
-                                            @isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else -  @endisset
-                                        @endif
-                                    </td>
-                                    <td>{{ $task->actual_handling_time }}</td>
-                                    <td>{{ $task->volume }}</td>
-                                    <td>{{ $task->remarks }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
                     </table>
+                    <div id="div-spinner" class="text-center mt-4 mb-4">
+                        <span id="loader" style="font-size: 16px"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
+                    </div>
                 </div>
             </div>
         </div> <!-- end col -->
@@ -117,33 +82,10 @@
     <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
-    <!-- Datatable init js -->
-    {{-- <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script> --}}
-    <!-- Select2 -->
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-                $('#datatable').DataTable({
-                    language: {
-                        // search: '_INPUT_',
-                        // searchPlaceholder: 'Search',
-                        oPaginate: {
-                            sNext: '<i class="fa fa-forward"></i>',
-                            sPrevious: '<i class="fa fa-backward"></i>',
-                            sFirst: '<i class="fa fa-step-backward"></i>',
-                            sLast: '<i class="fa fa-step-forward"></i>'
-                        },
-                    },
-                    "pageLength": 10,
-                    "pagingType": "full_numbers",
-                    "order": [2, "desc"],
-                    "columnDefs": [{ type: 'date', 'targets': [2] }],
-                    fixedColumns: {
-                        left: 3
-                    },
-                    "scrollX": true,
-                });
-            });
-    </script>
+@endsection
+
+@section('custom-js')
+    <script src="{{asset('scripts/tasklists.js')}}"></script>
 @endsection

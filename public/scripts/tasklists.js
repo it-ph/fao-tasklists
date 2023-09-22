@@ -4,12 +4,11 @@ $(document).ready(function() {
 
 const TASK = (() => {
     let this_task = {}
-    let _task_id;
 
     // load data
     this_task.load = () => {
         var filter_status = $('#status').html();
-        axios(`${APP_URL}/my-task/` + filter_status).then(function(response) {
+        axios(`${APP_URL}/task?status=` + filter_status).then(function(response) {
             $('#tbl_task').DataTable().destroy();
             var table;
             console.log(response.data.data)
@@ -44,8 +43,8 @@ const TASK = (() => {
                 },
                 "pageLength": 10,
                 "pagingType": "full_numbers",
-                "order": [3, "asc"],
-                "columnDefs": [{ type: 'date', 'targets': [3] }],
+                "order": [2, "desc"],
+                "columnDefs": [{ type: 'date', 'targets': [2] }],
                 "scrollX": true,
                 fixedColumns: {
                     left: 3

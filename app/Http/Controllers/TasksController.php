@@ -29,11 +29,6 @@ class TasksController extends GlobalVariableController
     public function agentTask(Request $request)
     {
         $status = $request['status'];
-        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
-        {
-            return view('errors.404');
-        }
-
         $result = $this->successResponse('Tasks loaded successfully!');
         try {
             $result["data"] = $this->service->load($status);
@@ -48,54 +43,16 @@ class TasksController extends GlobalVariableController
     // ADMIN, TL, & OM ACCESS
     public function index(Request $request)
     {
-        // accountant
-        if(Auth::user()->isAccountant())
-        {
-            return redirect()->route('unauthorized');
-        }
-
+        $result = $this->successResponse('Tasks loaded successfully!');
         $status = $request['status'];
-        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
-        {
-            return view('errors.404');
+
+        try {
+            $result["data"] = $this->service->loadTasklists($status);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
         }
 
-        $tasks = Task::query()
-            ->with([
-                'thecluster:id,name',
-                'theclient:id,name',
-                'theagent:id,email',
-                'theagent.employeeprofile:emp_id,fullname,last_name',
-                'theclientactivity:id,name'
-            ]);
-
-        // admin
-        if(Auth::user()->isAdmin())
-        {
-            $tasks = $tasks;
-        }
-        // operations manager
-        elseif(Auth::user()->isOperationsManager())
-        {
-            $tasks = $tasks->OMPermission();
-        }
-        // team leader
-        elseif(Auth::user()->isTeamLeader())
-        {
-            $tasks = $tasks->TLPermission();
-        }
-
-        // filter by status
-        if(in_array($status,(['','all'])))
-        {
-            $tasks = $tasks->get();
-        }
-        else
-        {
-            $tasks = $tasks->where('status',$status)->get();
-        }
-
-        return view('pages.admin.tasks.list', compact('tasks'));
+        return $this->returnResponse($result);
     }
 
     public function store(TaskRequest $request)
@@ -177,7 +134,6 @@ class TasksController extends GlobalVariableController
             Redis::del('in_progress_tasks_of_agent_'.Auth::id());
             Redis::del($status.'_tasks_of_agent_'.Auth::id());
             Redis::del('all_tasks_of_agent_'.Auth::id());
-
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);

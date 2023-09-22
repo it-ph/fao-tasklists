@@ -79,7 +79,9 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     // Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
     // Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
     Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
+
     Route::resource('task', TasksController::class);
+    Route::get('tasks', [PageController::class, 'showAgentTaskLists'])->name('tasks.index');
 
     // Client Activity Import / Export
     Route::resource('client-activities', ClientActivityController::class);

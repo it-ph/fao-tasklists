@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\Client;
 use App\Models\Permission;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class PageController extends GlobalVariableController
     }
 
     /**
-     * Agent Tasks
+     * Agent Permissions
      */
     public function showPermissions(Request $request)
     {
@@ -32,12 +33,32 @@ class PageController extends GlobalVariableController
         return view('pages.admin.clusters.list');
     }
 
-    /**
-     * Agent Tasks
-     */
+    // ADMIN, TL, & OM ACCESS
+    public function showAgentTaskLists(Request $request)
+    {
+        // accountant
+        if(Auth::user()->isAccountant())
+        {
+            return redirect()->route('unauthorized');
+        }
+
+        $status = $request['status'];
+        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
+        {
+            return view('errors.404');
+        }
+
+        return view('pages.admin.tasks.list');
+    }
+
+    // AGENT ACCESS
     public function showAgentTasks(Request $request)
     {
         $status = $request['status'];
+        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
+        {
+            return view('errors.404');
+        }
         $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
 
         $user_client_activities = ClientActivity::query()

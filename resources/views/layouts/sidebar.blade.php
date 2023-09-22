@@ -43,8 +43,8 @@
         {{-- Start of ADMIN / TL / OM --}}
             @if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin())
                 <li>
-                    <a href="{{ url('task') }}" class="waves-effect">
-                        <i class="bx bx-task"></i>
+                    <a href="{{ url('tasks/?status=all') }}" class="waves-effect" @if(\Request::has('status')) style="color:#fff" @endif>
+                        <i class="bx bx-task" @if(\Request::has('status')) style="color:#fff" @endif></i>
                         <span key="t-tasks-list">Task Lists</span>
                     </a>
                 </li>
