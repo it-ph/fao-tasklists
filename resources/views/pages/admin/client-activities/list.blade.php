@@ -43,11 +43,11 @@
                         <tbody>
                             @foreach ($permissions as $permission)
                                 <tr>
-                                    <td>@isset($permission->theuser->employeeprofile) {{ $permission->theuser->employeeprofile->fullname }} {{ $permission->theuser->employeeprofile->last_name }} @endisset</td>
-                                    <td>@isset($permission->theuser->employeeprofile) {{ strtolower($permission->theuser->email) }} @endisset</td>
+                                    <td>@isset($permission->theuser) {{ $permission->theuser->fullname }} {{ $permission->theuser->last_name }} @endisset</td>
+                                    <td>@isset($permission->theuser) {{ strtolower($permission->theuser->email) }} @endisset</td>
                                     <td class="text-center">
-                                        <a href="{{ url('client-activities') }}/?user_id={{ $permission->theuser->id }}&employeename={{ strtolower($permission->theuser->employeeprofile->fullname) }} {{ strtolower($permission->theuser->employeeprofile->last_name) }}" title="View Client Activities">
-                                            <button class="btn btn-primary btn-sm"><span class="badge" style="background-color:#fff; color:#00599D">{{ $permission->theuser->theclientactivities->count() }}</span> View Client Activities <i class="fa fa-chevron-right"></i></button>
+                                        <a href="{{ url('client-activities') }}/?user_id={{ $permission->theuser->emp_id }}&employeename={{ strtolower($permission->theuser->fullname) }} {{ strtolower($permission->theuser->last_name) }}" title="View Client Activities">
+                                            <button class="btn btn-primary btn-sm"><span class="badge" style="background-color:#fff; color:#00599D">{{ $permission->theclientactivities->count() }}</span> View Client Activities <i class="fa fa-chevron-right"></i></button>
                                         </a>
                                     </td>
                                 </tr>

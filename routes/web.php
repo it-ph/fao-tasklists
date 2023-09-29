@@ -53,6 +53,9 @@ Route::GET('redis/clear-cache', function () {
     echo 'redis cache cleared successfully!';
 });
 
+// HRPORTAL API
+Route::GET('HREmployeeProfileAPI', [PermissionController::class, 'hrportalusers']); 
+
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
  */

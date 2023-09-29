@@ -59,13 +59,13 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task created successfully!');
         try {
-            $request['created_by'] = Auth::id();
+            $request['created_by'] = Auth::user()->emp_id;
             $request['start_date'] = Carbon::now();
             $this->model->create($request->all());
 
             // clear cache
-            Redis::del('in_progress_tasks_of_agent_'.Auth::id());
-            Redis::del('all_tasks_of_agent_'.Auth::id());
+            Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
 
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
@@ -93,8 +93,8 @@ class TasksController extends GlobalVariableController
             $this->model->findOrfail($id)->update($request->all());
 
             // clear cache
-            Redis::del('in_progress_tasks_of_agent_'.Auth::id());
-            Redis::del('all_tasks_of_agent_'.Auth::id());
+            Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
@@ -131,9 +131,9 @@ class TasksController extends GlobalVariableController
             ]);
 
             // clear cache
-            Redis::del('in_progress_tasks_of_agent_'.Auth::id());
-            Redis::del($status.'_tasks_of_agent_'.Auth::id());
-            Redis::del('all_tasks_of_agent_'.Auth::id());
+            Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            Redis::del($status.'_tasks_of_agent_'.Auth::user()->emp_id);
+            Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);

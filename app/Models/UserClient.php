@@ -17,7 +17,7 @@ class UserClient extends Model
 
     public function theuser()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'emp_id');
     }
 
     public function theclient()

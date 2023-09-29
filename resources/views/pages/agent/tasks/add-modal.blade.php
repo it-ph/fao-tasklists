@@ -14,8 +14,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="agent_id" value="{{ Auth::id() }}">
-                                    <input class="form-control" type="text" disabled value="@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset">
+                                    <input class="form-control" type="hidden" name="agent_id" value="{{ Auth::user()->emp_id }}">
+                                    <input class="form-control" type="text" disabled value="{{ Auth::user()->fullname }} {{ Auth::user()->last_name }}">
                                 </div>
                             </div>
                         </div>

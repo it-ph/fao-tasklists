@@ -63,7 +63,7 @@ class PageController extends GlobalVariableController
 
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')
-            ->where('agent_id', Auth::id())
+            ->where('agent_id', Auth::user()->emp_id)
             ->orderBy('name', 'ASC')
             ->get();
 

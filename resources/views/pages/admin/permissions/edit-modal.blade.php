@@ -15,9 +15,9 @@
                             <option value="" disabled>-- Select Employee -- </option>
                                 @foreach ($users as $user )
                                     @if($user)
-                                        @isset($user->employeeprofile)
+                                        @isset($user)
                                             <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                                value="{{ $user->id }}">@isset($user->employeeprofile){{ ucwords($user->employeeprofile->fullname) }} {{ ucwords($user->employeeprofile->last_name) }}@endisset
+                                                value="{{ $user->id }}">@isset($user){{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -61,9 +61,9 @@
                             <option value="">-- Select Team Leader -- </option>
                                 @foreach ($tls as $tl )
                                     @if($tl)
-                                        @isset($tl->theuser->employeeprofile)
+                                        @isset($tl->theuser)
                                             <option {{ old('tl_id') == $tl->theuser->id ? "selected" : "" }}
-                                                value="{{ $tl->theuser->id }}">@isset($tl->theuser->employeeprofile){{ ucwords($tl->theuser->employeeprofile->fullname) }} {{ ucwords($tl->theuser->employeeprofile->last_name) }}@endisset
+                                                value="{{ $tl->theuser->id }}">@isset($tl->theuser){{ ucwords($tl->theuser->fullname) }} {{ ucwords($tl->theuser->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -77,9 +77,9 @@
                             <option value="">-- Select Operations Manager -- </option>
                                 @foreach ($oms as $om )
                                     @if($om)
-                                        @isset($om->theuser->employeeprofile)
+                                        @isset($om->theuser)
                                             <option {{ old('om_id') == $om->theuser->id ? "selected" : "" }}
-                                                value="{{ $om->theuser->id }}">@isset($om->theuser->employeeprofile){{ ucwords($om->theuser->employeeprofile->fullname) }} {{ ucwords($om->theuser->employeeprofile->last_name) }}@endisset
+                                                value="{{ $om->theuser->id }}">@isset($om->theuser){{ ucwords($om->theuser->fullname) }} {{ ucwords($om->theuser->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif

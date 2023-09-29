@@ -132,7 +132,6 @@
                                     <th>Date Received</th>
                                     <th>Cluster</th>
                                     <th>Client</th>
-                                    {{-- <th>Dashboard Activity</th> --}}
                                     <th>Client Activity</th>
                                     <th>Description</th>
                                     <th>Start Date</th>
@@ -155,12 +154,11 @@
                                                 <span class="text-primary"><strong>{{ $task->status }}</strong></span>
                                             @endif
                                         </td>
-                                        <td>@isset($task->theagent->employeeprofile){{ $task->theagent->employeeprofile->fullname }} {{ $task->theagent->employeeprofile->last_name }}@endisset</td>
+                                        <td>@isset($task->theagent){{ $task->theagent->fullname }} {{ $task->theagent->last_name }}@endisset</td>
                                         <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
                                         <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
                                         <td>{{ $task->thecluster->name }}</td>
                                         <td>{{ $task->theclient->name }}</td>
-                                        {{-- <td>{{ $task->thedashboardactivity->name }}</td> --}}
                                         <td>{{ $task->theclientactivity->name }}</td>
                                         <td>{{ $task->description }}</td>
                                         <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
@@ -188,12 +186,6 @@
     <!-- end row -->
 @endsection
 @section('script')
-    <!-- apexcharts -->
-    {{-- <script src="{{ URL::asset('/assets/libs/apexcharts/apexcharts.min.js') }}"></script> --}}
-
-    <!-- dashboard init -->
-    {{-- <script src="{{ URL::asset('/assets/js/pages/dashboard.init.js') }}"></script> --}}
-
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>

@@ -29,6 +29,9 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><i class="fas fa-plus"></i> Create</button>
+                            <a href="{{ url('HREmployeeProfileAPI') }}">
+                                <button class="btn btn-primary waves-effect waves-light" title="Click to update the employees list in create user."><i class="fa fa-sync"></i> Sync HR Portal Employees</button>
+                            </a>
                         </div>
                     </div>
                     <table id="tbl_permission" class="table table-bordered table-striped dt-responsive nowrap w-100">

@@ -25,15 +25,15 @@ class Task extends Model
     public function scopeTLPermission($query)
     {
         return $query->whereHas('thepermission', function ($q){
-                $q->where('tl_id',Auth::id());
+                $q->where('tl_id',Auth::user()->emp_id);
             })
             ->where('cluster_id',Auth::user()->thepermisssion->cluster_id)
-            ->orwhere('agent_id',Auth::id());
+            ->orwhere('agent_id',Auth::user()->emp_id);
     }
 
     public function scopeAccountantPermission($query)
     {
-        return $query->where('agent_id',Auth::id());
+        return $query->where('agent_id',Auth::user()->emp_id);
     }
 
     public function thecluster()
@@ -48,7 +48,7 @@ class Task extends Model
 
     public function theagent()
     {
-        return $this->belongsTo(User::class, 'agent_id');
+        return $this->belongsTo(User::class, 'agent_id', 'emp_id');
     }
 
     public function thepermission()

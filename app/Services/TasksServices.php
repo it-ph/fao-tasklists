@@ -28,7 +28,7 @@ class TasksServices
                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: On Hold / Complete" onclick=TASK.show_stop('.$value->id.')><i class="fas fa-stop"></i></button>' :
                 '-';
 
-            $employee_name = $value->theagent->employeeprofile->fullname.' '.$value->theagent->employeeprofile->last_name;
+            $employee_name = $value->theagent->fullname.' '.$value->theagent->last_name;
             $shift_date = date("m/d/Y",strtotime($value->shift_date));
             $date_received = date("m/d/Y",strtotime($value->date_received));
             $cluster = $value->thecluster->name;
@@ -73,7 +73,7 @@ class TasksServices
                 'thecluster:id,name',
                 'theclient:id,name',
                 'theagent:id,email',
-                'theagent.employeeprofile:emp_id,fullname,last_name',
+                'theagent:emp_id,fullname,last_name',
                 'theclientactivity:id,name'
             ]);
 
@@ -114,7 +114,7 @@ class TasksServices
                 $status = '<span class="text-primary"><strong>'.$value->status.'</strong></span>';
             }
 
-            $employee_name = $value->theagent->employeeprofile->fullname.' '.$value->theagent->employeeprofile->last_name;
+            $employee_name = $value->theagent->fullname.' '.$value->theagent->last_name;
             $shift_date = date("m/d/Y",strtotime($value->shift_date));
             $date_received = date("m/d/Y",strtotime($value->date_received));
             $cluster = $value->thecluster->name;

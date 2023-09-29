@@ -15,11 +15,9 @@
                             <option value="" selected disabled>-- Select Employee -- </option>
                                 @foreach ($users as $user )
                                     @if($user)
-                                        @isset($user->employeeprofile)
-                                            <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                                value="{{ $user->id }}">@isset($user->employeeprofile){{ ucwords($user->employeeprofile->fullname) }} {{ ucwords($user->employeeprofile->last_name) }}@endisset
-                                            </option>
-                                        @endisset
+                                        <option {{ old('user_id') == $user->emp_id ? "selected" : "" }}
+                                            value="{{ $user->emp_id }}">{{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}
+                                        </option>
                                     @endif
                                 @endforeach
                         </select>

@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $connection = 'mysql2';
+    // protected $connection = 'mysql2';
     protected $table = 'users';
     protected $dates = ['two_facor_expires_at'];
 
@@ -20,14 +20,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'employment_status',
-        'two_factor_code',
-        'two_factor_expires_at'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -55,23 +48,23 @@ class User extends Authenticatable
 
     function thepermisssion()
     {
-        return $this->hasOne(Permission::class, 'user_id');
+        return $this->hasOne(Permission::class, 'user_id', 'emp_id');
     }
 
     public function theclientactivities()
     {
-        return $this->hasMany(ClientActivity::class, 'agent_id');
+        return $this->hasMany(ClientActivity::class, 'agent_id', 'emp_id');
     }
 
     public function thetasks()
     {
-        return $this->hasMany(Task::class, 'agent_id');
+        return $this->hasMany(Task::class, 'agent_id', 'emp_id');
     }
 
     public function hasActiveTask()
     {
         $hasActiveTask = Task::query()
-            ->where('agent_id', $this->id)
+            ->where('agent_id', $this->emp_id)
             ->where('status', 'In Progress')
             ->count();
 
@@ -83,7 +76,7 @@ class User extends Authenticatable
     public function isStatusActive()
     {
         $hasPermission = Permission::query()
-            ->where('user_id', $this->id)
+            ->where('user_id', $this->emp_id)
             ->first();
 
         if($this->employment_status  == 'active' && $hasPermission)
@@ -105,7 +98,7 @@ class User extends Authenticatable
             ->whereIn('permission',[
                 $permission
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)
@@ -125,7 +118,7 @@ class User extends Authenticatable
                 'superadmin',
                 $permission
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)
@@ -145,7 +138,7 @@ class User extends Authenticatable
                 'superadmin',
                 $permission
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)
@@ -165,7 +158,7 @@ class User extends Authenticatable
                 'superadmin',
                 $permission
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)
@@ -186,7 +179,7 @@ class User extends Authenticatable
                 'admin',
                 $permission
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)
@@ -207,7 +200,7 @@ class User extends Authenticatable
                 'admin',
                 $permission
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)
@@ -230,7 +223,7 @@ class User extends Authenticatable
                 $tl,
                 $om
             ])
-            ->where('user_id',$this->id)
+            ->where('user_id',$this->emp_id)
             ->first();
 
         if($hasPermission)

@@ -94,7 +94,7 @@
                             <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/user2-160x1601.png') }}">
                         </div>
                         <div class="text-center">
-                            <h5 class="name font-weight-bold mb-1">@isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset</h5>
+                            <h5 class="name font-weight-bold mb-1">{{ Auth::user()->fullname }} {{ Auth::user()->last_name }}</h5>
                             <p class="email text-muted mb-2">{{ Auth::user()->email }}</p>
                             <p class="email text-muted mb-1">{{ ucwords(Auth::user()->thepermisssion->permission) }}</p>
                         </div>

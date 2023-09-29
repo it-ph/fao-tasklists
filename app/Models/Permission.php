@@ -29,7 +29,7 @@ class Permission extends Model
 
     public function theuser()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'emp_id');
     }
 
     public function thecluster()
@@ -40,6 +40,11 @@ class Permission extends Model
     public function theclient()
     {
         return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    public function theclientactivities()
+    {
+        return $this->hasMany(ClientActivity::class, 'agent_id', 'user_id');
     }
 
     public function thetl()

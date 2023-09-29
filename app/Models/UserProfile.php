@@ -9,6 +9,6 @@ class UserProfile extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mysql2';
-    protected $table = 'hr_employee_profile';
+    // protected $connection = 'mysql2';
+    protected $table = 'hrportal_employeeprofile';
 }
