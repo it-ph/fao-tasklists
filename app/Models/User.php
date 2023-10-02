@@ -41,11 +41,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function employeeprofile()
-    {
-        return $this->hasOne(UserProfile::class, 'emp_id');
-    }
-
     function thepermisssion()
     {
         return $this->hasOne(Permission::class, 'user_id', 'emp_id');
