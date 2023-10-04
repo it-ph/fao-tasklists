@@ -30,7 +30,7 @@ class PermissionController extends GlobalVariableController
     public function hrportalusers()
     {
         $hrportal = env('HRPORTAL_URL');
-        $response = Http::get($hrportal.'/api/HREmployeeProfileAPI/eyJ0eXAiOiJKV1QiLCJub25jZSI6InlVTmhITXhtYnNkemdKdXBRTFZLV3c3RGprNUc4eW5uRzFUM2lrMzZPTE0iLC');
+        $response = Http::withOptions(['verify' => false])->get($hrportal.'/api/HREmployeeProfileAPI/eyJ0eXAiOiJKV1QiLCJub25jZSI6InlVTmhITXhtYnNkemdKdXBRTFZLV3c3RGprNUc4eW5uRzFUM2lrMzZPTE0iLC');
         $jsonData = $response->json();
         $users = json_encode($jsonData);
         $hrportal_users = json_decode($users);
@@ -54,7 +54,7 @@ class PermissionController extends GlobalVariableController
             ]);
         }
 
-        return redirect()->back()->with('with_success', "HR Portal Employees has been synchronize!");
+        return redirect()->back()->with('with_success', "HR Portal Employees has been synchronized!");
     }
 
     /**
