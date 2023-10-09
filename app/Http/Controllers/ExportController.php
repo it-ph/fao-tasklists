@@ -40,7 +40,7 @@ class ExportController extends Controller
             ->with([
                 'thecluster:id,name',
                 'theclient:id,name',
-                'theagent.employeeprofile:emp_id,email,fullname,last_name',
+                'theagent:emp_id,email,fullname,last_name',
                 'theclientactivity:id,name'
             ])
             ->whereRaw(

@@ -32,7 +32,7 @@
                         </div>
                     </div>
 
-                    <table id="datatable" class="table table-bordered table-striped dt-responsive nowrap w-100">
+                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>

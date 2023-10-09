@@ -28,7 +28,7 @@
             // "order": [0, "desc"],
             // orderCellsTop: true,
             // fixedHeader: true,
-            // "scrollX": true,
+            "scrollX": true,
         }); //Buttons examples
 
         var table = $('#datatable-tasks').DataTable({
