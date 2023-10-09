@@ -101,9 +101,6 @@ const PERMISSION = (() => {
                 "pageLength": 10,
                 "pagingType": "full_numbers",
                 "scrollX": true,
-                fixedColumns: {
-                    left: 2
-                },
             });
             $('#loader').hide();
             if (response.data.data.length > 0)
