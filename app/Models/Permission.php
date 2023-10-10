@@ -19,7 +19,7 @@ class Permission extends Model
 
     public function scopeTLPermission($query)
     {
-        return $query->where('tl_id',Auth::id())->where('cluster_id',Auth::user()->thepermisssion->cluster_id)->orwhere('user_id',Auth::id());
+        return $query->where('tl_id',Auth::user()->emp_id)->where('cluster_id',Auth::user()->thepermisssion->cluster_id)->orwhere('user_id',Auth::user()->emp_id);
     }
 
     public function scopeOMPermission($query)
