@@ -3,11 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Traits\ResponseTraits;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Foundation\Http\FormRequest;
 
-class StoreClusterRequest extends FormRequest
+class ClusterRequest extends FormRequest
 {
     use ResponseTraits;
     /**
@@ -28,7 +28,7 @@ class StoreClusterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required','unique:clusters,name']
+            'name' => ['required']
         ];
     }
 
@@ -36,7 +36,6 @@ class StoreClusterRequest extends FormRequest
     {
         return [
             'name.required' => 'Cluster Name is required.',
-            'name.unique' => 'Cluster Name already exists.',
         ];
     }
 

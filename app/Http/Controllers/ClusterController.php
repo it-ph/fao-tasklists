@@ -2,16 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClusterRequest;
 use App\Models\Task;
 use App\Models\Cluster;
 use App\Models\Permission;
+use App\Traits\ResponseTraits;
+use App\Services\ClustersServices;
 use App\Http\Resources\ClusterResource;
-use App\Http\Resources\ClusterCollection;
 use App\Http\Requests\StoreClusterRequest;
 use App\Http\Requests\UpdateClusterRequest;
 
 class ClusterController extends Controller
 {
+    use ResponseTraits;
+
+    public function __construct()
+    {
+        $this->model = new Cluster();
+        $this->service = new ClustersServices();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,8 +29,17 @@ class ClusterController extends Controller
 
     public function index()
     {
-        $clusters = new ClusterCollection(Cluster::all());
-        return view('pages.admin.clusters.list', compact('clusters'));
+        $result = $this->successResponse('Clusters loaded successfully!');
+        try
+        {
+            $result["data"] =  $this->service->load();
+        } catch (\Throwable $th)
+        {
+            return $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
+
     }
 
     /**
@@ -42,8 +60,15 @@ class ClusterController extends Controller
      */
     public function store(StoreClusterRequest $request)
     {
-        $cluster = new ClusterResource(Cluster::create($request->all()));
-        return redirect()->back()->with('with_success', "Cluster created successfully!");
+        $result = $this->successResponse('Cluster created successfully!');
+        try {
+            Cluster::create($request->all());
+        } catch (\Throwable $th)
+        {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     /**
@@ -52,9 +77,16 @@ class ClusterController extends Controller
      * @param  \App\Models\Cluster  $cluster
      * @return \Illuminate\Http\Response
      */
-    public function show(Cluster $cluster)
+    public function show($id)
     {
-        // return new ClusterResource($cluster);
+        $result = $this->successResponse('Cluster retrieved successfully!');
+        try {
+            $result["data"] = $this->model::findOrfail($id);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     /**
@@ -75,10 +107,17 @@ class ClusterController extends Controller
      * @param  \App\Models\Cluster  $cluster
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClusterRequest $request, Cluster $cluster)
+    public function update(ClusterRequest $request, $id)
     {
-        $cluster = $cluster->update($request->all());
-        return redirect()->back()->with('with_success', "Cluster updated successfully!");
+        $result = $this->successResponse('Cluster updated successfully!');
+        try {
+            $this->model->findOrfail($id)->update($request->all());
+
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     /**
@@ -87,19 +126,28 @@ class ClusterController extends Controller
      * @param  \App\Models\Cluster  $cluster
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cluster $cluster)
+    public function destroy($id)
     {
-        $has_related_permission = Permission::where('cluster_id', $cluster['id'])->first();
-        $has_related_task = Task::where('cluster_id', $cluster['id'])->first();
+        $cluster = Cluster::findOrfail($id);
+        $has_related_permission = Permission::where('cluster_id', $cluster->id)->first();
+        $has_related_task = Task::where('cluster_id', $cluster->id)->first();
 
         if($has_related_permission || $has_related_task)
         {
-            return redirect()->back()->withErrors("Cluster cannot be deleted due to existence of related record.");
+            // return redirect()->back()->withErrors("Cluster cannot be deleted due to existence of related record.");
+            $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
         }
         else
         {
-            $cluster->delete();
-            return redirect()->back()->with('with_success', "Cluster deleted successfully!");
+            $result = $this->successResponse('Clusterser deleted successfully!');
+            try {
+                $cluster->delete();
+            } catch (\Throwable $th)
+            {
+                return $this->errorResponse($th);
+            }
         }
+
+        return $this->returnResponse($result);
     }
 }

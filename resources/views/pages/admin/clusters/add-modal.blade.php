@@ -7,17 +7,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="storeClusterForm" action="{{ route('clusters.store') }}" method="POST">
+                <form id="storeClusterForm" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="name" class="col-form-label custom-label"><strong>CLUSTER NAME:<span class="important">*</span></strong></label>
-                        <input type="text" class="form-control" name="name" required>
+                        <input type="text" class="form-control" name="name" id="name">
+                        <label id="nameError" class="error"></label>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary waves-effect waves-light" onclick="store('storeClusterForm')"><i class="fa fa-save"></i> Save</button>
+                <button type="submit" id="btn_save" class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Save</button>
                 <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                </form>
             </div>
         </div>
     </div>

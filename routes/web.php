@@ -54,7 +54,7 @@ Route::GET('redis/clear-cache', function () {
 });
 
 // HRPORTAL API
-Route::GET('HREmployeeProfileAPI', [PermissionController::class, 'hrportalusers']); 
+Route::GET('HREmployeeProfileAPI', [PermissionController::class, 'hrportalusers']);
 
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
@@ -111,7 +111,18 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
 
             // Resource
-            Route::resource('clusters', ClusterController::class);
+            // Route::resource('clusters', ClusterController::class);
+            Route::get('/clusters', [PageController::class, 'showClusters'])->name('my-tasks.index');
+            Route::group(['prefix' => 'cluster'],
+            function ()
+            {
+                Route::get('/all', [ClusterController::class,'index'])->name('cluster.index');
+                Route::post('/store', [ClusterController::class,'store'])->name('cluster.store');
+                Route::get('/show/{id}', [ClusterController::class,'show'])->name('cluster.show');
+                Route::post('/update/{id}', [ClusterController::class,'update'])->name('cluster.update');
+                Route::post('/delete/{id}', [ClusterController::class,'destroy'])->name('cluster.delete');
+            });
+
             Route::resource('clients', ClientController::class);
             Route::get('clients/get_clients/{clusterId}', [ClientController::class,'getClients'])->name('clients.get_clients');
 

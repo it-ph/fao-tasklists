@@ -16,8 +16,8 @@
                                 @foreach ($users as $user )
                                     @if($user)
                                         @isset($user)
-                                            <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                                value="{{ $user->id }}">@isset($user){{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}@endisset
+                                            <option {{ old('user_id') == $user->emp_id ? "selected" : "" }}
+                                                value="{{ $user->emp_id }}">@isset($user){{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -62,8 +62,8 @@
                                 @foreach ($tls as $tl )
                                     @if($tl)
                                         @isset($tl->theuser)
-                                            <option {{ old('tl_id') == $tl->theuser->id ? "selected" : "" }}
-                                                value="{{ $tl->theuser->id }}">@isset($tl->theuser){{ ucwords($tl->theuser->fullname) }} {{ ucwords($tl->theuser->last_name) }}@endisset
+                                            <option {{ old('tl_id') == $tl->theuser->emp_id ? "selected" : "" }}
+                                                value="{{ $tl->theuser->emp_id }}">@isset($tl->theuser){{ ucwords($tl->theuser->fullname) }} {{ ucwords($tl->theuser->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -78,8 +78,8 @@
                                 @foreach ($oms as $om )
                                     @if($om)
                                         @isset($om->theuser)
-                                            <option {{ old('om_id') == $om->theuser->id ? "selected" : "" }}
-                                                value="{{ $om->theuser->id }}">@isset($om->theuser){{ ucwords($om->theuser->fullname) }} {{ ucwords($om->theuser->last_name) }}@endisset
+                                            <option {{ old('om_id') == $om->theuser->emp_id ? "selected" : "" }}
+                                                value="{{ $om->theuser->emp_id }}">@isset($om->theuser){{ ucwords($om->theuser->fullname) }} {{ ucwords($om->theuser->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif

@@ -30,8 +30,7 @@
                             <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClusterModal"><i class="fas fa-plus"></i> Create</button>
                         </div>
                     </div>
-
-                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
+                    <table id="tbl_cluster" class="table table-bordered table-striped nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -39,33 +38,17 @@
                                 <th width="5%"></th>
                             </tr>
                         </thead>
-
-                        <tbody>
-                            @foreach ($clusters as $cluster)
-                                <tr>
-                                    <td>{{ $cluster->name }}</td>
-                                    <td>{{ date('m/d/Y h:i:s A', strtotime($cluster->updated_at)) }}</td>
-                                    <td class="text-center">
-                                        <form id="deleteClusterForm-{{ $cluster->id }}" class="form-horizontal" action="{{ route('clusters.destroy',$cluster) }}" method="POST">
-                                            @csrf
-                                            @method("DELETE")
-                                            <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editClusterModal-{{ $cluster->id }}"><i class="fas fa-pencil-alt"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="idelete('deleteClusterForm-{{ $cluster->id }}')"><i class="fas fa-times"></i></button>
-                                        </form>
-
-                                    </td>
-                                </tr>
-                                @include('pages.admin.clusters.edit-modal')
-                            @endforeach
-                        </tbody>
                     </table>
-
+                    <div id="div-spinner" class="text-center mt-4 mb-4">
+                        <span id="loader" style="font-size: 16px"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
+                    </div>
                 </div>
             </div>
         </div> <!-- end col -->
     </div>
 
     @include('pages.admin.clusters.add-modal')
+    @include('pages.admin.clusters.edit-modal')
 @endsection
 
 @section('script')
@@ -73,6 +56,8 @@
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
-    <!-- Datatable init js -->
-    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+@endsection
+
+@section('custom-js')
+    <script src="{{asset('scripts/clusters.js')}}"></script>
 @endsection
