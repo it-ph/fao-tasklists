@@ -33,10 +33,10 @@
                                 <button type="button" class="btn btn-primary waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false"><i class="fa fa-filter"></i> Filter <i class="mdi mdi-chevron-down"></i></button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route("my-tasks.index", ['status' => "all"]) }}">All Tasks</a>
-                                    <a class="dropdown-item" href="{{ route("my-tasks.index", ['status' => "In Progress"]) }}">In Progress</a>
-                                    <a class="dropdown-item" href="{{ route("my-tasks.index", ['status' => "On Hold"]) }}">On Hold</a>
-                                    <a class="dropdown-item" href="{{ route("my-tasks.index", ['status' => "Completed"]) }}">Completed</a>
+                                    <a class="dropdown-item" href="{{ url('my-tasks/all') }}">All Tasks</a>
+                                    <a class="dropdown-item" href="{{ url('my-tasks/In Progress') }}">In Progress</a>
+                                    <a class="dropdown-item" href="{{ url('my-tasks/On Hold') }}">On Hold</a>
+                                    <a class="dropdown-item" href="{{ url('my-tasks/Completed') }}">Completed</a>
                                 </div>
                             </div>
                             <p id="status" style="display:none">{{ $status }}</p>
