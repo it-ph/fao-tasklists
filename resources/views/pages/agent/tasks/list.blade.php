@@ -59,7 +59,7 @@
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Client Activity</th>
+                                <th>Activity</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
@@ -94,4 +94,10 @@
 
 @section('custom-js')
     <script src="{{asset('scripts/tasks.js')}}"></script>
+    <script>
+        $('#client_activity_id').change(function () {
+            var text = $('#client_activity_id option:selected').text();
+            $('#description').val(text);
+        });
+    </script>
 @endsection

@@ -25,15 +25,21 @@ class StoreClientActivityRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'agent_id' => ['required']
+            'agent_id' => ['required'],
+            'frequency' => ['required'],
+            'schedule' => ['required'],
+            'function' => ['required'],
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Client Activity Name is required.',
+            'name.required' => 'Activity Name is required.',
             'agent_id.required' => 'Employee Name is required.',
+            'frequency.required' => 'Frequency is required.',
+            'schedule.required' => 'Schedule is required.',
+            'function.required' => 'Function is required.',
         ];
     }
 }

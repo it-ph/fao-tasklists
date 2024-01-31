@@ -49,7 +49,12 @@ class ClientActivityImport implements ToModel, WithHeadingRow,WithValidation,Ski
             ClientActivity::updateOrCreate(
                 [
                     'agent_id' => $user_id,
-                    'name' => $row['client_activity']
+                    'name' => $row['activity']
+                ],
+                [
+                    'frequency' => strtolower($row['frequency']),
+                    'schedule' => $row['schedule'],
+                    'function' => $row['function'],
                 ]
             );
         }
@@ -65,7 +70,10 @@ class ClientActivityImport implements ToModel, WithHeadingRow,WithValidation,Ski
         return [
             '*.employee_name' => ['required'],
             '*.email_address' => ['required'],
-            '*.client_activity' => ['required']
+            '*.activity' => ['required'],
+            '*.frequency' => ['required'],
+            '*.schedule' => ['required'],
+            '*.function' => ['required']
         ];
     }
 

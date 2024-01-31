@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\UserProfile;
+use Illuminate\Http\Request;
 use App\Models\ClientActivity;
 use App\Traits\ResponseTraits;
 use Illuminate\Support\Facades\Auth;
@@ -198,5 +199,16 @@ class PermissionController extends GlobalVariableController
         }
 
         return $this->returnResponse($result);
+    }
+
+    public function updateShiftDate(Request $request)
+    {
+        $permission = Permission::where('user_id', Auth::user()->emp_id)->first();
+        $permission->update(
+            [
+                'shift_date' => $request['shift_date'].'00:00:00'
+            ]
+        );
+        return redirect()->back()->with('with_success', "Default Shift Date updated successfully!");
     }
 }

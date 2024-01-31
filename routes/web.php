@@ -18,6 +18,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserClientController;
 use App\Http\Controllers\ClientActivityController;
 use App\Http\Controllers\DashboardActivityController;
+use App\Http\Controllers\SettingsController;
 
 // LOGIN
 Auth::routes(['register' => false]);
@@ -64,6 +65,9 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [HomeController::class, 'index'])->name('index');
 
+    // Users' Activities
+    Route::get('activities', [ClientActivityController::class, 'showActivities'])->name('activities');
+
     // Agent Task: Start / Update / Stop
     Route::get('/my-tasks/{status?}', [PageController::class, 'showAgentTasks'])->name('my-tasks.index');
     Route::group(['prefix' => 'my-task'],
@@ -94,6 +98,9 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     // Report
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
     Route::post('export', [ExportController::class, 'export'])->name('export');
+
+    // Shift Date Setting
+    Route::post('shift-date', [PermissionController::class, 'updateShiftDate'])->name('shift-date.update');
 
     /**
      * START OF ADMIN, TL, OM
@@ -143,7 +150,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::resource('dashboard-activities', DashboardActivityController::class);
             Route::resource('user-clients', UserClientController::class);
             Route::resource('task/logs', TaskLogController::class);
-
+            Route::resource('settings', SettingsController::class);
         }
     );
     /**

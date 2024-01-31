@@ -34,6 +34,7 @@
                 </div>
                 <!-- container-fluid -->
             </div>
+            @include('pages.agent.edit-shift-date-modal')
             <!-- End Page-content -->
             @include('layouts.footer')
         </div>

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Activities List @endsection
+@section('title') My Activity List @endsection
 
 @section('css')
     <!-- DataTables -->
@@ -10,8 +10,8 @@
 @section('content')
 
     @component('components.breadcrumb')
-        @slot('li_1') Activities @endslot
-        @slot('title') @if(!Auth::user()->isAccountant()) {{ ucwords(\Request::get('employeename')) }}'s @endif Activity List @endslot
+        @slot('li_1') My Activities @endslot
+        @slot('title') @if(!Auth::user()->isAccountant()) {{ ucwords(\Request::get('employeename')) }}'s @endif My Activity List @endslot
     @endcomponent
 
     <div class="row">
@@ -25,7 +25,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row mb-3">
+                    {{-- <div class="row mb-3">
                         <div class="col-md-12">
                             @if(Auth::user()->isAccountant())
                                 <a href="{{ url('client-activity-upload-template') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
@@ -36,7 +36,7 @@
                                 <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientActivityModal"><i class="fas fa-plus"></i> Create</button>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
 
                     <table id="datatable" class="table table-bordered table-striped nowrap w-100">
                         <thead>
@@ -57,12 +57,13 @@
                                     <td>{{ ucfirst($client_activity->schedule) }}</td>
                                     <td>{{ ucfirst($client_activity->function) }}</td>
                                     <td class="text-center">
-                                        <form id="deleteClientActivityForm-{{ $client_activity->id }}" class="form-horizontal" action="{{ route('client-activities.destroy',$client_activity) }}" method="POST">
+                                        {{-- <form id="deleteClientActivityForm-{{ $client_activity->id }}" class="form-horizontal" action="{{ route('client-activities.destroy',$client_activity) }}" method="POST">
                                             @csrf
                                             @method("DELETE")
                                             <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editClientActivityModal-{{ $client_activity->id }}"><i class="fas fa-pencil-alt"></i></button>
                                             <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" onclick="idelete('deleteClientActivityForm-{{ $client_activity->id }}')"><i class="fas fa-times"></i></button>
-                                        </form>
+                                        </form> --}}
+                                        <button type="button" class="btn btn-warning btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#editClientActivityModal-{{ $client_activity->id }}"><i class="fas fa-pencil-alt"></i></button>
                                     </td>
                                 </tr>
                                 @include('pages.admin.client-activities.edit-modal')
@@ -75,8 +76,8 @@
         </div> <!-- end col -->
     </div>
 
-    @include('pages.admin.client-activities.upload-modal')
-    @include('pages.admin.client-activities.add-modal')
+    {{-- @include('pages.admin.client-activities.upload-modal') --}}
+    {{-- @include('pages.admin.client-activities.add-modal') --}}
 @endsection
 
 @section('script')

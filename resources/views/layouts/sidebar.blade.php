@@ -19,6 +19,13 @@
                 </li>
 
                 <li>
+                    <a href="{{ url('activities') }}" class="waves-effect">
+                        <i class="bx bx-task" @if(\Request::routeIs('activities')) style="color:#fff" @endif></i>
+                        <span key="t-activities" @if(\Request::routeIs('activities')) style="color:#fff" @endif>My Activities</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ url('my-tasks/all') }}" class="waves-effect">
                         <i class="bx bx-task" @if(\Request::routeIs('my-tasks.index')) style="color:#fff" @endif></i>
                         <span key="t-tasks" @if(\Request::routeIs('my-tasks.index')) style="color:#fff" @endif>My Tasks</span>
@@ -85,7 +92,14 @@
                 <li>
                     <a href="{{ url('client-activities') }}@if(Auth::user()->isAccountant())/?user_id={{ Auth::user()->id }}&employeename=@isset(Auth::user()->employeeprofile){{ strtolower(Auth::user()->employeeprofile->fullname) }} {{ strtolower(Auth::user()->employeeprofile->last_name) }}@endisset @endif" class="waves-effect">
                         <i class="bx bx-list-ul" @if(\Request::has('employeename')) style="color:#fff" @endif></i>
-                        <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin()) Users' @endif Client Activities</span>
+                        <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin()) Users' @endif Activities</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url('settings') }}" class="waves-effect">
+                        <i class="bx bxs-cog"></i>
+                        <span key="t-settings">Settings</span>
                     </a>
                 </li>
             @endif

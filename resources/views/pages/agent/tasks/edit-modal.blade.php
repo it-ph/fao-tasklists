@@ -89,9 +89,9 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
+                                    <label for="client_activity_id" class="col-form-label custom-label"><strong>ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="client_activity_id" id="client_activity_id_edit" style="width:100%;">
-                                        <option value="" selected disabled>-- Select Client Activity -- </option>
+                                        <option value="" selected disabled>-- Select Activity -- </option>
                                         @foreach ($user_client_activities as $user_client_activity)
                                                 @if($user_client_activity)
                                                     <option {{ old('client_activity_id') == $user_client_activity->id ? "selected" : "" }}

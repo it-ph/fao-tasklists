@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Client Activities List @endsection
+@section('title') Activities List @endsection
 
 @section('css')
     <!-- DataTables -->
@@ -10,8 +10,8 @@
 @section('content')
 
     @component('components.breadcrumb')
-        @slot('li_1') Users' Client Activities @endslot
-        @slot('title') Users' Client Activities List @endslot
+        @slot('li_1') Users' Activities @endslot
+        @slot('title') Users' Activities List @endslot
     @endcomponent
 
     <div class="row">
@@ -47,7 +47,7 @@
                                     <td>@isset($permission->theuser) {{ strtolower($permission->theuser->email) }} @endisset</td>
                                     <td class="text-center">
                                         <a href="{{ url('client-activities') }}/?user_id={{ $permission->theuser->emp_id }}&employeename={{ strtolower($permission->theuser->fullname) }} {{ strtolower($permission->theuser->last_name) }}" title="View Client Activities">
-                                            <button class="btn btn-primary btn-sm"><span class="badge" style="background-color:#fff; color:#00599D">{{ $permission->theclientactivities->count() }}</span> View Client Activities <i class="fa fa-chevron-right"></i></button>
+                                            <button class="btn btn-primary btn-sm"><span class="badge" style="background-color:#fff; color:#00599D">{{ $permission->theclientactivities->count() }}</span> View Activities <i class="fa fa-chevron-right"></i></button>
                                         </a>
                                     </td>
                                 </tr>

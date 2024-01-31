@@ -132,7 +132,7 @@
                                     <th>Date Received</th>
                                     <th>Cluster</th>
                                     <th>Client</th>
-                                    <th>Client Activity</th>
+                                    <th>Activity</th>
                                     <th>Description</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>

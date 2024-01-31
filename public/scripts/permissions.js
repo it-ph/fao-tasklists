@@ -85,6 +85,7 @@ const PERMISSION = (() => {
                         <td>${val.team_leader}</td>
                         <td>${val.operations_manager}</td>
                         <td>${val.permission}</td>
+                        <td>${val.employment_status}</td>
                         <td class="text-center">${val.action}</td>
                     </tr>`;
             });

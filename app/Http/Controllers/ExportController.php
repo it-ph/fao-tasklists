@@ -92,7 +92,7 @@ class ExportController extends Controller
 
     public function uploadClientActivityTemplate()
     {
-        return Excel::download(new UploadClientActivityTemplateExport, 'client-activity-upload-template.xlsx');
+        return Excel::download(new UploadClientActivityTemplateExport, 'activity-upload-template.xlsx');
     }
 
     public function uploadDashboardActivityTemplate()

@@ -11,7 +11,7 @@ class PermissionsServices
     {
         $datastorage = [];
         $permissions = Permission::with([
-            'theuser:emp_id,email,fullname,last_name',
+            'theuser:emp_id,email,fullname,last_name,employment_status',
             'thecluster:id,name',
             'theclient:id,name',
             'thetl:user_id',
@@ -48,8 +48,9 @@ class PermissionsServices
             $team_leader = $value->thetl ? $value->thetl->theuser->fullname.' '.$value->thetl->theuser->last_name : "";
             $operations_manager = $value->theom ? $value->theom->theuser->fullname.' '.$value->theom->theuser->last_name : "";
             $permission = ucwords($value->permission);
-            $action ='<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit User" onclick=PERMISSION.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
-                <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Delete User" onclick=PERMISSION.destroy('.$value->id.')><i class="fas fa-times"></i></button>';
+            $employment_status = $value->theuser->employment_status == 'active' ? '<span class="text-success">Active</span>' : '<label class="text-danger">Inactive</label>';
+            $action ='<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit User" onclick=PERMISSION.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>';
+                    // <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Delete User" onclick=PERMISSION.destroy('.$value->id.')><i class="fas fa-times"></i></button>';
 
             $datastorage[] = [
                 'id' => $value->id,
@@ -60,6 +61,7 @@ class PermissionsServices
                 'team_leader' => $team_leader,
                 'operations_manager' => $operations_manager,
                 'permission' => $permission,
+                'employment_status' => $employment_status,
                 'action' => $action,
             ];
         }

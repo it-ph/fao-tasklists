@@ -17,6 +17,9 @@ class ClientActivityResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'frequency' => $this->frequency,
+            'schedule' => $this->schedule,
+            'function' => $this->function,
         ];
     }
 }

@@ -44,6 +44,7 @@
                                 <th>Team Leader</th>
                                 <th>Operations Manager</th>
                                 <th>Permission</th>
+                                <th>Employee Status</th>
                                 <th width="5%"></th>
                             </tr>
                         </thead>

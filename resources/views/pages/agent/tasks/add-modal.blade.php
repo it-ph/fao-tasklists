@@ -26,7 +26,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date">
+                                    <input class="form-control" type="date" name="shift_date" @if(Auth::user()->thepermisssion->shift_date) value="{{ date('Y-m-d', strtotime(Auth::user()->thepermisssion->shift_date)) }}" @endif>
                                     <label id="shift_dateError" class="error" style="display:none"></label>
                                 </div>
                             </div>
@@ -92,9 +92,9 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="client_activity_id" class="col-form-label custom-label"><strong>CLIENT ACTIVITY:<span class="important">*</span></strong></label>
+                                    <label for="client_activity_id" class="col-form-label custom-label"><strong>ACTIVITY:<span class="important">*</span></strong></label>
                                     <select class="form-control select2" name="client_activity_id" id="client_activity_id" style="width:100%;">
-                                        <option value="" selected disabled>-- Select Client Activity -- </option>
+                                        <option value="" selected disabled>-- Select Activity -- </option>
                                             @foreach ($user_client_activities as $user_client_activity)
                                                 @if($user_client_activity)
                                                     <option value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }} </option>
@@ -112,7 +112,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
-                                    <textarea class="form-control" name="description" placeholder="Type the description here">{{ old('description') }}</textarea>
+                                    <textarea class="form-control" name="description" id="description" placeholder="Type the description here">{{ old('description') }}</textarea>
                                     <label id="descriptionError" class="error" style="display:none"></label>
                                 </div>
                             </div>

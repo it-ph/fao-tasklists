@@ -72,6 +72,12 @@ class ClientActivityController extends GlobalVariableController
         }
     }
 
+    public function showActivities()
+    {
+        $client_activities = ClientActivity::where('agent_id', Auth::user()->emp_id)->get();
+        return view('pages.agent.activities.list', compact('client_activities'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -94,9 +100,14 @@ class ClientActivityController extends GlobalVariableController
             [
                 'agent_id' => $request['agent_id'],
                 'name' => $request['name']
+            ],
+            [
+                'frequency' => strtolower($request['frequency']),
+                'schedule' => $request['schedule'],
+                'function' => $request['function'],
             ]
         ));
-        return redirect()->back()->with('with_success', "Client Activity created successfully!");
+        return redirect()->back()->with('with_success', "Activity created successfully!");
     }
 
     /**
@@ -131,7 +142,7 @@ class ClientActivityController extends GlobalVariableController
     public function update(UpdateClientActivityRequest $request, ClientActivity $clientActivity)
     {
         $clientActivity->update($request->all());
-        return redirect()->back()->with('with_success', "Client Activity updated successfully!");
+        return redirect()->back()->with('with_success', "Activity updated successfully!");
     }
 
     /**
@@ -146,12 +157,12 @@ class ClientActivityController extends GlobalVariableController
 
         if($has_related_task)
         {
-            return redirect()->back()->withErrors("Client Activity cannot be deleted due to existence of related record.");
+            return redirect()->back()->withErrors("Activity cannot be deleted due to existence of related record.");
         }
         else
         {
             $clientActivity->delete();
-            return redirect()->back()->with('with_success', "Client Activity deleted successfully!");
+            return redirect()->back()->with('with_success', "Activity deleted successfully!");
         }
     }
 }
