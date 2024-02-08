@@ -12,14 +12,3 @@
 <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 <!-- Toastr Css -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"/>
-
-{{-- Datatable --}}
-<style>
-    .dataTables_scrollBody thead tr[role="row"]{
-        visibility: collapse !important;
-    }
-    table.dataTable thead tr>.dtfc-fixed-left, table.dataTable thead tr>.dtfc-fixed-right, table.dataTable tfoot tr>.dtfc-fixed-left, table.dataTable tfoot tr>.dtfc-fixed-right {
-        background: #00599D;
-    }
-</style>
-

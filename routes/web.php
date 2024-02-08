@@ -78,13 +78,15 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::get('/show/{id}', [TasksController::class,'show'])->name('my-task.show');
             Route::post('/update/{id}', [TasksController::class,'update'])->name('my-task.update');
             Route::post('/stop/{id}', [TasksController::class,'stopTask'])->name('my-task.stop');
+            Route::post('/pause/{id}', [TasksController::class,'pauseTask'])->name('my-task.pause');
+            Route::post('/resume/{id}', [TasksController::class,'resumeTask'])->name('my-task.resume');
 
         });
 
     Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
     Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
     // Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
-    // Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
+    Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
     Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
 
     Route::resource('task', TasksController::class);

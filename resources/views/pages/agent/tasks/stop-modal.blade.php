@@ -16,7 +16,7 @@
                                     <label for="status" class="col-form-label custom-label"><strong>STATUS:<span class="important">*(change status)</span></strong></label>
                                     <select name="status" id="status_stop" class="form-control">
                                         <option value="" selected disabled>In Progress (current)</option>
-                                        <option value="On Hold">On Hold</option>
+                                        {{-- <option value="On Hold">On Hold</option> --}}
                                         <option value="Completed">Completed</option>
                                     </select>
                                     <label id="status_stopError" class="error"></label>
@@ -49,7 +49,7 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" id="btn_stop" class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Stop</button>
+                <button type="submit" id="btn_stop" class="btn btn-primary waves-effect waves-light"><i class="fa fa-stop"></i> Stop</button>
                 <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                 </form>
             </div>

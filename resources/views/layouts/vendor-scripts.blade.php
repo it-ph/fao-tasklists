@@ -24,4 +24,5 @@
 
 <!-- Moment Js -->
 <script src="{{ asset('assets/libs/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/libs/moment/moment-timezone.min.js') }}"></script>
 @yield('script-bottom')

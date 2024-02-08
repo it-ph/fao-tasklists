@@ -5,6 +5,7 @@
 @section('css')
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/buttons.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/datatables/fixedColumns.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
@@ -68,6 +69,23 @@
                                 <th>Volume</th>
                                 <th>Remarks</th>
                             </tr>
+                            <tr>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                                <th><input type="text" class="form-control"/></th>
+                            </tr>
                         </thead>
                     </table>
                     <div id="div-spinner" class="text-center mt-4 mb-4">
@@ -80,11 +98,14 @@
     @include('pages.agent.tasks.add-modal')
     @include('pages.agent.tasks.edit-modal')
     @include('pages.agent.tasks.stop-modal')
+    @include('pages.agent.tasks.pause-modal')
+    @include('pages.agent.tasks.resume-modal')
 @endsection
 
 @section('script')
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
@@ -99,5 +120,23 @@
             var text = $('#client_activity_id option:selected').text();
             $('#description').val(text);
         });
+
+        // $(function(){
+        //     var calcNewYear = setInterval(function(){
+        //         date_future = new Date(new Date().getFullYear() +1, 0, 1);
+        //         date_now = new Date();
+
+        //         seconds = Math.floor((date_future - (date_now))/1000);
+        //         minutes = Math.floor(seconds/60);
+        //         hours = Math.floor(minutes/60);
+        //         days = Math.floor(hours/24);
+
+        //         hours = hours-(days*24);
+        //         minutes = minutes-(days*24*60)-(hours*60);
+        //         seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+
+        //         $(".aht_timer").text(days + ":" + hours + ":" + minutes + ":" + seconds);
+        //     },1000);
+        // });
     </script>
 @endsection

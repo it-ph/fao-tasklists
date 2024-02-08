@@ -26,9 +26,9 @@
                 </button>
             </div> --}}
 
-            <div class="dropdown d-none d-lg-inline-block ms-1">
+            <div class="dropdown d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" title="Set Shift Date" data-bs-toggle="modal" data-bs-target="#editShiftDate">
-                    <i class="bx bx-cog text-white"></i>
+                    @if(Auth::user()->thepermisssion->shift_date) <span class=" text-white">SHIFT DATE: {{ date('m/d/Y', strtotime(Auth::user()->thepermisssion->shift_date)) }}</span> @endif <i class="bx bx-calendar text-white"></i>
                 </button>
             </div>
 

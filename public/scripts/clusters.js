@@ -88,6 +88,10 @@ const CLUSTER = (() => {
                         sLast: '<i class="fa fa-step-forward"></i>'
                     },
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ],
                 "pageLength": 10,
                 "pagingType": "full_numbers",
                 "scrollX": true,

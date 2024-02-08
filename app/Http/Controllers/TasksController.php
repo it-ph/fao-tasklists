@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ClientActivity;
 use App\Traits\ResponseTraits;
 use App\Services\TasksServices;
+use Facades\App\Http\Helpers\TaskHelper;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
@@ -64,8 +65,8 @@ class TasksController extends GlobalVariableController
             $this->model->create($request->all());
 
             // clear cache
-            Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
-            Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
 
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
@@ -93,8 +94,8 @@ class TasksController extends GlobalVariableController
             $this->model->findOrfail($id)->update($request->all());
 
             // clear cache
-            Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
-            Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
@@ -108,32 +109,32 @@ class TasksController extends GlobalVariableController
         return view('pages.admin.tasks.upload');
     }
 
-    public function stopTask(StopTaskRequest $request, $id)
+    // Pause Task
+    public function pauseTask(Request $request, $id)
     {
+        $request['status'] = 'On Hold';
         $result = $this->successResponse("Task has been ".$request['status']." successfully!");
         try {
             $task = $this->model->findOrfail($id);
             $status = $request['status'];
-            $actual_handling_time = "";
-            $volume = $request['volume'];
-            $remarks = $request['remarks'];
-
-            $start = Carbon::parse($task->start_date);
-            $now = Carbon::now();
-            $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
+            
+            $values = TaskHelper::getActualHandlingTime($task);
 
             $task->update([
                 'status' => $status,
-                'end_date' => Carbon::now(),
-                'actual_handling_time' => $actual_handling_time,
-                'volume' => $volume,
-                'remarks' => $remarks
+                'old_dt' => $values['old_dt'],
+                'temp_handling_time' => $values['temp_handling_time'],
+                'actual_handling_time' => $values['actual_handling_time'],
             ]);
 
+            // $task->update([
+            //     'status' => $status,
+            // ]);
+
             // clear cache
-            Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
-            Redis::del($status.'_tasks_of_agent_'.Auth::user()->emp_id);
-            Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del($status.'_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
@@ -142,51 +143,79 @@ class TasksController extends GlobalVariableController
         return $this->returnResponse($result);
     }
 
-    // Pause Task
-    public function pauseTask(Request $request, $taskId)
+    // Resume Task
+    public function resumeTask(Request $request, $id)
     {
-        $task = Task::findOrFail($taskId);
-        $status = "On Hold";
-        // $actual_handling_time = "";
-        // $volume = $request['volume'];
-        // $remarks = $request['remarks'];
+        $request['status'] = 'In Progress';
+        $result = $this->successResponse("Task has been ".$request['status']." successfully!");
+        try {
+            $task = $this->model->findOrfail($id);
+            $status = $request['status'];
+            
+            // resume handling time elapse
+            // $actual_handling_time = "";
 
-        // $start = Carbon::parse($task->start_date);
-        // $now = Carbon::now();
-        // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
+            // $start = Carbon::parse($task->start_date);
+            // $now = Carbon::now();
+            // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
 
-        $task->update([
-            'status' => $status,
-            // 'end_date' => Carbon::now(),
-            // 'actual_handling_time' => $actual_handling_time,
-            // 'volume' => $volume,
-            // 'remarks' => $remarks
-        ]);
+            $task->update([
+                'status' => $status,
+                'old_dt' => Carbon::now(),
+            ]);
 
-        return redirect()->back()->with('with_success', "Task has been completed successfully!");
+            // clear cache
+            // Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del($status.'_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
+
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
-    // Resume Task
-    public function resumeTask(Request $request, $taskId)
+    public function stopTask(StopTaskRequest $request, $id)
     {
-        $task = Task::findOrFail($taskId);
-        $status = "In Progress";
-        // $actual_handling_time = "";
-        // $volume = $request['volume'];
-        // $remarks = $request['remarks'];
+        $result = $this->successResponse("Task has been ".$request['status']." successfully!");
+        try {
+            $task = $this->model->findOrfail($id);
+            $status = $request['status'];
+            $volume = $request['volume'];
+            $remarks = $request['remarks'];
 
-        // $start = Carbon::parse($task->start_date);
-        // $now = Carbon::now();
-        // $actual_handling_time = $now->diff($start)->format('%D:%H:%I:%S');
+            
 
-        $task->update([
-            'status' => $status,
-            // 'end_date' => Carbon::now(),
-            // 'actual_handling_time' => $actual_handling_time,
-            // 'volume' => $volume,
-            // 'remarks' => $remarks
-        ]);
+            // $task->update([
+            //     'status' => $status,
+            //     'end_date' => Carbon::now(),
+            //     'actual_handling_time' => $actual_handling_time,
+            //     'volume' => $volume,
+            //     'remarks' => $remarks
+            // ]);
 
-        return redirect()->back()->with('with_success', "Task has been completed successfully!");
+            $values = TaskHelper::getActualHandlingTime($task);
+
+            $task->update([
+                'status' => $status,
+                'end_date' => Carbon::now(),
+                'old_dt' => $values['old_dt'],
+                'temp_handling_time' => $values['temp_handling_time'],
+                'actual_handling_time' => $values['actual_handling_time'],
+                'volume' => $volume,
+                'remarks' => $remarks
+            ]);
+
+            // clear cache
+            // Redis::del('in_progress_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del($status.'_tasks_of_agent_'.Auth::user()->emp_id);
+            // Redis::del('all_tasks_of_agent_'.Auth::user()->emp_id);
+
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 }

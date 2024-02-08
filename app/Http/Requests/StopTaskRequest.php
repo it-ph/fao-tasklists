@@ -36,10 +36,10 @@ class StopTaskRequest extends FormRequest
     public function messages()
     {
         return [
-            'status.required' => 'Set Status to On Hold or Completed!',
+            // 'status.required' => 'Set Status to On Hold or Completed!',
+            'status.required' => 'Set Status to On Hold!',
             'volume.required' => 'Volume is required!',
         ];
-
     }
 
     protected function failedValidation(Validator $validator)

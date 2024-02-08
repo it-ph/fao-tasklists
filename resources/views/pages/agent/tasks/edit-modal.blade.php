@@ -123,11 +123,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="status" class="col-form-label custom-label"><strong>STATUS:</strong></label>
-                                    <select class="form-control" name="status" id="status_edit" disabled>
-                                        <option value="" disabled selected>-- Select Status --</option>
-                                        <option value="In Progress" selected>In Progress (current)</option>
-                                        <option value="Completed">Completed</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="status" id="status_edit" readonly>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +158,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="volume" class="col-form-label custom-label"><strong>VOLUME:</span></strong></label>
-                                    <input type="text" class="form-control" name="volume" id="volume_edit" readonly>
+                                    <input type="number" class="form-control" name="volume" id="volume_edit" readonly>
                                 </div>
                             </div>
                         </div>

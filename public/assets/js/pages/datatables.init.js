@@ -22,6 +22,10 @@
                     sLast: '<i class="fa fa-step-forward"></i>'
                 },
             },
+            dom: 'Bfrtip',
+            buttons: [
+                'excel'
+            ],
             "pageLength": 10,
             "pagingType": "full_numbers",
             // "columnDefs": [{ type: 'date', 'targets': [1] }],
@@ -29,7 +33,7 @@
             // orderCellsTop: true,
             // fixedHeader: true,
             "scrollX": true,
-        }); //Buttons examples
+        });
 
         var table = $('#datatable-tasks').DataTable({
             language: {

@@ -1,10 +1,12 @@
 @extends('layouts.master')
+@inject('TaskHelper','App\Http\Helpers\TaskHelper')
 
 @section('title') Dashboard @endsection
 
 @section('css')
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/buttons.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/datatables/fixedColumns.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
@@ -163,14 +165,35 @@
                                         <td>{{ $task->description }}</td>
                                         <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
                                         <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }} @else - @endisset</td>
+                                        <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
                                         <td>
-                                            @if($task->status == "On Hold")
-                                                -
-                                            @else
-                                                @isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @endisset
-                                            @endif
+                                            {{-- START OF ACTUAL HANDLING TIME --}}
+                                            <?php
+                                                $now = \Carbon\Carbon::now();
+                                                $actual_handling_timer = $task->start_date->diff($now)->format('%D:%H:%I:%S');
+
+                                                // TASK ON HOLD-COMPLETED W/ ACTUAL HANDLING TIME
+                                                if($task->actual_handling_time)
+                                                {
+                                                    if($task->status == "In Progress")
+                                                    {
+                                                        $get_aht = $TaskHelper->getActualHandlingTime($task);
+                                                        $actual_handling_time = $get_aht['actual_handling_time'];
+                                                    }
+                                                    else
+                                                    {
+                                                        $actual_handling_time = $task->actual_handling_time;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $actual_handling_time = $actual_handling_timer;
+                                                }
+
+                                            ?>
+                                            {{ $actual_handling_time }}
+                                            {{-- END OF ACTUAL HANDLING TIME --}}
                                         </td>
-                                        <td>{{ $task->actual_handling_time }}</td>
                                         <td>{{ $task->volume }}</td>
                                         <td>{{ $task->remarks }}</td>
                                     </tr>
@@ -188,6 +211,7 @@
 @section('script')
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
@@ -205,6 +229,10 @@
                             sLast: '<i class="fa fa-step-forward"></i>'
                         },
                     },
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'excel'
+                    ],
                     "pageLength": 10,
                     "pagingType": "full_numbers",
                     "order": [2, "desc"],

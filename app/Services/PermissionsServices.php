@@ -48,7 +48,7 @@ class PermissionsServices
             $team_leader = $value->thetl ? $value->thetl->theuser->fullname.' '.$value->thetl->theuser->last_name : "";
             $operations_manager = $value->theom ? $value->theom->theuser->fullname.' '.$value->theom->theuser->last_name : "";
             $permission = ucwords($value->permission);
-            $employment_status = $value->theuser->employment_status == 'active' ? '<span class="text-success">Active</span>' : '<label class="text-danger">Inactive</label>';
+            $employment_status = $value->theuser->employment_status == 'active' ? '<span class="text-success"><strong>Active</strong></span>' : '<label class="text-danger"><strong>Inactive</strong></label>';
             $action ='<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit User" onclick=PERMISSION.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>';
                     // <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Delete User" onclick=PERMISSION.destroy('.$value->id.')><i class="fas fa-times"></i></button>';
 

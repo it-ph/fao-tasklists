@@ -55,7 +55,7 @@
             var end = moment($('#date_to').val());
         
             function cb(start, end) {
-                $('#reportrange span').html(start.format('ddd MMMM D, YYYY hh:mm a') + ' - ' + end.format('ddd MMMM D, YYYY hh:mm a'));
+                $('#reportrange span').html(start.format('dddd, MMMM D, YYYY hh:mm a') + ' - ' + end.format('dddd, MMMM D, YYYY hh:mm a'));
                 $('#allowed_date_range').val(start.format('YYYY-MM-DD hh:mm a') + ' - ' + end.format('YYYY-MM-DD hh:mm a'));
             }
         

@@ -32,7 +32,19 @@ const TASK = (() => {
                     </tr>`;
             });
             $('#tbl_task tbody').html(table)
-            $('#tbl_task').DataTable({
+
+            $('#tbl_task thead tr:eq(1)  th:not( )').each(function(i) {
+                $('input', this).on('keyup change', function() {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+            var table = $('#tbl_task').DataTable({
                 language: {
                     oPaginate: {
                         sNext: '<i class="fa fa-forward"></i>',
@@ -41,6 +53,10 @@ const TASK = (() => {
                         sLast: '<i class="fa fa-step-forward"></i>'
                     },
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ],
                 "pageLength": 10,
                 "pagingType": "full_numbers",
                 "order": [2, "desc"],
@@ -49,7 +65,9 @@ const TASK = (() => {
                 fixedColumns: {
                     left: 3
                 },
+                bSortCellsTop: true
             });
+
             $('#loader').hide();
             if (response.data.data.length > 0)
                 toastr.success(response.data.message);

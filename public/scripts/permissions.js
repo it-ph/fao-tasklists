@@ -90,6 +90,7 @@ const PERMISSION = (() => {
                     </tr>`;
             });
             $('#tbl_permission tbody').html(table)
+
             $('#tbl_permission').DataTable({
                 language: {
                     oPaginate: {
@@ -99,10 +100,15 @@ const PERMISSION = (() => {
                         sLast: '<i class="fa fa-step-forward"></i>'
                     },
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ],
                 "pageLength": 10,
                 "pagingType": "full_numbers",
                 "scrollX": true,
             });
+
             $('#loader').hide();
             if (response.data.data.length > 0)
                 toastr.success(response.data.message);

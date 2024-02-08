@@ -5,13 +5,14 @@
 @section('css')
     <!-- DataTables -->
     <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/buttons.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
 
     @component('components.breadcrumb')
         @slot('li_1') My Activities @endslot
-        @slot('title') @if(!Auth::user()->isAccountant()) {{ ucwords(\Request::get('employeename')) }}'s @endif My Activity List @endslot
+        @slot('title') My Activity List @endslot
     @endcomponent
 
     <div class="row">
@@ -83,6 +84,7 @@
 @section('script')
     <!-- Required datatable js -->
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatables/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <!-- Datatable init js -->

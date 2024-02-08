@@ -94,7 +94,19 @@ const TASK = (() => {
                     </tr>`;
             });
             $('#tbl_task tbody').html(table)
-            $('#tbl_task').DataTable({
+
+            $('#tbl_task thead tr:eq(1)  th:not( )').each(function(i) {
+                $('input', this).on('keyup change', function() {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+
+            var table = $('#tbl_task').DataTable({
                 language: {
                     oPaginate: {
                         sNext: '<i class="fa fa-forward"></i>',
@@ -103,6 +115,10 @@ const TASK = (() => {
                         sLast: '<i class="fa fa-step-forward"></i>'
                     },
                 },
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ],
                 "pageLength": 10,
                 "pagingType": "full_numbers",
                 "order": [3, "desc"],
@@ -111,7 +127,9 @@ const TASK = (() => {
                 fixedColumns: {
                     left: 4
                 },
+                bSortCellsTop: true
             });
+
             $('#loader').hide();
             if (response.data.data.length > 0)
                 toastr.success(response.data.message);
@@ -132,22 +150,29 @@ const TASK = (() => {
         $('#btn_update').prop("disabled", true);
         axios(`${APP_URL}/my-task/show/${id}`).then(function(response) {
             _task_id = id;
-            var shift_date = moment(response.data.data.shift_date).format('YYYY-MM-DD');
-            var date_received = moment(response.data.data.date_received).format('YYYY-MM-DD');
-            var start_date = moment(response.data.data.start_date).format('MM/DD/YYYY hh:mm:ss a');
-            var end_date = response.data.data.end_date ? moment(response.data.data.end_date).format('MM/DD/YYYY hh:mm:ss a') : '';
+            const tzone = "Asia/Manila";
+            var shift_date = moment(response.data.data.shift_date).tz(tzone).format('YYYY-MM-DD');
+            var date_received = moment(response.data.data.date_received).tz(tzone).format('YYYY-MM-DD');
+            var start_date = moment(response.data.data.start_date).tz(tzone).format('MM/DD/YYYY hh:mm:ss a');
+            var end_date = response.data.data.end_date ? moment(response.data.data.end_date).tz(tzone).format('MM/DD/YYYY hh:mm:ss a') : '';
+            var allow_volume = response.data.data.status == 'Completed' ? false : true;
+            var allow_remarks = response.data.data.status == 'Completed' ? false : true;
+
             $('#shift_date_edit').val(shift_date);
             $('#date_received_edit').val(date_received);
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
             $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
             $('#description_edit').text(response.data.data.description);
+            $('#status_edit').val(response.data.data.status);
             $('#start_date_edit').val(start_date);
             $('#end_date_edit').val(end_date);
             $('#actual_handling_time_edit').val(response.data.data.actual_handling_time);
+            $('#volume_edit').attr('readonly', allow_volume);
             $('#volume_edit').val(response.data.data.volume);
+            $('#remarks_edit').attr('readonly', allow_remarks);
             $('#remarks_edit').text(response.data.data.remarks);
             $('#btn_update').empty();
-            $('#btn_update').append('<i class="fa fa-save"></i> update');
+            $('#btn_update').append('<i class="fa fa-save"></i> Update');
             $('#btn_update').prop("disabled", false);
             $('.error').hide();
             $('.error').text('');
@@ -194,6 +219,8 @@ const TASK = (() => {
                         $('#editTaskForm')[0].reset();
                         $("#client_activity_id_edit").val(null).trigger("change");
                         $('#description_edit').text('');
+                        $('#volume_edit').attr('readonly', true);
+                        $('#remarks_edit').attr('readonly', true);
                         TASK.load();
                         $('.error').hide();
                         $('.error').text('');
@@ -277,12 +304,118 @@ const TASK = (() => {
                         toastr.error(response.data.message);
                     }
                     $('#btn_stop').empty();
-                    $('#btn_stop').append('<i class="fa fa-save"></i> Stop');
+                    $('#btn_stop').append('<i class="fa fa-stop"></i> Stop');
                     $('#btn_stop').prop("disabled", false);
                 }).catch(error => {
                     toastr.error(error);
                 });
             }
+        });
+    });
+
+    // show data to pause
+    this_task.show_pause = (id) => {
+        $('.error').hide();
+        $('.error').text('');
+        $('#pauseTaskModal').modal('show');
+        _task_id = id
+    }
+
+    // pause
+    $('#pauseTaskForm').on('submit', function(e) {
+        e.preventDefault();
+        id = _task_id;
+        var formdata = new FormData(this);
+        $('.error').hide();
+        $('.error').text('');
+        $('#btn_pause').empty();
+        $('#btn_pause').append('<i class="fa fa-spinner fa-spin"></i> Pausing...');
+        $('#btn_pause').prop("disabled", true);
+        // Send a POST request
+        axios({
+            method: 'post',
+            url: `${APP_URL}/my-task/pause/${id}`,
+            data: formdata
+        }).then(function(response) {
+            console.log(response.data.status)
+            if (response.data.status === 'success') {
+                $('#loader').show();
+                $("#tbl_task > tbody").empty();
+                $("#tbl_task_info").hide();
+                $("#tbl_task_paginate").hide();
+                $('#pauseTaskForm')[0].reset();
+                $('#create_button').load(' #create_button');
+                $('.error').hide();
+                $('.error').text('');
+                TASK.load();
+                $('#pauseTaskModal').modal('hide');
+                toastr.success(response.data.message);
+            } else if (response.data.status === 'warning') {
+                Object.keys(response.data.error).forEach((key) => {
+                    $(`#${[key]}_pauseError`).show();
+                    $(`#${[key]}_pauseError`).text(response.data.error[key][0]);
+                });
+            } else {
+                toastr.error(response.data.message);
+            }
+            $('#btn_pause').empty();
+            $('#btn_pause').append('<i class="fa fa-pause"></i> Pause');
+            $('#btn_pause').prop("disabled", false);
+        }).catch(error => {
+            toastr.error(error);
+        });
+    });
+
+    // show data to resume
+    this_task.show_resume = (id) => {
+        $('.error').hide();
+        $('.error').text('');
+        $('#resumeTaskModal').modal('show');
+        _task_id = id
+    }
+
+    // resume
+    $('#resumeTaskForm').on('submit', function(e) {
+        e.preventDefault();
+        id = _task_id;
+        var formdata = new FormData(this);
+        $('.error').hide();
+        $('.error').text('');
+        $('#btn_resume').empty();
+        $('#btn_resume').append('<i class="fa fa-spinner fa-spin"></i> Resuming...');
+        $('#btn_resume').prop("disabled", true);
+        // Send a POST request
+        axios({
+            method: 'post',
+            url: `${APP_URL}/my-task/resume/${id}`,
+            data: formdata
+        }).then(function(response) {
+            console.log(response.data.status)
+            if (response.data.status === 'success') {
+                $('#loader').show();
+                $("#tbl_task > tbody").empty();
+                $("#tbl_task_info").hide();
+                $("#tbl_task_paginate").hide();
+                $('#resumeTaskForm')[0].reset();
+                $('#create_button').load(' #create_button');
+                $('.error').hide();
+                $('.error').text('');
+                TASK.load();
+                $('#resumeTaskModal').modal('hide');
+                toastr.success(response.data.message);
+            } else if (response.data.status === 'warning') {
+                Object.keys(response.data.error).forEach((key) => {
+                    $(`#${[key]}_resumeError`).show();
+                    $(`#${[key]}_resumeError`).text(response.data.error[key][0]);
+                });
+            } else {
+                toastr.error(response.data.message);
+            }
+            $('#btn_resume').empty();
+            $('#btn_resume').append('<i class="fa fa-play"></i> Resume');
+            $('#btn_resume').prop("disabled", false);
+        }).catch(error => {
+            toastr.error(error);
         });
     });
 
