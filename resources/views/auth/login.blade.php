@@ -109,7 +109,7 @@
                         <div class="mt-5 text-center">
 
                             <div>Copyright © <script>document.write(new Date().getFullYear())</script>
-                                Personiv | FAO Tasklists v1.0.0
+                                Personiv | FAO Tasklists v2.0.0
                             </div>
                         </div>
 
