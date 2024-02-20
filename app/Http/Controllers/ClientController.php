@@ -42,9 +42,16 @@ class ClientController extends GlobalVariableController
     public function getClients($cluster_id)
     {
         $clients = Client::query()
-            ->with('thecluster')
-            ->where('cluster_id', $cluster_id)
-            ->get();
+            ->with('thecluster');
+
+        if(Auth::user()->isAdmin())
+        {
+            $clients = $clients->get();
+        }
+        else
+        {
+            $clients = $clients->where('cluster_id', $cluster_id)->get();
+        }
 
         return $clients;
     }

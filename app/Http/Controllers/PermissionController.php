@@ -91,6 +91,33 @@ class PermissionController extends GlobalVariableController
         return $permissions;
     }
 
+    public function getAccountants($user_id)
+    {
+        $permissions = Permission::query()
+                ->from('permissions as ftp')
+                ->leftjoin('users as hr','ftp.user_id', '=', 'hr.emp_id')
+                ->select(['ftp.id','ftp.user_id','ftp.permission','hr.fullname','hr.last_name','hr.emp_id'])
+                ->where('ftp.permission','<>','superadmin')
+                ->orderBy('hr.fullname');
+
+        if(Auth::user()->isAdmin())
+        {
+            $permissions = $permissions->get();
+        }
+        // operations manager
+        elseif(Auth::user()->isOperationsManager())
+        {
+            $permissions = $permissions->OMPermission()->get();
+        }
+        // team leader
+        elseif(Auth::user()->isTeamLeader())
+        {
+            $permissions = $permissions->TLPermission()->get();
+        }
+
+        return $permissions;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

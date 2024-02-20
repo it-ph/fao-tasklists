@@ -55,17 +55,19 @@ class ExportController extends Controller
         // admin
         if(Auth::user()->isAdmin())
         {
-            $tasks = $tasks->get();
+            $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
         }
         // operations manager
         elseif(Auth::user()->isOperationsManager())
         {
-            $tasks = $tasks->OMPermission()->get();
+            $tasks = $tasks->OMPermission();
+            $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
         }
         // team leader
         elseif(Auth::user()->isTeamLeader())
         {
-            $tasks = $tasks->TLPermission()->get();
+            $tasks = $tasks->TLPermission();
+            $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
         }
         // accountant
         elseif(Auth::user()->isAccountant())
@@ -83,6 +85,25 @@ class ExportController extends Controller
         }
 
         return Excel::download(new TasksReportExport($tasks), $filename);
+    }
+
+    // get data based on filters
+    public function getFilteredData($filter_by,$filtered_to,$tasks)
+    {
+        if($filter_by == 'All')
+        {
+            $tasks = $tasks->get();
+        }
+        else if($filter_by == 'Client')
+        {
+            $tasks = $tasks->whereIn('client_id', $filtered_to)->get();
+        }
+        else if($filter_by == 'Accountant')
+        {
+            $tasks = $tasks->whereIn('agent_id', $filtered_to)->get();
+        }
+
+        return $tasks;
     }
 
     public function uploadTasksTemplate()

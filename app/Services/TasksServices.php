@@ -52,14 +52,12 @@ class TasksServices
                 $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
                     <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="Pause Task: On Hold" onclick=TASK.show_pause('.$value->id.')><i class="fas fa-pause"></i></button>
                     <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: Complete" onclick=TASK.show_stop('.$value->id.')><i class="fas fa-stop"></i></button>';
-                    // <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: On Hold / Complete" onclick=TASK.show_stop('.$value->id.')><i class="fas fa-stop"></i></button>';
             }
 
             if($value->status == "On Hold")
             {
                 $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>
                 <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick=TASK.show_resume('.$value->id.')><i class="fas fa-play"></i></button>';
-                // <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick="resume(resumeTaskForm)"><i class="fas fa-play"></i></button>';
             }
 
             if($value->status == "Completed")
@@ -96,7 +94,7 @@ class TasksServices
             $start_date = date("m/d/Y h:i:s a",strtotime($value->start_date));
             $end_date = $value->end_date ? date("m/d/Y h:i:s a",strtotime($value->end_date)) : '-';
             $date_completed = $value->status == "On Hold" ? '-' : ($value->end_date ? date("m/d/Y",strtotime($value->end_date)) : '-');
-            
+
             // START OF ACTUAL HANDLING TIME
             $now = \Carbon\Carbon::now();
             $actual_handling_timer = $value->start_date->diff($now)->format('%D:%H:%I:%S');
@@ -207,7 +205,7 @@ class TasksServices
             $start_date = date("m/d/Y h:i:s a",strtotime($value->start_date));
             $end_date = $value->end_date ? date("m/d/Y h:i:s a",strtotime($value->end_date)) : '-';
             $date_completed = $value->status == "On Hold" ? '-' : ($value->end_date ? date("m/d/Y",strtotime($value->end_date)) : '-');
-            
+
             // START OF ACTUAL HANDLING TIME
             $now = \Carbon\Carbon::now();
             $actual_handling_timer = $value->start_date->diff($now)->format('%D:%H:%I:%S');

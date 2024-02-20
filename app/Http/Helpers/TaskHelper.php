@@ -9,11 +9,11 @@ class TaskHelper {
     {
         if($task->actual_handling_time)
         {
-            $old_sla = explode(":", $task->temp_handling_time);
-            $old_D = ltrim($old_sla[0],'0') ? : '0';
-            $old_H = ltrim($old_sla[1],'0') ? : '0';
-            $old_I = ltrim($old_sla[2],'0') ? : '0';
-            $old_S = ltrim($old_sla[3],'0') ? : '0';
+            $old_handling_time = explode(":", $task->temp_handling_time);
+            $old_D = ltrim($old_handling_time[0],'0') ? : '0';
+            $old_H = ltrim($old_handling_time[1],'0') ? : '0';
+            $old_I = ltrim($old_handling_time[2],'0') ? : '0';
+            $old_S = ltrim($old_handling_time[3],'0') ? : '0';
 
             // echo "OLD: " . $old_D." days ".$old_H." hours ". $old_I." minutes ".$old_S." seconds".'<br>';
 

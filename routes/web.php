@@ -137,6 +137,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
             Route::resource('permissions', PermissionController::class);
             Route::get('permissions/get_tloms/{clusterId}', [PermissionController::class,'getTLOMs'])->name('permissions.get_tloms');
+            Route::get('permissions/get_accountants/{userId}', [PermissionController::class,'getAccountants'])->name('permissions.get_accountants');
 
             Route::get('permissions', [PageController::class, 'showPermissions'])->name('permissions.index');
             Route::group(['prefix' => 'permission'],
