@@ -12,9 +12,9 @@
                     @method("PUT")
                     <div class="form-group">
                         <label for="name" class="col-form-label custom-label"><strong>ACTIVITY NAME:<span class="important">*</span></strong></label>
-                        <input type="text" class="form-control" name="name" value ="{{ $client_activity->name }}" required>
+                        <input type="text" class="form-control" name="name" value ="{{ $client_activity->name }}" required @if(Auth::user()->isAccountant()) disabled @endif>
                         <label for="frequency" class="col-form-label custom-label"><strong>FREQUENCY:<span class="important">*</span></strong></label>
-                        <select name="frequency" class="form-control">
+                        <select name="frequency" class="form-control" @if(Auth::user()->isAccountant()) disabled @endif>
                             <option value="">-- Select Frequency --</option>
                             <option value="daily" @if($client_activity->frequency == 'daily') selected @endif>Daily</option>
                             <option value="weekly" @if($client_activity->frequency == 'weekly') selected @endif>Weekly</option>
@@ -23,7 +23,7 @@
                         <label for="schedule" class="col-form-label custom-label"><strong>SCHEDULE:<span class="important">*</span></strong></label>
                         <input type="text" class="form-control" name="schedule" value="{{ $client_activity->schedule }}" required>
                         <label for="function" class="col-form-label custom-label"><strong>FUNCTION:<span class="important">*</span></strong></label>
-                        <select name="function" class="form-control">
+                        <select name="function" class="form-control" @if(Auth::user()->isAccountant()) disabled @endif>
                             <option value="">-- Select Frequency --</option>
                             <option value="P2P" @if($client_activity->function == 'P2P') selected @endif>P2P</option>
                             <option value="O2C" @if($client_activity->function == 'O2C') selected @endif>O2C</option>

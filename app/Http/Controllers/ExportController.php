@@ -75,7 +75,7 @@ class ExportController extends Controller
             $tasks = $tasks->AccountantPermission()->get();
         }
 
-        // set filename base on date filter
+        // set filename based on date filter
         if($date_from == $date_to )
         {
             $filename = "TASKLISTS_REPORT_". $date_from .".xlsx";

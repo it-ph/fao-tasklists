@@ -50,7 +50,7 @@ class ImportController extends Controller
         }
         else
         {
-            return redirect()->back()->with('with_success', 'Client Activity Uploaded Succesfully!');
+            return redirect()->back()->with('with_success', 'Activity Uploaded Succesfully!');
         }
     }
 
