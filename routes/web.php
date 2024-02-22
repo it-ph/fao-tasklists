@@ -153,12 +153,20 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::resource('dashboard-activities', DashboardActivityController::class);
             Route::resource('user-clients', UserClientController::class);
             Route::resource('task/logs', TaskLogController::class);
-            Route::resource('settings', SettingsController::class);
         }
     );
     /**
      * END OF ADMIN, TL, OM
      */
+
+    /**
+     * START OF ADMIN ONLY
+     */
+        Route::resource('settings', SettingsController::class)->middleware('admin');
+    /**
+     * END OF ADMIN ONLY
+     */
+
 });
 /**
  * END OF AUTHORIZE & ACTIVE USERS

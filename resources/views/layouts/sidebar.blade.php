@@ -95,7 +95,8 @@
                         <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin()) Users' @endif Activities</span>
                     </a>
                 </li>
-
+            @endif
+            @if(Auth::user()->isAdmin())
                 <li>
                     <a href="{{ url('settings') }}" class="waves-effect">
                         <i class="bx bxs-cog"></i>
@@ -103,7 +104,6 @@
                     </a>
                 </li>
             @endif
-
 
             </ul>
         {{-- End of ADMIN / TL / OM --}}
