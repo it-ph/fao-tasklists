@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="text-white m-3">
-                                <h5 class="text-white">Welcome Back, @isset(Auth::user()->employeeprofile) {{ Auth::user()->employeeprofile->fullname }} {{ Auth::user()->employeeprofile->last_name }} @endisset!</h5>
+                                <h5 class="text-white">Welcome Back, {{ Auth::user()->fullname }} {{ Auth::user()->last_name }}!</h5>
                             </div>
                         </div>
                     </div>
