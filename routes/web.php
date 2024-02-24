@@ -121,7 +121,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
             // Resource
             // Route::resource('clusters', ClusterController::class);
-            Route::get('/clusters', [PageController::class, 'showClusters'])->name('my-tasks.index');
+            Route::get('/clusters', [PageController::class, 'showClusters'])->name('clusters.index');
             Route::group(['prefix' => 'cluster'],
             function ()
             {
