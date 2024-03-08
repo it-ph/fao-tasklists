@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
+use Dcblogdev\MsGraph\Models\MsGraphToken;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -36,5 +38,20 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function logout()
+    {
+        $is_logged_in = MsGraphToken::query()
+            ->where('user_id', Auth::user()->emp_id)
+            ->delete();
+
+        if($is_logged_in)
+        {
+            Auth::logout();
+            Session()->flush();
+
+            return redirect('login');
+        }
     }
 }

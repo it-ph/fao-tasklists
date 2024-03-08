@@ -108,7 +108,7 @@
                         </div>
                         <div class="mt-5 text-center">
 
-                            <div>Copyright © <script>document.write(new Date().getFullYear())</script>
+                            <div>Copyright © <script nonce="{{ csp_nonce() }}">document.write(new Date().getFullYear())</script>
                                 Personiv | FAO Tasklists v2.0.0
                             </div>
                         </div>
