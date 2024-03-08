@@ -37,7 +37,7 @@ class StopTaskRequest extends FormRequest
     {
         return [
             // 'status.required' => 'Set Status to On Hold or Completed!',
-            'status.required' => 'Set Status to On Hold!',
+            'status.required' => 'Set Status to Completed!',
             'volume.required' => 'Volume is required!',
         ];
     }
