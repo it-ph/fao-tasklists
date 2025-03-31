@@ -26,7 +26,7 @@
             buttons: [
                 'excel'
             ],
-            "pageLength": 10,
+            "pageLength": 20,
             "pagingType": "full_numbers",
             // "columnDefs": [{ type: 'date', 'targets': [1] }],
             // "order": [0, "desc"],

@@ -32,6 +32,11 @@ class Permission extends Model
         return $this->belongsTo(User::class, 'user_id', 'emp_id');
     }
 
+    public function getFullNameAttribute()
+    {
+        return $this->theuser->fullname . ' ' . $this->theuser->last_name;
+    }
+
     public function thecluster()
     {
         return $this->belongsTo(Cluster::class, 'cluster_id');
@@ -52,9 +57,19 @@ class Permission extends Model
         return $this->belongsTo(Permission::class, 'tl_id', 'user_id');
     }
 
+    public function getTLFullNameAttribute()
+    {
+        return $this->thetl ? $this->thetl->fullname . ' ' . $this->thetl->last_name : null;
+    }
+
     public function theom()
     {
         return $this->belongsTo(Permission::class, 'om_id', 'user_id');
+    }
+
+    public function getOMFullNameAttribute()
+    {
+        return $this->theom ? $this->theom->fullname . ' ' . $this->theom->last_name : null;
     }
 
     public function theclients()

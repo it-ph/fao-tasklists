@@ -39,7 +39,6 @@ class ClusterController extends Controller
         }
 
         return $this->returnResponse($result);
-
     }
 
     /**
@@ -134,12 +133,11 @@ class ClusterController extends Controller
 
         if($has_related_permission || $has_related_task)
         {
-            // return redirect()->back()->withErrors("Cluster cannot be deleted due to existence of related record.");
             $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
         }
         else
         {
-            $result = $this->successResponse('Clusterser deleted successfully!');
+            $result = $this->successResponse('Cluster deleted successfully!');
             try {
                 $cluster->delete();
             } catch (\Throwable $th)

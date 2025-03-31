@@ -41,8 +41,9 @@ const TASK = (() => {
                         $("#tbl_task_paginate").hide();
                         $('#storeTaskForm')[0].reset();
                         $("#client_id").val(null).trigger("change");
-                        $("#client_activity_id").val(null).trigger("change");
+                        $("#cluster_activity_id").val(null).trigger("change");
                         $('#create_button').load(' #create_button');
+                        // $('#has_active_task').load(' #has_active_task');
                         $('.error').hide();
                         $('.error').text('');
                         TASK.load();
@@ -69,75 +70,59 @@ const TASK = (() => {
     // load data
     this_task.load = () => {
         var filter_status = $('#status').html();
-        axios(`${APP_URL}/my-task/` + filter_status).then(function(response) {
-            $('#tbl_task').DataTable().destroy();
-            var table;
-            console.log(response.data.data)
-            response.data.data.forEach(val => {
-                table +=
-                    `<tr>
-                        <td>${val.status}</td>
-                        <td class="text-center">${val.action}</td>
-                        <td>${val.employee_name}</td>
-                        <td>${val.shift_date}</td>
-                        <td>${val.date_received}</td>
-                        <td>${val.cluster}</td>
-                        <td>${val.client}</td>
-                        <td>${val.client_activity}</td>
-                        <td>${val.description}</td>
-                        <td>${val.start_date}</td>
-                        <td>${val.end_date}</td>
-                        <td>${val.date_completed}</td>
-                        <td>${val.actual_handling_time}</td>
-                        <td>${val.volume}</td>
-                        <td>${val.remarks}</td>
-                    </tr>`;
-            });
-            $('#tbl_task tbody').html(table)
-
-            $('#tbl_task thead tr:eq(1)  th:not( )').each(function(i) {
-                $('input', this).on('keyup change', function() {
-                    if (table.column(i).search() !== this.value) {
-                        table
-                            .column(i)
-                            .search(this.value)
-                            .draw();
-                    }
-                });
-            });
-
-            var table = $('#tbl_task').DataTable({
-                language: {
-                    oPaginate: {
-                        sNext: '<i class="fa fa-forward"></i>',
-                        sPrevious: '<i class="fa fa-backward"></i>',
-                        sFirst: '<i class="fa fa-step-backward"></i>',
-                        sLast: '<i class="fa fa-step-forward"></i>'
-                    },
+        $.fn.dataTable.ext.errMode = 'none';
+        $('#tbl_task').DataTable().clear().draw();
+        $('#tbl_task').DataTable().destroy();
+        $('#tbl_task').DataTable({
+            // "bStateSave": true,
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
+                oPaginate: {
+                    sNext: '<i class="fa fa-forward"></i>',
+                    sPrevious: '<i class="fa fa-backward"></i>',
+                    sFirst: '<i class="fa fa-step-backward"></i>',
+                    sLast: '<i class="fa fa-step-forward"></i>'
                 },
-                dom: 'Bfrtip',
-                buttons: [
-                    'excel'
-                ],
-                "pageLength": 20,
-                "pagingType": "full_numbers",
-                "order": [3, "desc"],
-                "columnDefs": [{ type: 'date', 'targets': [3] }],
-                "scrollX": true,
-                fixedColumns: {
-                    left: 4
+            },
+            scrollX: true,
+            pagingType: "full_numbers",
+            pageLength: 20,
+            lengthMenu: [
+                [10, 20, 50, 100],
+                [10, 20, 50, 100]
+            ],
+            order: [4, "desc"],
+            columnDefs: [{ type: 'date', 'targets': [4] }],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: `${APP_URL}/my-task/api/` + filter_status,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                bSortCellsTop: true
-            });
-
-            $('#loader').hide();
-            if (response.data.data.length > 0)
-                toastr.success(response.data.message);
-            else
-                toastr.info(response.data.message);
-        }).catch(error => {
-            toastr.error(null);
+            },
+            columns: [
+                { data: 'status', name: 'status', className: 'text-center' },
+                { data: 'action', name: 'action', className: 'text-center' },
+                { data: 'theagent.fullname', name: 'theagent.fullname' },
+                { data: 'shift_date', name: 'shift_date', className: 'text-center' },
+                { data: 'date_received', name: 'date_received', className: 'text-center' },
+                { data: 'thecluster.name', name: 'thecluster.name' },
+                { data: 'theclient.name', name: 'theclient.name' },
+                { data: 'theclientactivity.name', name: 'theclientactivity.name' },
+                { data: 'description', name: 'description' },
+                { data: 'start_date', name: 'start_date', className: 'text-center' },
+                { data: 'end_date', name: 'end_date', className: 'text-center' },
+                { data: 'date_completed', name: 'date_completed', className: 'text-center' },
+                { data: 'actual_handling_time', name: 'actual_handling_time', className: 'text-center' },
+                { data: 'volume', name: 'volume', className: 'text-center' },
+                { data: 'remarks', name: 'remarks' },
+            ],
         });
+        $.fn.dataTable.ext.errMode = function(settings, helpPage, message) {
+            console.log(message);
+        };
     }
 
     // show data
@@ -161,7 +146,7 @@ const TASK = (() => {
             $('#shift_date_edit').val(shift_date);
             $('#date_received_edit').val(date_received);
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
-            $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
+            $("#cluster_activity_id_edit").val(response.data.data.cluster_activity_id).trigger("change");
             $('#description_edit').text(response.data.data.description);
             $('#status_edit').val(response.data.data.status);
             $('#start_date_edit').val(start_date);
@@ -217,7 +202,7 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#editTaskForm')[0].reset();
-                        $("#client_activity_id_edit").val(null).trigger("change");
+                        $("#cluster_activity_id_edit").val(null).trigger("change");
                         $('#description_edit').text('');
                         $('#volume_edit').attr('readonly', true);
                         $('#remarks_edit').attr('readonly', true);
@@ -290,6 +275,7 @@ const TASK = (() => {
                         $("#status_stop").val(null).trigger("change");
                         $('#remarks_stop').text('');
                         $('#create_button').load(' #create_button');
+                        // $('#has_active_task').load(' #has_active_task');
                         $('.error').hide();
                         $('.error').text('');
                         TASK.load();
@@ -345,6 +331,7 @@ const TASK = (() => {
                 $("#tbl_task_paginate").hide();
                 $('#pauseTaskForm')[0].reset();
                 $('#create_button').load(' #create_button');
+                // $('#has_active_task').load(' #has_active_task');
                 $('.error').hide();
                 $('.error').text('');
                 TASK.load();
@@ -368,9 +355,32 @@ const TASK = (() => {
 
     // show data to resume
     this_task.show_resume = (id) => {
+        // var has_active_task = $('#has_active_task').text();
+        // has_active_task ? TASK.has_active_task() : $('#resumeTaskModal').modal('show');
+
         $('.error').hide();
         $('.error').text('');
-        $('#resumeTaskModal').modal('show');
+        $('#btn-resume-' + id).empty();
+        $('#btn-resume-' + id).append('<i class="fa fa-spinner fa-spin"></i>');
+        $('#btn-resume-' + id).prop("disabled", true);
+        axios({
+            method: 'post',
+            url: `${APP_URL}/my-task/has-active-task`,
+        }).then(function(response) {
+            console.log(response.data)
+            if (response.data.status === 'success') {
+                var has_active_task = response.data.data;
+                has_active_task ? TASK.has_active_task() : $('#resumeTaskModal').modal('show');
+            } else {
+                toastr.error(response.data.message);
+            }
+            $('#btn-resume-' + id).empty();
+            $('#btn-resume-' + id).append('<i class="fa fa-play"></i>');
+            $('#btn-resume-' + id).prop("disabled", false);
+        }).catch(error => {
+            toastr.error(error);
+        });
+
         _task_id = id
     }
 
@@ -398,6 +408,7 @@ const TASK = (() => {
                 $("#tbl_task_paginate").hide();
                 $('#resumeTaskForm')[0].reset();
                 $('#create_button').load(' #create_button');
+                // $('#has_active_task').load(' #has_active_task');
                 $('.error').hide();
                 $('.error').text('');
                 TASK.load();
@@ -418,6 +429,18 @@ const TASK = (() => {
             toastr.error(error);
         });
     });
+
+    this_task.has_active_task = () => {
+        Swal.fire({
+            title: 'Invalid Action',
+            text: "Please On Hold or Complete your current task before creating a new one!",
+            icon: 'error',
+            confirmButtonText: 'Okay!',
+            confirmButtonClass: 'btn btn-primary mt-2',
+            buttonsStyling: false,
+            allowOutsideClick: false
+        });
+    }
 
     return this_task;
 })()

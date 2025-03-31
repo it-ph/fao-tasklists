@@ -1,3 +1,4 @@
+use App\Models\TaskPause;
 <div class="modal fade" id="addClientActivityModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
     aria-labelledby="addClientActivityModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -27,7 +28,8 @@
                             <option value="P2P">P2P</option>
                             <option value="O2C">O2C</option>
                             <option value="RTR">RTR</option>
-                            <option value="Admin">Admin</option>
+                            <option value="Client Admin">Client Admin</option>
+                            <option value="Personiv Admin">Personiv Admin</option>
                         </select>
                         <input type="hidden" class="form-control" name="agent_id" value="{{ \Request::get('user_id') }}">
                     </div>

@@ -36,7 +36,7 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown"
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false"><i class="fa fa-filter"></i> Filter <i class="mdi mdi-chevron-down"></i></button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "all"]) }}">All Tasks</a>
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <p id="status" style="display:none">@if(\Request::get('status')) {{ (\Request::get('status')) }} @else all @endif</p>
-                    <table id="tbl_task" class="table table-bordered table-striped nowrap w-100">
+                    <table id="tbl_task" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Status</th>
@@ -66,7 +66,7 @@
                                 <th>Volume</th>
                                 <th>Remarks</th>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th><input type="text" class="form-control"/></th>
                                 <th><input type="text" class="form-control"/></th>
                                 <th><input type="text" class="form-control"/></th>
@@ -81,12 +81,9 @@
                                 <th><input type="text" class="form-control"/></th>
                                 <th><input type="text" class="form-control"/></th>
                                 <th><input type="text" class="form-control"/></>
-                            </tr>
+                            </tr> --}}
                         </thead>
                     </table>
-                    <div id="div-spinner" class="text-center mt-4 mb-4">
-                        <span id="loader" style="font-size: 16px"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
-                    </div>
                 </div>
             </div>
         </div> <!-- end col -->
@@ -105,5 +102,5 @@
 @endsection
 
 @section('custom-js')
-    <script src="{{asset('scripts/tasklists.js')}}"></script>
+    <script src="{{asset('scripts/all-tasks.js')}}"></script>
 @endsection

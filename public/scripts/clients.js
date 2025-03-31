@@ -1,13 +1,13 @@
 $(document).ready(function() {
-    PERMISSION.load();
+    CLIENT.load();
 });
 
-const PERMISSION = (() => {
-    let this_permission = {}
-    let _permission_id;
+const CLIENT = (() => {
+    let this_client = {}
+    let _client_id;
 
     // store data
-    $('#storePermissionForm').on('submit', function(e) {
+    $('#storeClientForm').on('submit', function(e) {
         e.preventDefault();
         Swal.fire({
             title: 'Are you sure?',
@@ -30,26 +30,21 @@ const PERMISSION = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: `${APP_URL}/permission/store`,
+                    url: `${APP_URL}/client/store`,
                     data: formdata
                 }).then(function(response) {
                     console.log(response.data.status)
                     if (response.data.status === 'success') {
                         $('#loader').show();
-                        $("#tbl_permission > tbody").empty();
-                        $("#tbl_permission_info").hide();
-                        $("#tbl_permission_paginate").hide();
-                        $('#storePermissionForm')[0].reset();
-                        $("#user_id").val(null).trigger("change");
-                        $("#cluster_id").val(null).trigger("change");
-                        $("#client_id").val(null).trigger("change");
-                        $("#tl_id").val(null).trigger("change");
-                        $("#om_id").val(null).trigger("change");
-                        $("#permission").val(null).trigger("change");
+                        $("#tbl_client > tbody").empty();
+                        $("#tbl_client_info").hide();
+                        $("#tbl_client_paginate").hide();
+                        $('#storeClientForm')[0].reset();
+                        $("#name").val('');
                         $('.error').hide();
                         $('.error').text('');
-                        PERMISSION.load();
-                        $('#addPermissionModal').modal('hide');
+                        CLIENT.load();
+                        $('#addClientModal').modal('hide');
                         toastr.success(response.data.message);
                     } else if (response.data.status === 'warning') {
                         Object.keys(response.data.error).forEach((key) => {
@@ -70,59 +65,12 @@ const PERMISSION = (() => {
     });
 
     // load data
-    this_permission.load = () => {
-        // axios(`${APP_URL}/permission/all`).then(function(response) {
-        //     $('#tbl_permission').DataTable().destroy();
-        //     var table;
-        //     console.log(response.data.data)
-        //     response.data.data.forEach(val => {
-        //         table +=
-        //             `<tr>
-        //                 <td>${val.employee_name}</td>
-        //                 <td>${val.email_address}</td>
-        //                 <td>${val.cluster}</td>
-        //                 <td>${val.client}</td>
-        //                 <td>${val.team_leader}</td>
-        //                 <td>${val.operations_manager}</td>
-        //                 <td>${val.permission}</td>
-        //                 <td>${val.employment_status}</td>
-        //                 <td class="text-center">${val.action}</td>
-        //             </tr>`;
-        //     });
-        //     $('#tbl_permission tbody').html(table)
-
-        //     $('#tbl_permission').DataTable({
-        //         language: {
-        //             oPaginate: {
-        //                 sNext: '<i class="fa fa-forward"></i>',
-        //                 sPrevious: '<i class="fa fa-backward"></i>',
-        //                 sFirst: '<i class="fa fa-step-backward"></i>',
-        //                 sLast: '<i class="fa fa-step-forward"></i>'
-        //             },
-        //         },
-        //         dom: 'Bfrtip',
-        //         buttons: [
-        //             'excel'
-        //         ],
-        //         "pageLength": 20,
-        //         "pagingType": "full_numbers",
-        //         "scrollX": true,
-        //     });
-
-        //     $('#loader').hide();
-        //     if (response.data.data.length > 0)
-        //         toastr.success(response.data.message);
-        //     else
-        //         toastr.info(response.data.message);
-        // }).catch(error => {
-        //     toastr.error(null);
-        // });
-
+    this_client.load = () => {
         $.fn.dataTable.ext.errMode = 'none';
 
-        $('#tbl_permission').DataTable().clear().draw();
-        $('#tbl_permission').DataTable().destroy();
-        $('#tbl_permission').DataTable({
+        $('#tbl_client').DataTable().clear().draw();
+        $('#tbl_client').DataTable().destroy();
+        $('#tbl_client').DataTable({
             // "bStateSave": true,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
@@ -144,21 +92,16 @@ const PERMISSION = (() => {
             processing: true,
             serverSide: true,
             ajax: {
-                url: `${APP_URL}/permission/api/all`,
+                url: `${APP_URL}/client/api/all`,
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
             },
             columns: [
-                { data: 'full_name', name: 'full_name' },
-                { data: 'theuser.email', name: 'theuser.email' },
-                { data: 'thecluster', name: 'thecluster' },
-                { data: 'theclient', name: 'theclient' },
-                { data: 'tl_full_name', name: 'tl_full_name' },
-                { data: 'om_full_name', name: 'om_full_name' },
-                { data: 'employment_status', name: 'employment_status' },
-                { data: 'permission', name: 'permission' },
+                { data: 'name', name: 'name' },
+                { data: 'thecluster.name', name: 'thecluster.name' },
+                { data: 'updated_at', name: 'updated_at' },
                 { data: 'action', name: 'action', className: 'text-center' },
             ],
             dom: 'Bfrtip',
@@ -173,27 +116,19 @@ const PERMISSION = (() => {
     }
 
     // show data
-    this_permission.show = (id) => {
-        $('#editPermissionModal').modal('show');
+    this_client.show = (id) => {
+        $('#editClientModal').modal('show');
         $('.error').hide();
         $('.error').text('');
-        $("#user_id_edit").val(null).trigger("change");
-        $("#cluster_id_edit").val(null).trigger("change");
-        $("#client_id_edit").val(null).trigger("change");
-        $("#tl_id_edit").val(null).trigger("change");
-        $("#om_id_edit").val(null).trigger("change");
-        $("#permission_edit").val(null).trigger("change");
+        $("#name_edit").val('');
+        $("#cluster_id_edit").val('');
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
-        axios(`${APP_URL}/permission/show/${id}`).then(function(response) {
-            _permission_id = id;
-            $("#user_id_edit").val(response.data.data.user_id).trigger("change");
-            $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
-            $("#client_id_edit").val(response.data.data.client_id).trigger("change");
-            $("#tl_id_edit").val(response.data.data.tl_id).trigger("change");
-            $("#om_id_edit").val(response.data.data.om_id).trigger("change");
-            $("#permission_edit").val(response.data.data.permission).trigger("change");
+        axios(`${APP_URL}/client/show/${id}`).then(function(response) {
+            _client_id = id;
+            $("#name_edit").val(response.data.data.name);
+            $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");;
             $('#btn_update').empty();
             $('#btn_update').append('<i class="fa fa-save"></i> Update');
             $('#btn_update').prop("disabled", false);
@@ -206,7 +141,7 @@ const PERMISSION = (() => {
     }
 
     // update data
-    $('#editPermissionForm').on('submit', function(e) {
+    $('#editClientForm').on('submit', function(e) {
         e.preventDefault();
         Swal.fire({
             title: 'Are you sure?',
@@ -220,7 +155,7 @@ const PERMISSION = (() => {
             allowOutsideClick: false
         }).then((result) => {
             if (result.isConfirmed) {
-                id = _permission_id;
+                id = _client_id;
                 var formdata = new FormData(this);
                 $('.error').hide();
                 $('.error').text('');
@@ -230,26 +165,21 @@ const PERMISSION = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: `${APP_URL}/permission/update/${id}`,
+                    url: `${APP_URL}/client/update/${id}`,
                     data: formdata
                 }).then(function(response) {
                     console.log(response.data.status)
                     if (response.data.status === 'success') {
                         $('#loader').show();
-                        $("#tbl_permission > tbody").empty();
-                        $("#tbl_permission_info").hide();
-                        $("#tbl_permission_paginate").hide();
-                        $('#editPermissionForm')[0].reset();
-                        $("#user_id_edit").val(null).trigger("change");
-                        $("#cluster_id_edit").val(null).trigger("change");
-                        $("#client_id_edit").val(null).trigger("change");
-                        $("#tl_id_edit").val(null).trigger("change");
-                        $("#om_id_edit").val(null).trigger("change");
-                        $("#permission_edit").val(null).trigger("change");
-                        PERMISSION.load();
+                        $("#tbl_client > tbody").empty();
+                        $("#tbl_client_info").hide();
+                        $("#tbl_client_paginate").hide();
+                        $('#editClientForm')[0].reset();
+                        $("#name_edit").val('');
+                        CLIENT.load();
                         $('.error').hide();
                         $('.error').text('');
-                        $('#editPermissionModal').modal('hide');
+                        $('#editClientModal').modal('hide');
                         toastr.success(response.data.message);
                     } else if (response.data.status === 'warning') {
                         Object.keys(response.data.error).forEach((key) => {
@@ -270,7 +200,7 @@ const PERMISSION = (() => {
     });
 
     // destroy data
-    this_permission.destroy = (id) => {
+    this_client.destroy = (id) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -285,14 +215,14 @@ const PERMISSION = (() => {
             if (result.isConfirmed) {
                 axios({
                         method: 'post',
-                        url: `${APP_URL}/permission/delete/${id}`,
+                        url: `${APP_URL}/client/delete/${id}`,
                     })
                     .then(function(response) {
                         console.log(response.data.status)
                         if (response.data.status === 'success') {
-                            $('#tbl_permission').DataTable().destroy();
+                            $('#tbl_client').DataTable().destroy();
                             toastr.success(response.data.message);
-                            PERMISSION.load();
+                            CLIENT.load();
                         } else {
                             toastr.error(response.data.message);
                         }
@@ -303,5 +233,5 @@ const PERMISSION = (() => {
         });
     }
 
-    return this_permission;
+    return this_client;
 })()

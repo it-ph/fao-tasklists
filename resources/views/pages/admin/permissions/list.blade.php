@@ -29,13 +29,13 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><i class="fas fa-plus"></i> Create</button>
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><i class="fas fa-plus"></i> Create</button>
                             <a href="{{ url('HREmployeeProfileAPI') }}">
-                                <button class="btn btn-primary waves-effect waves-light" title="Click to update the employees list in create user."><i class="fa fa-sync"></i> Sync HR Portal Employees</button>
+                                <button class="btn btn-primary btn-sm waves-effect waves-light" title="Click to update the employees list in create user."><i class="fa fa-sync"></i> Sync HR Portal Employees</button>
                             </a>
                         </div>
                     </div>
-                    <table id="tbl_permission" class="table table-bordered table-striped nowrap w-100">
+                    <table id="tbl_permission" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>
@@ -50,9 +50,6 @@
                             </tr>
                         </thead>
                     </table>
-                    <div id="div-spinner" class="text-center mt-4 mb-4">
-                        <span id="loader" style="font-size: 16px"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
-                    </div>
                 </div>
             </div>
         </div> <!-- end col -->
@@ -91,13 +88,11 @@
                                 // console.log(value);
                                 $('#client_id').append('<option value="'+ value.id +'">' + value.name +'</option>');
                             });
-
                         }
                         else
                         {
                             $('#client_id option[value=""]').prop('selected', true);
                         }
-
                     },
 
                     error: function(error) {
@@ -127,14 +122,12 @@
                                 // console.log(value);
                                 $('#om_id').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
                             });
-
                         }
                         else
                         {
                             $('#tl_id option[value=""]').prop('selected', true);
                             $('#tom_id option[value=""]').prop('selected', true);
                         }
-
                     },
 
                     error: function(error) {
@@ -170,13 +163,11 @@
                                 // console.log(value);
                                 $('#client_id_edit').append('<option value="'+ value.id +'">' + value.name +'</option>');
                             });
-
                         }
                         else
                         {
                             $('#client_id_edit option[value=""]').prop('selected', true);
                         }
-
                     },
 
                     error: function(error) {
@@ -206,14 +197,12 @@
                                 // console.log(value);
                                 $('#om_id_edit').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
                             });
-
                         }
                         else
                         {
                             $('#tl_id_edit option[value=""]').prop('selected', true);
                             $('#tom_id_edit option[value=""]').prop('selected', true);
                         }
-
                     },
 
                     error: function(error) {

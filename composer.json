@@ -19,7 +19,8 @@
         "laravel/ui": "^3.2",
         "maatwebsite/excel": "^3.1",
         "predis/predis": "^2.2",
-        "spatie/laravel-csp": "^2.8"
+        "spatie/laravel-csp": "^2.8",
+        "yajra/laravel-datatables": "^1.5"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

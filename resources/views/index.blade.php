@@ -125,7 +125,7 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">My Latest Tasks</h4>
                     <div class="table-responsive">
-                        <table id="datatable" class="table table-bordered nowrap w-100">
+                        <table id="datatable" class="table table-bordered table-sm nowrap w-100">
                             <thead>
                                 <tr>
                                     <th>Status</th>
@@ -233,7 +233,7 @@
                     buttons: [
                         'excel'
                     ],
-                    "pageLength": 10,
+                    "pageLength": 20,
                     "pagingType": "full_numbers",
                     "order": [2, "desc"],
                     "columnDefs": [{ type: 'date', 'targets': [2] }],

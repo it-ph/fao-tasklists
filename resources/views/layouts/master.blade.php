@@ -10,6 +10,7 @@
 
     <!-- CSRF Token -->
     <meta name="_token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="robots" content="noindex">
 
     <!-- App favicon -->
@@ -18,7 +19,7 @@
 </head>
 
 @section('body')
-    <body data-sidebar="dark">
+    <body data-sidebar="dark" data-keep-enlarged="true" class="vertical-collpsed">
 @show
     <!-- Begin page -->
     <div id="layout-wrapper">

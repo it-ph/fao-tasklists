@@ -26,20 +26,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    {{-- <div class="row mb-3">
-                        <div class="col-md-12">
-                            @if(Auth::user()->isAccountant())
-                                <a href="{{ url('client-activity-upload-template') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
-                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadClientActivityModal"><i class="fas fa-upload"></i> Upload</button>
-                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientActivityModal"><i class="fas fa-plus"></i> Create</button>
-                            @else
-                                <a href="{{ url('client-activities') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-chevron-left"></i> Back</a>
-                                <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientActivityModal"><i class="fas fa-plus"></i> Create</button>
-                            @endif
-                        </div>
-                    </div> --}}
-
-                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
+                    <table id="datatable" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Activity</th>

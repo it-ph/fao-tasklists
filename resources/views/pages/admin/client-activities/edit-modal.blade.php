@@ -28,7 +28,8 @@
                             <option value="P2P" @if($client_activity->function == 'P2P') selected @endif>P2P</option>
                             <option value="O2C" @if($client_activity->function == 'O2C') selected @endif>O2C</option>
                             <option value="RTR" @if($client_activity->function == 'RTR') selected @endif>RTR</option>
-                            <option value="Admin" @if($client_activity->function == 'Admin') selected @endif>Admin</option>
+                            <option value="Client Admin" @if($client_activity->function == 'Client Admin') selected @endif>Client Admin</option>
+                            <option value="Personiv Admin" @if($client_activity->function == 'Personiv Admin') selected @endif>Personiv Admin</option>
                         </select>
                         <input type="hidden" class="form-control" name="agent_id" value ="{{ $client_activity->agent_id }}" required>
                     </div>

@@ -28,12 +28,12 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <a href="{{ url('client-activity-upload-template') }}" class="btn btn-primary waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadClientActivityModal"><i class="fas fa-upload"></i> Upload</button>
+                            <a href="{{ url('client-activity-upload-template') }}" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadClientActivityModal"><i class="fas fa-upload"></i> Upload</button>
                         </div>
                     </div>
 
-                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
+                    <table id="datatable" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>

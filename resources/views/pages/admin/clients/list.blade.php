@@ -28,11 +28,11 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientModal"><i class="fas fa-plus"></i> Create</button>
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClientModal"><i class="fas fa-plus"></i> Create</button>
                         </div>
                     </div>
 
-                    <table id="datatable" class="table table-bordered table-striped nowrap w-100">
+                    <table id="tbl_client" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -42,7 +42,7 @@
                             </tr>
                         </thead>
 
-                        <tbody>
+                        {{-- <tbody>
                             @foreach ($clients as $client)
                                 <tr>
                                     <td>{{ $client->name }}</td>
@@ -60,7 +60,7 @@
                                 </tr>
                                 @include('pages.admin.clients.edit-modal')
                             @endforeach
-                        </tbody>
+                        </tbody> --}}
                     </table>
 
                 </div>
@@ -69,6 +69,7 @@
     </div>
 
     @include('pages.admin.clients.add-modal')
+    @include('pages.admin.clients.edit-modal')
 @endsection
 
 @section('script')
@@ -79,5 +80,6 @@
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
 
     <!-- Datatable init js -->
-    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script> --}}
+    <script src="{{asset('scripts/clients.js')}}"></script>
 @endsection

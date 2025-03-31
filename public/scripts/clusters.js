@@ -66,44 +66,52 @@ const CLUSTER = (() => {
 
     // load data
     this_cluster.load = () => {
-        axios(`${APP_URL}/cluster/all`).then(function(response) {
-            $('#tbl_cluster').DataTable().destroy();
-            var table;
-            console.log(response.data.data)
-            response.data.data.forEach(val => {
-                table +=
-                    `<tr>
-                        <td>${val.name}</td>
-                        <td>${val.updated_at}</td>
-                        <td class="text-center">${val.action}</td>
-                    </tr>`;
-            });
-            $('#tbl_cluster tbody').html(table)
-            $('#tbl_cluster').DataTable({
-                language: {
-                    oPaginate: {
-                        sNext: '<i class="fa fa-forward"></i>',
-                        sPrevious: '<i class="fa fa-backward"></i>',
-                        sFirst: '<i class="fa fa-step-backward"></i>',
-                        sLast: '<i class="fa fa-step-forward"></i>'
-                    },
+        $.fn.dataTable.ext.errMode = 'none';
+
+        $('#tbl_cluster').DataTable().clear().draw();
+        $('#tbl_cluster').DataTable().destroy();
+        $('#tbl_cluster').DataTable({
+            // "bStateSave": true,
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
+                oPaginate: {
+                    sNext: '<i class="fa fa-forward"></i>',
+                    sPrevious: '<i class="fa fa-backward"></i>',
+                    sFirst: '<i class="fa fa-step-backward"></i>',
+                    sLast: '<i class="fa fa-step-forward"></i>'
                 },
-                dom: 'Bfrtip',
-                buttons: [
-                    'excel'
-                ],
-                "pageLength": 10,
-                "pagingType": "full_numbers",
-                "scrollX": true,
-            });
-            $('#loader').hide();
-            if (response.data.data.length > 0)
-                toastr.success(response.data.message);
-            else
-                toastr.info(response.data.message);
-        }).catch(error => {
-            toastr.error(null);
+            },
+            scrollX: true,
+            pagingType: "full_numbers",
+            pageLength: 20,
+            lengthMenu: [
+                [10, 20, 50, 100],
+                [10, 20, 50, 100]
+            ],
+            order: [0, "asc"],
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: `${APP_URL}/cluster/api/all`,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+            },
+            columns: [
+                { data: 'name', name: 'name' },
+                { data: 'updated_at', name: 'updated_at' },
+                { data: 'action', name: 'action', className: 'text-center' },
+            ],
+            dom: 'Bfrtip',
+            buttons: [
+                'excel',
+            ]
         });
+
+        $.fn.dataTable.ext.errMode = function(settings, helpPage, message) {
+            console.log(message);
+        };
     }
 
     // show data

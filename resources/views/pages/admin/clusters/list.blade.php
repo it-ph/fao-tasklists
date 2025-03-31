@@ -28,10 +28,10 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClusterModal"><i class="fas fa-plus"></i> Create</button>
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addClusterModal"><i class="fas fa-plus"></i> Create</button>
                         </div>
                     </div>
-                    <table id="tbl_cluster" class="table table-bordered table-striped nowrap w-100">
+                    <table id="tbl_cluster" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -40,9 +40,6 @@
                             </tr>
                         </thead>
                     </table>
-                    <div id="div-spinner" class="text-center mt-4 mb-4">
-                        <span id="loader" style="font-size: 16px"><i class="fa fa-spinner fa-spin"></i> Please wait...</span>
-                    </div>
                 </div>
             </div>
         </div> <!-- end col -->

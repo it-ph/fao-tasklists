@@ -57,7 +57,7 @@ const TASK = (() => {
                 buttons: [
                     'excel'
                 ],
-                "pageLength": 10,
+                "pageLength": 20,
                 "pagingType": "full_numbers",
                 "order": [2, "desc"],
                 "columnDefs": [{ type: 'date', 'targets': [2] }],

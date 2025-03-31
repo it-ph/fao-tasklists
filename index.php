@@ -1,6 +1,6 @@
 <?php
 
-$loc = '/fao-tasklists-v2/public/login';
+$loc = '/fao-tasklists/public/login';
 header("Location: $loc");
 die(0);
 
@@ -14,6 +14,6 @@ die(0);
 <body>
 <h1>Hello World</h1>
 
-<a href="/fao-tasklists-v2/public">FAO Task Lists</a>
+<a href="/fao-tasklists/public">FAO Task Lists</a>
 </body>
 </html>

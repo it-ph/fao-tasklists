@@ -19,21 +19,22 @@ class Task extends Model
 
     public function scopeOMPermission($query)
     {
-        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+        return $query->where('cluster_id',auth()->user()->thepermisssion->cluster_id);
     }
 
     public function scopeTLPermission($query)
     {
+        $user = auth()->user();
         return $query->whereHas('thepermission', function ($q){
-                $q->where('tl_id',Auth::user()->emp_id);
+                $q->where('tl_id',$user->emp_id);
             })
-            ->where('cluster_id',Auth::user()->thepermisssion->cluster_id)
-            ->orwhere('agent_id',Auth::user()->emp_id);
+            ->where('cluster_id',$user->thepermisssion->cluster_id)
+            ->orwhere('agent_id',$user->emp_id);
     }
 
     public function scopeAccountantPermission($query)
     {
-        return $query->where('agent_id',Auth::user()->emp_id);
+        return $query->where('agent_id',auth()->user()->emp_id);
     }
 
     public function thecluster()
