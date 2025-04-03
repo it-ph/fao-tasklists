@@ -115,28 +115,28 @@ class TimeElapsedHelper
         return $totalSeconds / 3600; // Convert seconds to hours
     }
 
-    public function convertTime($hours)
-    {
-        $ss = ($hours * 3600);
-        $hh = floor($hours);
-        $ss -= $hh * 3600;
-        $mm = floor($ss / 60);
-        $ss -= $mm * 60;
-
-        return sprintf('%02d:%02d:%02d', $hh, $mm, $ss);
-    }
-
     // public function convertTime($hours)
     // {
-    //     $totalSeconds = $hours * 3600;
-    //     $days = floor($hours / 24);
-    //     $remainingHours = floor($hours) % 24;
-    //     $remainingSeconds = $totalSeconds - ($days * 24 * 3600) - ($remainingHours * 3600);
-    //     $minutes = floor($remainingSeconds / 60);
-    //     $remainingSeconds -= $minutes * 60;
+    //     $ss = ($hours * 3600);
+    //     $hh = floor($hours);
+    //     $ss -= $hh * 3600;
+    //     $mm = floor($ss / 60);
+    //     $ss -= $mm * 60;
 
-    //     return sprintf('%02d:%02d:%02d:%02d', $days, $remainingHours, $minutes, $remainingSeconds);
+    //     return sprintf('%02d:%02d:%02d', $hh, $mm, $ss);
     // }
+
+    public function convertTime($hours)
+    {
+        $totalSeconds = $hours * 3600;
+        $days = floor($hours / 24);
+        $remainingHours = floor($hours) % 24;
+        $remainingSeconds = $totalSeconds - ($days * 24 * 3600) - ($remainingHours * 3600);
+        $minutes = floor($remainingSeconds / 60);
+        $remainingSeconds -= $minutes * 60;
+
+        return sprintf('%02d:%02d:%02d:%02d', $days, $remainingHours, $minutes, $remainingSeconds);
+    }
 
     public function convertWorkingTime($time)
     {

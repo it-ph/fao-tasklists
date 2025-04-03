@@ -56,17 +56,20 @@ class TasksControllerAPI extends Controller
                     $status = '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
                     return $status;
                 }))
+                ->editColumn('agent_id', function ($value) {
+                        return $value->theagent->fullname.' '.$value->theagent->last_name;
+                })
                 ->editColumn('shift_date', (function($value){
-                    return $value->shift_date ? date("m/d/Y",strtotime($value->shift_date)) : '';
+                    return $value->shift_date ? date("Y-m-d",strtotime($value->shift_date)) : '';
                 }))
                 ->editColumn('date_received', (function($value){
-                    return $value->date_received ? date("m/d/Y",strtotime($value->date_received)) : '';
+                    return $value->date_received ? date("Y-m-d",strtotime($value->date_received)) : '';
                 }))
                 ->editColumn('start_date', (function($value){
-                    return $value->start_date ? date("m/d/Y H:i:s a",strtotime($value->start_date)) : '';
+                    return $value->start_date ? date("Y-m-d h:i:s a",strtotime($value->start_date)) : '';
                 }))
                 ->editColumn('end_date', (function($value){
-                    return $value->end_date ? date("m/d/Y H:i:s a",strtotime($value->end_date)) : '-';
+                    return $value->end_date ? date("Y-m-d h:i:s a",strtotime($value->end_date)) : '-';
                 }))
                 ->editColumn('actual_handling_time', (function($value){
                     $now = Carbon::now();
@@ -91,7 +94,7 @@ class TasksControllerAPI extends Controller
                     return $actual_handling_time;
                 }))
                 ->addColumn('date_completed', (function($value){
-                    return $value->status == "On Hold" ? '-' : ($value->end_date ? date("m/d/Y", strtotime($value->end_date)) : '-');
+                    return $value->status == "On Hold" ? '-' : ($value->end_date ? date("Y-m-d", strtotime($value->end_date)) : '-');
                 }))
                 ->addColumn('action', (function($value){
                     $action = '';
@@ -140,7 +143,8 @@ class TasksControllerAPI extends Controller
                     'thecluster:id,name',
                     'theclient:id,name',
                     'theclientactivity:id,name'
-                ]);
+                ])
+                ->select('tasks.*');
 
             // Get user permission
             $userPermission = auth()->user()->permission;
@@ -186,17 +190,21 @@ class TasksControllerAPI extends Controller
 
                     $status = '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
                     return $status;
-                }))->editColumn('shift_date', (function($value){
-                    return $value->shift_date ? date("m/d/Y",strtotime($value->shift_date)) : '';
+                }))
+                ->editColumn('agent_id', function ($value) {
+                        return $value->theagent->fullname.' '.$value->theagent->last_name;
+                })
+                ->editColumn('shift_date', (function($value){
+                    return $value->shift_date ? date("Y-m-d",strtotime($value->shift_date)) : '';
                 }))
                 ->editColumn('date_received', (function($value){
-                    return $value->date_received ? date("m/d/Y",strtotime($value->date_received)) : '';
+                    return $value->date_received ? date("Y-m-d",strtotime($value->date_received)) : '';
                 }))
                 ->editColumn('start_date', (function($value){
-                    return $value->start_date ? date("m/d/Y H:i:s a",strtotime($value->start_date)) : '';
+                    return $value->start_date ? date("Y-m-d h:i:s a",strtotime($value->start_date)) : '';
                 }))
                 ->editColumn('end_date', (function($value){
-                    return $value->end_date ? date("m/d/Y H:i:s a",strtotime($value->end_date)) : '-';
+                    return $value->end_date ? date("Y-m-d h:i:s a",strtotime($value->end_date)) : '-';
                 }))
                 ->editColumn('actual_handling_time', (function($value){
                     $now = Carbon::now();
@@ -221,8 +229,25 @@ class TasksControllerAPI extends Controller
                     return $actual_handling_time;
                 }))
                 ->addColumn('date_completed', (function($value){
-                    return $value->status == "On Hold" ? '-' : ($value->end_date ? date("m/d/Y", strtotime($value->end_date)) : '-');
+                    return $value->status == "On Hold" ? '-' : ($value->end_date ? date("Y-m-d", strtotime($value->end_date)) : '-');
                 }))
+                ->addColumn('action', (function($value){
+                    if($value->status == 'Completed')
+                    {
+                        $allowed_daterange = AllowedEditingDate::first();
+                        $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
+                        $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
+                        $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+
+                        $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
+                        $action = $is_allowed_to_edit ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>' : '-';
+                    }
+                    return $action;
+                }))
+                ->rawColumns(
+                [
+                    'action',
+                ])
                 ->escapeColumns([])
                 ->make(true);
         }

@@ -52,6 +52,8 @@
                         <thead>
                             <tr>
                                 <th>Status</th>
+                                @if(Auth::user()->isOperationsManagerOrAdmin())<th>Action</th>@endif
+                                <th>Employee Name</th>
                                 <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Date Received</th>
@@ -88,6 +90,7 @@
             </div>
         </div> <!-- end col -->
     </div>
+    @include('pages.admin.tasks.edit-modal')
 @endsection
 
 @section('script')

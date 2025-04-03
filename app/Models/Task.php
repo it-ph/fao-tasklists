@@ -52,6 +52,11 @@ class Task extends Model
         return $this->belongsTo(User::class, 'agent_id', 'emp_id');
     }
 
+    public function getAgentFullNameAttribute()
+    {
+        return $this->theagent->fullname . ' ' . $this->theagent->last_name;
+    }
+
     public function thepermission()
     {
         return $this->hasOne(Permission::class, 'user_id', 'agent_id');

@@ -57,6 +57,7 @@
                                 <th>Status</th>
                                 <th>Action</th>
                                 <th>Employee Name</th>
+                                <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Date Received</th>
                                 <th>Cluster</th>

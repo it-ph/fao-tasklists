@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@inject('TaskHelper','App\Http\Helpers\TaskHelper')
+@inject('TimeElapsedHelper','App\Http\Helpers\TimeElapsedHelper')
 
 @section('title') Dashboard @endsection
 
@@ -145,57 +145,55 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($tasks as $task)
+                                @foreach ($tasks as $value)
                                     <tr>
                                         <td>
-                                            @if($task->status == "In Progress")
-                                                <span class="text-success"><strong>{{ $task->status }}</strong></span>
-                                            @elseif($task->status == "On Hold")
-                                                <span class="text-warning"><strong>{{ $task->status }}</strong></span>
-                                            @elseif($task->status == "Completed")
-                                                <span class="text-primary"><strong>{{ $task->status }}</strong></span>
+                                            @if($value->status == "In Progress")
+                                                <span class="text-success"><strong>{{ $value->status }}</strong></span>
+                                            @elseif($value->status == "On Hold")
+                                                <span class="text-warning"><strong>{{ $value->status }}</strong></span>
+                                            @elseif($value->status == "Completed")
+                                                <span class="text-primary"><strong>{{ $value->status }}</strong></span>
                                             @endif
                                         </td>
-                                        <td>@isset($task->theagent){{ $task->theagent->fullname }} {{ $task->theagent->last_name }}@endisset</td>
-                                        <td>{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
-                                        <td>{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
-                                        <td>{{ $task->thecluster->name }}</td>
-                                        <td>{{ $task->theclient->name }}</td>
-                                        <td>{{ $task->theclientactivity->name }}</td>
-                                        <td>{{ $task->description }}</td>
-                                        <td>@isset($task->start_date){{ date('m/d/Y h:i:s A', strtotime($task->start_date)) }}@endisset</td>
-                                        <td>@isset($task->end_date){{ date('m/d/Y h:i:s A', strtotime($task->end_date)) }} @else - @endisset</td>
-                                        <td>@isset($task->end_date){{ date('m/d/Y', strtotime($task->end_date)) }} @else - @endisset</td>
+                                        <td>@isset($value->theagent){{ $value->theagent->fullname }} {{ $value->theagent->last_name }}@endisset</td>
+                                        <td>{{ date('Y-m-d', strtotime($value->shift_date)) }}</td>
+                                        <td>{{ date('Y-m-d', strtotime($value->date_received)) }}</td>
+                                        <td>{{ $value->thecluster->name }}</td>
+                                        <td>{{ $value->theclient->name }}</td>
+                                        <td>{{ $value->theclientactivity->name }}</td>
+                                        <td>{{ $value->description }}</td>
+                                        <td>@isset($value->start_date){{ date('Y-m-d h:i:s A', strtotime($value->start_date)) }}@endisset</td>
+                                        <td>@isset($value->end_date){{ date('Y-m-d h:i:s A', strtotime($value->end_date)) }} @else - @endisset</td>
+                                        <td>@isset($value->end_date){{ date('Y-m-d', strtotime($value->end_date)) }} @else - @endisset</td>
                                         <td>
                                             {{-- START OF ACTUAL HANDLING TIME --}}
                                             <?php
                                                 $now = \Carbon\Carbon::now();
-                                                $actual_handling_timer = $task->start_date->diff($now)->format('%D:%H:%I:%S');
-
-                                                // TASK ON HOLD-COMPLETED W/ ACTUAL HANDLING TIME
-                                                if($task->actual_handling_time)
+                                                $actual_handling_timer = $value->start_date->diff($now)->format('%D:%H:%I:%S');
+                                                if($value->status <> "Completed")
                                                 {
-                                                    if($task->status == "In Progress")
-                                                    {
-                                                        $get_aht = $TaskHelper->getActualHandlingTime($task);
-                                                        $actual_handling_time = $get_aht['actual_handling_time'];
-                                                    }
-                                                    else
-                                                    {
-                                                        $actual_handling_time = $task->actual_handling_time;
-                                                    }
+                                                    $start_at = $value->start_date;
+                                                    $end_at = $now->format('Y-m-d H:i:s');
+                                                    $shift_start = '00:00:00';
+                                                    $shift_end = '23:59:59';
+                                                    $pauses = [];
+                                                    $events = []; //retain as empty array since there is no events module in the system
+
+                                                    $pauses = $TimeElapsedHelper->getTaskPauses($value->id);
+                                                    $working_hours = $TimeElapsedHelper->calculateWorkingTime($start_at, $end_at, $shift_start, $shift_end, $pauses,$events);
+                                                    $actual_handling_time = $TimeElapsedHelper->convertTime($working_hours);
                                                 }
                                                 else
                                                 {
-                                                    $actual_handling_time = $actual_handling_timer;
+                                                    $actual_handling_time = $value->actual_handling_time ? $value->actual_handling_time : $actual_handling_timer;
                                                 }
-
                                             ?>
                                             {{ $actual_handling_time }}
                                             {{-- END OF ACTUAL HANDLING TIME --}}
                                         </td>
-                                        <td>{{ $task->volume }}</td>
-                                        <td>{{ $task->remarks }}</td>
+                                        <td>{{ $value->volume }}</td>
+                                        <td>{{ $value->remarks }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

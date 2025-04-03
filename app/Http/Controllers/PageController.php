@@ -48,7 +48,12 @@ class PageController extends GlobalVariableController
             return view('errors.404');
         }
 
-        return view('pages.admin.tasks.list');
+        $user_client_activities = ClientActivity::query()
+            ->select('id','agent_id','name')
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        return view('pages.admin.tasks.list',compact('user_client_activities'));
     }
 
     // AGENT ACCESS
@@ -59,6 +64,7 @@ class PageController extends GlobalVariableController
         {
             return view('errors.404');
         }
+
         $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
 
         $user_client_activities = ClientActivity::query()

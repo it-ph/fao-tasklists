@@ -41,7 +41,7 @@ const TASK = (() => {
                         $("#tbl_task_paginate").hide();
                         $('#storeTaskForm')[0].reset();
                         $("#client_id").val(null).trigger("change");
-                        $("#cluster_activity_id").val(null).trigger("change");
+                        $("#client_activity_id").val(null).trigger("change");
                         $('#create_button').load(' #create_button');
                         // $('#has_active_task').load(' #has_active_task');
                         $('.error').hide();
@@ -105,7 +105,8 @@ const TASK = (() => {
             columns: [
                 { data: 'status', name: 'status', className: 'text-center' },
                 { data: 'action', name: 'action', className: 'text-center' },
-                { data: 'theagent.fullname', name: 'theagent.fullname' },
+                { data: 'agent_id', name: 'theagent.fullname' },
+                { data: 'agent_id', name: 'theagent.last_name', className: 'hide-column' },
                 { data: 'shift_date', name: 'shift_date', className: 'text-center' },
                 { data: 'date_received', name: 'date_received', className: 'text-center' },
                 { data: 'thecluster.name', name: 'thecluster.name' },
@@ -146,7 +147,7 @@ const TASK = (() => {
             $('#shift_date_edit').val(shift_date);
             $('#date_received_edit').val(date_received);
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
-            $("#cluster_activity_id_edit").val(response.data.data.cluster_activity_id).trigger("change");
+            $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
             $('#description_edit').text(response.data.data.description);
             $('#status_edit').val(response.data.data.status);
             $('#start_date_edit').val(start_date);
@@ -202,7 +203,7 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#editTaskForm')[0].reset();
-                        $("#cluster_activity_id_edit").val(null).trigger("change");
+                        $("#client_activity_id_edit").val(null).trigger("change");
                         $('#description_edit').text('');
                         $('#volume_edit').attr('readonly', true);
                         $('#remarks_edit').attr('readonly', true);

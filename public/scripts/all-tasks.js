@@ -42,7 +42,9 @@ const TASK = (() => {
             },
             columns: [
                 { data: 'status', name: 'status', className: 'text-center' },
-                { data: 'theagent.fullname', name: 'theagent.fullname' },
+                { data: 'action', name: 'action', className: 'text-center' },
+                { data: 'agent_id', name: 'theagent.fullname' },
+                { data: 'agent_id', name: 'theagent.last_name', className: 'hide-column' },
                 { data: 'shift_date', name: 'shift_date', className: 'text-center' },
                 { data: 'date_received', name: 'date_received', className: 'text-center' },
                 { data: 'thecluster.name', name: 'thecluster.name' },
@@ -61,6 +63,117 @@ const TASK = (() => {
             console.log(message);
         };
     }
+
+    // show data
+    this_task.show = (id) => {
+        $('#editTaskModal').modal('show');
+        $('#editTaskForm')[0].reset();
+        $("#cluster_id_edit").val(null).trigger("change");
+        $("#client_id_edit").val(null).trigger("change");
+        $("#client_activity_id_edit").val(null).trigger("change");
+        $('.error').hide();
+        $('.error').text('');
+        $('#btn_update').empty();
+        $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
+        $('#btn_update').prop("disabled", true);
+        axios(`${APP_URL}/my-task/show/${id}`).then(function(response) {
+            _task_id = id;
+            const tzone = "Asia/Manila";
+            var shift_date = moment(response.data.data.shift_date).tz(tzone).format('YYYY-MM-DD');
+            var date_received = moment(response.data.data.date_received).tz(tzone).format('YYYY-MM-DD');
+            var start_date = moment(response.data.data.start_date).tz(tzone).format('YYYY-MM-DDTHH:mm');
+            var end_date = response.data.data.end_date ? moment(response.data.data.end_date).tz(tzone).format('YYYY-MM-DDTHH:mm') : '';
+            var allow_volume = response.data.data.status == 'Completed' ? false : true;
+            var allow_remarks = response.data.data.status == 'Completed' ? false : true;
+
+            $('#agent_id').val(response.data.data.agent_id);
+            $('#employee_name').val(response.data.data.theagent.fullname + ' ' + response.data.data.theagent.last_name);
+            $('#shift_date_edit').val(shift_date);
+            $('#date_received_edit').val(date_received);
+            $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
+            $("#client_id_edit").val(response.data.data.client_id).trigger("change");
+            $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
+            $('#description_edit').text(response.data.data.description);
+            $('#status_edit').val(response.data.data.status);
+            $('#start_date_edit').val(start_date);
+            $('#end_date_edit').val(end_date);
+            $('#actual_handling_time_edit').val(response.data.data.actual_handling_time);
+            $('#volume_edit').attr('readonly', allow_volume);
+            $('#volume_edit').val(response.data.data.volume);
+            $('#remarks_edit').attr('readonly', allow_remarks);
+            $('#remarks_edit').text(response.data.data.remarks);
+            $('#btn_update').empty();
+            $('#btn_update').append('<i class="fa fa-save"></i> Update');
+            $('#btn_update').prop("disabled", false);
+            $('.error').hide();
+            $('.error').text('');
+            toastr.success(response.data.message);
+        }).catch(error => {
+            toastr.error(error);
+        });
+    }
+
+    // update data
+    $('#editTaskForm').on('submit', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#00599D",
+            cancelButtonColor: "#F46A6A",
+            confirmButtonText: 'Yes, update it!',
+            cancelButtonText: 'No, cancel!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                id = _task_id;
+                var formdata = new FormData(this);
+                $('.error').hide();
+                $('.error').text('');
+                $('#btn_update').empty();
+                $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Updating...');
+                $('#btn_update').prop("disabled", true);
+                // Send a POST request
+                axios({
+                    method: 'post',
+                    url: `${APP_URL}/my-task/update/${id}`,
+                    data: formdata
+                }).then(function(response) {
+                    console.log(response.data.status)
+                    if (response.data.status === 'success') {
+                        $('#loader').show();
+                        $("#tbl_task > tbody").empty();
+                        $("#tbl_task_info").hide();
+                        $("#tbl_task_paginate").hide();
+                        $('#editTaskForm')[0].reset();
+                        $("#cluster_activity_id_edit").val(null).trigger("change");
+                        $('#description_edit').text('');
+                        $('#volume_edit').attr('readonly', true);
+                        $('#remarks_edit').attr('readonly', true);
+                        TASK.load();
+                        $('.error').hide();
+                        $('.error').text('');
+                        $('#editTaskModal').modal('hide');
+                        toastr.success(response.data.message);
+                    } else if (response.data.status === 'warning') {
+                        Object.keys(response.data.error).forEach((key) => {
+                            $(`#${[key]}_editError`).show();
+                            $(`#${[key]}_editError`).text(response.data.error[key][0]);
+                        });
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                    $('#btn_update').empty();
+                    $('#btn_update').append('<i class="fa fa-save"></i> Update');
+                    $('#btn_update').prop("disabled", false);
+                }).catch(error => {
+                    toastr.error(error);
+                });
+            }
+        });
+    });
 
     return this_task;
 })()
