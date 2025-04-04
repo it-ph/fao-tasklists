@@ -3,6 +3,7 @@ $(document).ready(function() {
 });
 
 const TASK = (() => {
+    const isAdmin = $('#permission').text();
     let this_task = {}
 
     // load data
@@ -42,7 +43,7 @@ const TASK = (() => {
             },
             columns: [
                 { data: 'status', name: 'status', className: 'text-center' },
-                { data: 'action', name: 'action', className: 'text-center' },
+                ...(isAdmin ? [{ data: 'action', name: 'action', className: 'text-center' }] : []),
                 { data: 'agent_id', name: 'theagent.fullname' },
                 { data: 'agent_id', name: 'theagent.last_name', className: 'hide-column' },
                 { data: 'shift_date', name: 'shift_date', className: 'text-center' },

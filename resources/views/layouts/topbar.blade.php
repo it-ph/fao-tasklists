@@ -28,7 +28,7 @@
 
             <div class="dropdown d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect" title="Set Shift Date" data-bs-toggle="modal" data-bs-target="#editShiftDate">
-                    @if(Auth::user()->thepermisssion->shift_date) <span class=" text-white">SHIFT DATE: {{ date('m/d/Y', strtotime(Auth::user()->thepermisssion->shift_date)) }}</span> @endif <i class="bx bx-calendar text-white"></i>
+                    @if(auth()->user()->thepermisssion->shift_date) <span class=" text-white">SHIFT DATE: {{ date('m/d/Y', strtotime(auth()->user()->thepermisssion->shift_date)) }}</span> @endif <i class="bx bx-calendar text-white"></i>
                 </button>
             </div>
 
@@ -100,9 +100,9 @@
                             <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/user2-160x1601.png') }}">
                         </div>
                         <div class="text-center">
-                            <h5 class="name font-weight-bold mb-1">{{ Auth::user()->fullname }} {{ Auth::user()->last_name }}</h5>
-                            <p class="email text-muted mb-2">{{ Auth::user()->email }}</p>
-                            <p class="email text-muted mb-1">{{ ucwords(Auth::user()->thepermisssion->permission) }}</p>
+                            <h5 class="name font-weight-bold mb-1">{{ auth()->user()->fullname }} {{ auth()->user()->last_name }}</h5>
+                            <p class="email text-muted mb-2">{{ auth()->user()->email }}</p>
+                            <p class="email text-muted mb-1">{{ ucwords(auth()->user()->thepermisssion->permission) }}</p>
                         </div>
                     </div>
                     <div class="dropdown-divider"></div>

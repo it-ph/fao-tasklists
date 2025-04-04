@@ -232,6 +232,7 @@ class TasksControllerAPI extends Controller
                     return $value->status == "On Hold" ? '-' : ($value->end_date ? date("Y-m-d", strtotime($value->end_date)) : '-');
                 }))
                 ->addColumn('action', (function($value){
+                    $action = '-';
                     if($value->status == 'Completed')
                     {
                         $allowed_daterange = AllowedEditingDate::first();

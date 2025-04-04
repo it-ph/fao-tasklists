@@ -48,11 +48,12 @@
                         </div>
                     </div>
                     <p id="status" style="display:none">@if(\Request::get('status')) {{ (\Request::get('status')) }} @else all @endif</p>
+                    <p id="permission" class="ihide">{{ auth()->user()->isOperationsManagerOrAdmin() }}</p>
                     <table id="tbl_task" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Status</th>
-                                @if(Auth::user()->isOperationsManagerOrAdmin())<th>Action</th>@endif
+                                @if(auth()->user()->isOperationsManagerOrAdmin())<th>Action</th>@endif
                                 <th>Employee Name</th>
                                 <th>Employee Name</th>
                                 <th>Shift Date</th>
