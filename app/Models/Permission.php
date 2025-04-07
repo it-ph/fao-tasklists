@@ -17,14 +17,19 @@ class Permission extends Model
     protected $guarded = [];
     protected $dates = ['created_at', 'updated_at', 'deleted_at','shift_date'];
 
+    public function scopeAgentPermission($query)
+    {
+        return $query->where('id',auth()->user()->id);
+    }
+
     public function scopeTLPermission($query)
     {
-        return $query->where('tl_id',Auth::user()->emp_id)->where('cluster_id',Auth::user()->thepermisssion->cluster_id)->orwhere('user_id',Auth::user()->emp_id);
+        return $query->where('tl_id',auth()->user()->emp_id)->where('cluster_id',auth()->user()->thepermisssion->cluster_id)->orwhere('user_id',auth()->user()->emp_id);
     }
 
     public function scopeOMPermission($query)
     {
-        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+        return $query->where('cluster_id',auth()->user()->thepermisssion->cluster_id);
     }
 
     public function theuser()

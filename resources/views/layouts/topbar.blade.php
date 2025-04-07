@@ -102,6 +102,7 @@
                         <div class="text-center">
                             <h5 class="name font-weight-bold mb-1">{{ auth()->user()->fullname }} {{ auth()->user()->last_name }}</h5>
                             <p class="email text-muted mb-2">{{ auth()->user()->email }}</p>
+                            <p class="email text-muted mb-1 fw-bold">{{ ucwords(auth()->user()->thepermisssion->thecluster->name) }}</p>
                             <p class="email text-muted mb-1">{{ ucwords(auth()->user()->thepermisssion->permission) }}</p>
                         </div>
                     </div>
