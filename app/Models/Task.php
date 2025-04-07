@@ -39,17 +39,17 @@ class Task extends Model
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id');
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();;
     }
 
     public function theclient()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();;
     }
 
     public function theagent()
     {
-        return $this->belongsTo(User::class, 'agent_id', 'emp_id');
+        return $this->belongsTo(User::class, 'agent_id', 'emp_id')->withTrashed();;
     }
 
     public function getAgentFullNameAttribute()
@@ -59,7 +59,7 @@ class Task extends Model
 
     public function thepermission()
     {
-        return $this->hasOne(Permission::class, 'user_id', 'agent_id');
+        return $this->hasOne(Permission::class, 'user_id', 'agent_id')->withTrashed();;
     }
 
     public function thedashboardactivity()
@@ -69,12 +69,12 @@ class Task extends Model
 
     public function theclientactivity()
     {
-        return $this->belongsTo(ClientActivity::class, 'client_activity_id');
+        return $this->belongsTo(ClientActivity::class, 'client_activity_id')->withTrashed();;
     }
 
     public function thecreatedby()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();;
     }
 
     public function thetasklogs()

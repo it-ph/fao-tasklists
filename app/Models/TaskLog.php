@@ -15,11 +15,11 @@ class TaskLog extends Model
 
     public function thetask()
     {
-        return $this->belongsTo(Task::class, 'task_id');
+        return $this->belongsTo(Task::class, 'task_id')->withTrashed();;
     }
 
     public function thecreatedby()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();;
     }
 }

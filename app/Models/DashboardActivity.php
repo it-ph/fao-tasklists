@@ -18,7 +18,7 @@ class DashboardActivity extends Model
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id');
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();;
     }
 
     public function scopeCluster($query)

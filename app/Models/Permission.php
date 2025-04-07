@@ -44,22 +44,22 @@ class Permission extends Model
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id');
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();;
     }
 
     public function theclient()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();;
     }
 
     public function theclientactivities()
     {
-        return $this->hasMany(ClientActivity::class, 'agent_id', 'user_id');
+        return $this->hasMany(ClientActivity::class, 'agent_id', 'user_id')->withTrashed();;
     }
 
     public function thetl()
     {
-        return $this->belongsTo(Permission::class, 'tl_id', 'user_id');
+        return $this->belongsTo(Permission::class, 'tl_id', 'user_id')->withTrashed();;
     }
 
     public function getTLFullNameAttribute()
@@ -69,7 +69,7 @@ class Permission extends Model
 
     public function theom()
     {
-        return $this->belongsTo(Permission::class, 'om_id', 'user_id');
+        return $this->belongsTo(Permission::class, 'om_id', 'user_id')->withTrashed();;
     }
 
     public function getOMFullNameAttribute()

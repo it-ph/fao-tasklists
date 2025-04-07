@@ -17,11 +17,11 @@ class UserClient extends Model
 
     public function theuser()
     {
-        return $this->belongsTo(User::class, 'emp_id');
+        return $this->belongsTo(User::class, 'emp_id')->withTrashed();;
     }
 
     public function theclient()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();;
     }
 }
