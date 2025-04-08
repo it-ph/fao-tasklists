@@ -25,9 +25,9 @@
                         <label for="function" class="col-form-label custom-label"><strong>FUNCTION:<span class="important">*</span></strong></label>
                         <select name="function" class="form-control" @if(Auth::user()->isAccountant()) disabled @endif>
                             <option value="">-- Select Frequency --</option>
-                            <option value="P2P" @if($client_activity->function == 'P2P') selected @endif>P2P</option>
-                            <option value="O2C" @if($client_activity->function == 'O2C') selected @endif>O2C</option>
-                            <option value="RTR" @if($client_activity->function == 'RTR') selected @endif>RTR</option>
+                            <option value="Procure to Pay (P2P)" @if($client_activity->function == 'Procure to Pay (P2P)') selected @endif>Procure to Pay (P2P)</option>
+                            <option value="Order to Cash (O2C)" @if($client_activity->function == 'Order to Cash (O2C)') selected @endif>Order to Cash (O2C)</option>
+                            <option value="Record to Report (R2R)" @if($client_activity->function == 'Record to Report (R2R)') selected @endif>Record to Report (R2R)</option>
                             <option value="Client Admin" @if($client_activity->function == 'Client Admin') selected @endif>Client Admin</option>
                             <option value="Personiv Admin" @if($client_activity->function == 'Personiv Admin') selected @endif>Personiv Admin</option>
                         </select>

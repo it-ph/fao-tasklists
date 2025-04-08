@@ -121,6 +121,10 @@
 
     {{-- @include('pages.dashboard.latest-tasks') --}}
     @include('pages.dashboard.filters')
+    <div class="row">
+        @include('pages.dashboard.agent-tasks')
+        @include('pages.dashboard.avg-of-RU')
+    </div>
 @endsection
 @section('script')
     <!-- Required datatable js -->
@@ -161,5 +165,5 @@
 @endsection
 
 @section('custom-js')
-    <script src="{{asset('scripts/dashboard/agent.js')}}"></script>
+    <script src="{{asset('scripts/dashboard.js')}}"></script>
 @endsection

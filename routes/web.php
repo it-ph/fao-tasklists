@@ -17,6 +17,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksControllerAPI;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClientControllerAPI;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClusterControllerAPI;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserClientController;
@@ -119,6 +120,18 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
     // Shift Date Setting
     Route::post('shift-date', [PermissionController::class, 'updateShiftDate'])->name('shift-date.update');
+
+    /**
+     * DASHBOARD
+     */
+    Route::group(['prefix' => 'dashboard/report'],
+        function () {
+            Route::post('daily', [DashboardController::class,'loadDaily']);
+            Route::post('weekly', [DashboardController::class, 'loadWeekly']);
+            Route::post('monthly', [DashboardController::class, 'loadMonthly']);
+            Route::post('yearly', [DashboardController::class, 'loadYearly']);
+        }
+    );
 
     /**
      * START OF ADMIN, TL, OM

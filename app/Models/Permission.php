@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dcblogdev\MsGraph\Resources\Tasks;
 use Illuminate\Support\Facades\Auth;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
@@ -59,7 +60,7 @@ class Permission extends Model
 
     public function thetl()
     {
-        return $this->belongsTo(Permission::class, 'tl_id', 'user_id')->withTrashed();;
+        return $this->belongsTo(Permission::class, 'tl_id', 'user_id');
     }
 
     public function getTLFullNameAttribute()
@@ -69,7 +70,7 @@ class Permission extends Model
 
     public function theom()
     {
-        return $this->belongsTo(Permission::class, 'om_id', 'user_id')->withTrashed();;
+        return $this->belongsTo(Permission::class, 'om_id', 'user_id');
     }
 
     public function getOMFullNameAttribute()
@@ -80,5 +81,10 @@ class Permission extends Model
     public function theclients()
     {
         return $this->hasMany(UserClient::class, 'client_id', 'user_id');
+    }
+
+    public function thetasks()
+    {
+        return $this->hasMany(Task::class, 'agent_id', 'user_id');
     }
 }

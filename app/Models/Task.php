@@ -49,7 +49,7 @@ class Task extends Model
 
     public function theagent()
     {
-        return $this->belongsTo(User::class, 'agent_id', 'emp_id')->withTrashed();;
+        return $this->belongsTo(User::class, 'agent_id', 'emp_id');
     }
 
     public function getAgentFullNameAttribute()
