@@ -122,8 +122,8 @@
     {{-- @include('pages.dashboard.latest-tasks') --}}
     @include('pages.dashboard.filters')
     <div class="row">
-        @include('pages.dashboard.agent-tasks')
-        @include('pages.dashboard.avg-of-RU')
+        @include('pages.dashboard.agents-fte')
+        @include('pages.dashboard.clients-fte')
     </div>
 @endsection
 @section('script')

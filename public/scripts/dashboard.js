@@ -83,27 +83,28 @@ const DASHBOARD = (() => {
                     url: `${APP_URL}/dashboard/report/daily`,
                     data: datas
                 }).then(function(response) {
-                    // agents FTE RU
-                    $('#tbl_daily').DataTable().destroy();
+                    // agents FTE
+                    $('#tbl_daily_agent_fte').DataTable().destroy();
                     var table;
                     console.log(response.data.data)
                     const data = response.data.data;
 
-                    $('#daily_filter').text(data.date);
-                    data.agents.forEach(val => {
+                    $('.daily_filter').text(data.date);
+                    data.agents_fte.forEach(val => {
                         table +=
                             `<tr>
-                                <td>${val.theuser.fullname} ${val.theuser.last_name}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>${val.client}</td>
+                                <td>${val.employee_name}</td>
+                                <td class="text-center">${val.sum_volume}</td>
+                                <td class="text-center">${val.sum_aht}</td>
+                                <td class="text-center">${val.workdays}</td>
+                                <td class="text-center">${val.work_minutes}</td>
+                                <td class="text-center">${val.ru_percent}</td>
                             </tr>`;
                     });
 
-                    $('#tbl_daily tbody').html(table)
-                    $('#tbl_daily').DataTable({
+                    $('#tbl_daily_agent_fte tbody').html(table)
+                    $('#tbl_daily_agent_fte').DataTable({
                         language: {
                             oPaginate: {
                                 sNext: '<i class="fa fa-forward"></i>',
@@ -121,35 +122,44 @@ const DASHBOARD = (() => {
                         scrollX: true,
                     });
 
-                    // average of ru %
-                    $('#tbl_avg_ru').DataTable().destroy();
-                    var table_avg_ru;
-                    data.clients.forEach(val => {
-                        table_avg_ru +=
+                    // clients FTE
+                    $('#tbl_daily_client_fte').DataTable().destroy();
+                    var table_client_fte;
+                    let totalRU = 0;
+                    let count = 0;
+
+                    data.clients_fte.forEach(val => {
+                        table_client_fte +=
                             `<tr>
-                                <td>${val.name}</td>
-                                <td></td>
+                                <td>${val.client}</td>
+                                <td class="text-center">${val.average_ru}</td>
                             </tr>`;
+                        totalRU += parseFloat(val.average_ru);
+                        count++;
                     });
 
-                    $('#tbl_avg_ru tbody').html(table_avg_ru)
-                        // $('#tbl_avg_ru').DataTable({
-                        //     language: {
-                        //         oPaginate: {
-                        //             sNext: '<i class="fa fa-forward"></i>',
-                        //             sPrevious: '<i class="fa fa-backward"></i>',
-                        //             sFirst: '<i class="fa fa-step-backward"></i>',
-                        //             sLast: '<i class="fa fa-step-forward"></i>'
-                        //         },
-                        //     },
-                        //     pagingType: "full_numbers",
-                        //     pageLength: 20,
-                        //     lengthMenu: [
-                        //         [10, 20, 50, 100],
-                        //         [10, 20, 50, 100]
-                        //     ],
-                        //     scrollX: true,
-                        // });
+                    $('#tbl_daily_client_fte tbody').html(table_client_fte);
+
+                    let overall_average_ru = (count > 0) ? (totalRU / count).toFixed(2) + '%' : '0%';
+                    $('#overall_avg_ru').text(overall_average_ru);
+
+                    $('#tbl_daily_client_fte').DataTable({
+                        language: {
+                            oPaginate: {
+                                sNext: '<i class="fa fa-forward"></i>',
+                                sPrevious: '<i class="fa fa-backward"></i>',
+                                sFirst: '<i class="fa fa-step-backward"></i>',
+                                sLast: '<i class="fa fa-step-forward"></i>'
+                            },
+                        },
+                        pagingType: "full_numbers",
+                        pageLength: 20,
+                        lengthMenu: [
+                            [10, 20, 50, -1],
+                            [10, 20, 50, "All"]
+                        ],
+                        scrollX: true,
+                    });
 
                     $('.div_daily').removeClass('card-loading');
 
@@ -162,6 +172,10 @@ const DASHBOARD = (() => {
                     toastr.error(error);
                 });
             }
+
+
+
+
 
             this_dashboard.loadWeekly = (data, select) => {
                     var datas = {

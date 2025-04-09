@@ -10,27 +10,17 @@ use Carbon\CarbonImmutable;
 class DashboardServices
 {
     // dashboarddata
-    public function dashboardData($date, $agents, $clients)
+    public function dashboardData($date, $agents_fte, $clients_fte)
     {
         $datastorage = [];
 
         $datastorage = [
-            'date'          => $date,
-            'agents'        => $agents,
-            'clients'       => $clients,
+            'date'                  => $date,
+            'agents_fte'            => $agents_fte,
+            'clients_fte'           => $clients_fte,
         ];
 
         return $datastorage;
-    }
-
-    public function getSumOfVolume($agent_id, $cluster_id)
-    {
-
-    }
-
-    public function getSumOfAHT()
-    {
-
     }
 
     public function scopeQuery($q)
@@ -63,12 +53,16 @@ class DashboardServices
     {
         $agents = Permission::where('cluster_id', $cluster_id)
             ->with([
-                'theuser:id,email,emp_id,fullname,last_name',
+                'theuser:id,emp_id,fullname,last_name,employment_status',
+                'theclient:id,name',
                 'thetasks'
             ])
-            ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
+            ->select('id','user_id','client_id')
             ->where('permission','<>','superadmin')
-            ->whereNull('deleted_at');
+            ->whereNull('deleted_at')
+            ->whereHas('theuser', function($query) {
+                $query->where('employment_status', 'active');
+            });
 
         $agents = $this->scopeQuery($agents);
 
@@ -95,7 +89,7 @@ class DashboardServices
                     $date_filter = Carbon::today();
                 } else {
                     $date = date("F j, Y", strtotime($where['date']));
-                    $date_filter = $where['date'];
+                    $date_filter = $where['date'].' 00:00:00';
                 }
                 break;
 
@@ -151,34 +145,70 @@ class DashboardServices
         $date = $d['date'];
         $date_filter = $d['date_filter'];
 
-        $dashboard = $agents->map(function ($agent) {
-            $empployee_name = $agent->theuser->fullname .' '. $agent->theuser->last_name;
-            $tasks = $agent->thetasks;
+        $agents_fte = $agents->map(function ($agent) use ($cluster_id,$date_filter) {
+            $client = $agent->theclient ? $agent->theclient->name : '';
+            $employee_name = $agent->theuser->fullname .' '. $agent->theuser->last_name;
+            $tasks = $agent->thetasks
+                ->where('cluster_id',$cluster_id)
+                ->where('status','Completed')
+                ->where('shift_date', $date_filter);
+
             $total_volume = $tasks->sum('volume');
 
-            $totalAhtInMinutes = $tasks->sum(function ($task) {
+            $sum_aht = $tasks->sum(function ($task) {
                 // Explode AHT string into parts
                 $parts = array_map('intval', array_pad(explode(':', $task->actual_handling_time ?? '0:0:0:0'), 4, 0));
 
                 [$dd, $hh, $mm, $ss] = $parts;
 
-                return ($dd * 1440) + ($hh * 60) + $mm + ($ss / 60);
+                return number_format(($dd * 1440) + ($hh * 60) + $mm + ($ss / 60),0);
             });
 
+            $workdays = $tasks->pluck('created_at')
+                ->pluck('toDateString')
+                ->unique()
+                ->count();
+
+            $work_minutes = $workdays * 450;
+
+            $ruPercent = $work_minutes > 0
+                ? number_format(($sum_aht / $work_minutes) * 100,0)
+                : 0;
+
             return [
-                'employee_name' => $empployee_name,
+                'client' => $client,
+                'employee_name' => $employee_name,
                 'sum_volume'    => $total_volume,
-                'sum_aht'       => $totalAhtInMinutes,
-                // 'workdays'      => $workdays,
-                // 'work_minutes'  => $workMinutes,
-                // 'ru_percent'    => $ruPercent,
+                'sum_aht'       => $sum_aht,
+                'workdays'      => $workdays,
+                'work_minutes'  => $work_minutes,
+                'ru_percent'    => $ruPercent . '%',
             ];
         });
 
-        dd($dashboard);
+        $clients_fte = collect($agents_fte)->groupBy('client')->map(function ($group, $client) {
+            $count = $group->count();
 
+            $total_ru = $group->sum(function ($item) {
+                // Strip '%' and convert to float
+                return floatval(str_replace('%', '', $item['ru_percent']));
+            });
 
+            $average_ru = $count > 0 ? number_format($total_ru / $count, 0) . '%' : '0%';
 
-        // return $this->dashboardData($date, $agents, $clients);
+            return [
+                'client' => $client,
+                'average_ru' => $average_ru,
+                'agents_count' => $count
+            ];
+        })->values()->toArray();
+
+        // $overall_average_ru = count($clients_fte) > 0
+        //     ? number_format(array_sum(array_map(function ($client) {
+        //         return floatval(str_replace('%', '', $client['average_ru']));
+        //     }, $clients_fte)) / count($clients_fte), 2) . '%'
+        //     : '0%';
+
+        return $this->dashboardData($date, $agents_fte, $clients_fte);
     }
 }
