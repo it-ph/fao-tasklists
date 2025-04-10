@@ -98,6 +98,10 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task updated successfully!');
         try {
+            $actual_handling_time = $request['actual_handling_time'];
+            list($days, $hours, $minutes, $seconds) = explode(":", $actual_handling_time);
+            $request['aht_in_minutes'] = number_format(($days * 24 * 60 + $hours * 60 + $minutes + $seconds / 60),2);
+
             $this->model->findOrfail($id)->update($request->all());
 
         } catch (\Throwable $th) {
