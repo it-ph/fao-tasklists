@@ -20,16 +20,16 @@ const DASHBOARD = (() => {
             var inputHtml = '';
             switch (select) {
                 case 'daily':
-                    inputHtml = '<input type="date" class="form-control" id="filter_option" required />';
+                    inputHtml = '<input type="date" class="form-control mt-2" id="filter_option" required />';
                     break;
                 case 'weekly':
-                    inputHtml = '<input type="week" class="form-control" id="filter_option" required />';
+                    inputHtml = '<input type="week" class="form-control mt-2" id="filter_option" required />';
                     break;
                 case 'monthly':
-                    inputHtml = '<input type="month" class="form-control" id="filter_option" required />';
+                    inputHtml = '<input type="month" class="form-control mt-2" id="filter_option" required />';
                     break;
                 case 'yearly':
-                    inputHtml = '<input type="number" placeholder="YYYY" min="2025" max="4000" class="form-control" id="filter_option" required />';
+                    inputHtml = '<input type="number" placeholder="YYYY" min="2025" max="4000" class="form-control mt-2" id="filter_option" required />';
                     break;
             }
             filterDiv.append(inputHtml);
