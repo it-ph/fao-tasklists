@@ -26,4 +26,16 @@ class DashboardController extends Controller
 
         return $this->returnResponse($result);
     }
+
+    public function loadWeekly(Request $request)
+    {
+        $result = $this->successResponse('Data loaded successfully!');
+        try {
+            $result["data"] = $this->service->getWeekly($request->all());
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
+    }
 }

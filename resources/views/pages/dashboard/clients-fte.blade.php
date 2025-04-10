@@ -12,13 +12,13 @@
                     <div class="div_daily">
                         <table id="tbl_daily_client_fte" class="table table-bordered table-striped table-sm nowrap w-100 hideTable1">
                             <thead>
-                                <tr>
-                                    {{-- <th class="text-center">DAILY</th> --}}
-                                    <th colspan="2" class="text-center bg-secondary"><span class="daily_filter"></span></th>
-                                </tr>
+                                {{-- <tr>
+                                    <th class="text-center">DAILY</th>
+                                    <th colspan="2" class="text-center bg-secondary"><span class="daily_filter">&nbsp;</span></th>
+                                </tr> --}}
                                 <tr class="task-header">
-                                    <th class="text-center col-3">Client Name</th>
-                                    <th class="text-center col-1">Average of RU %</th>
+                                    <th class="text-center col-2">Client Name</th>
+                                    <th class="text-center col-2">Average of RU %</th>
                                 </tr>
                             </thead>
                             <tbody id="task-data-daily">

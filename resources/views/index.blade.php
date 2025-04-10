@@ -122,8 +122,12 @@
     {{-- @include('pages.dashboard.latest-tasks') --}}
     @include('pages.dashboard.filters')
     <div class="row">
-        @include('pages.dashboard.agents-fte')
-        @include('pages.dashboard.clients-fte')
+        {{-- @include('pages.dashboard.agents-fte')
+        @include('pages.dashboard.clients-fte') --}}
+
+        @include('pages.dashboard.fte-daily')
+        {{-- @include('pages.dashboard.fte-weekly')
+        @include('pages.dashboard.fte-monthly') --}}
     </div>
 @endsection
 @section('script')

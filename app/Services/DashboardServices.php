@@ -155,14 +155,15 @@ class DashboardServices
 
             $total_volume = $tasks->sum('volume');
 
-            $sum_aht = $tasks->sum(function ($task) {
-                // Explode AHT string into parts
-                $parts = array_map('intval', array_pad(explode(':', $task->actual_handling_time ?? '0:0:0:0'), 4, 0));
+            // $sum_aht = $tasks->sum(function ($task) {
+            //     $parts = array_map('intval', array_pad(explode(':', $task->actual_handling_time ?? '0:0:0:0'), 4, 0));
 
-                [$dd, $hh, $mm, $ss] = $parts;
+            //     [$dd, $hh, $mm, $ss] = $parts;
 
-                return number_format(($dd * 1440) + ($hh * 60) + $mm + ($ss / 60),0);
-            });
+            //     return number_format(($dd * 1440) + ($hh * 60) + $mm + ($ss / 60),0);
+            // });
+
+            $sum_aht = number_format($tasks->sum('aht_in_minutes'),0);
 
             $workdays = $tasks->pluck('created_at')
                 ->pluck('toDateString')

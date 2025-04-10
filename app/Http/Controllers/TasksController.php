@@ -200,11 +200,13 @@ class TasksController extends GlobalVariableController
             $pauses = $this->getTaskPauses($task->id);
             $working_hours = TimeElapsedHelper::calculateWorkingTime($start_at, $end_at, $shift_start, $shift_end, $pauses, $events);
             $actual_handling_time = TimeElapsedHelper::convertTime($working_hours);
+            $aht_in_minutes = number_format(($working_hours * 60),2);
 
             $task->update([
                 'status' => $status,
                 'end_date' => $now,
                 'actual_handling_time' => $actual_handling_time,
+                'aht_in_minutes' => $aht_in_minutes,
                 'volume' => $volume,
                 'remarks' => $remarks
             ]);
