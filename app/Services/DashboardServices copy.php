@@ -10,11 +10,12 @@ use Carbon\CarbonImmutable;
 class DashboardServices
 {
     // dashboarddata
-    public function dashboardData($date, $agents_fte, $clients_fte)
+    public function dashboardData($filtered_by, $date, $agents_fte, $clients_fte)
     {
         $datastorage = [];
 
         $datastorage = [
+            'filtered_by'           => $filtered_by,
             'date'                  => $date,
             'agents_fte'            => $agents_fte,
             'clients_fte'           => $clients_fte,
@@ -113,7 +114,7 @@ class DashboardServices
                     $date_filter = Carbon::now()->month;
                 } else {
                     $date = date("F Y", strtotime($where["date"]));
-                    $date_filter = explode("-", $where["date"]);
+                    $date_filter = explode("-", $where["date"])[1];
                 }
                 break;
 
@@ -143,26 +144,30 @@ class DashboardServices
         $d = $this->dateFilters($where, 'daily');
         $date = $d['date'];
         $date_filter = $d['date_filter'];
+        $filtered_by = $where['filter'] == 'all' ? 'DAILY' : '';
 
         $agents_fte = $agents->map(function ($agent) use ($cluster_id,$date_filter) {
             $client = $agent->theclient ? $agent->theclient->name : '';
             $employee_name = $agent->theuser->fullname .' '. $agent->theuser->last_name;
-
-            $tasks = $agent->thetasks()
+            $tasks = $agent->thetasks
                 ->where('cluster_id',$cluster_id)
                 ->where('status','Completed')
-                ->where('shift_date', $date_filter)
-                ->get();
+                ->where('shift_date', $date_filter);
 
             $total_volume = $tasks->sum('volume');
 
+            // $sum_aht = $tasks->sum(function ($task) {
+            //     $parts = array_map('intval', array_pad(explode(':', $task->actual_handling_time ?? '0:0:0:0'), 4, 0));
+
+            //     [$dd, $hh, $mm, $ss] = $parts;
+
+            //     return number_format(($dd * 1440) + ($hh * 60) + $mm + ($ss / 60),0);
+            // });
+
             $sum_aht = number_format($tasks->sum('aht_in_minutes'),2);
 
-            // Count distinct workdays within the date filter
-            $workdays = $tasks->pluck('shift_date')
-                ->map(function ($date) {
-                    return $date->toDateString();
-                })
+            $workdays = $tasks->pluck('created_at')
+                ->pluck('toDateString')
                 ->unique()
                 ->count();
 
@@ -203,6 +208,12 @@ class DashboardServices
             ];
         })->values()->toArray();
 
-        return $this->dashboardData($date, $agents_fte, $clients_fte);
+        // $overall_average_ru = count($clients_fte) > 0
+        //     ? number_format(array_sum(array_map(function ($client) {
+        //         return floatval(str_replace('%', '', $client['average_ru']));
+        //     }, $clients_fte)) / count($clients_fte), 2) . '%'
+        //     : '0%';
+
+        return $this->dashboardData($filtered_by , $date, $agents_fte, $clients_fte);
     }
 }

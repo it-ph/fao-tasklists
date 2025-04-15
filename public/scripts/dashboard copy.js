@@ -1,7 +1,6 @@
 $(document).ready(function() {
     // $('#div_filter').hide();
-    DASHBOARD.loadData($('#slct_filter').val(), 'daily');
-    // DASHBOARD.loadDaily($('#slct_filter').val(), 'all');
+    DASHBOARD.loadDaily($('#slct_filter').val(), 'daily');
     // DASHBOARD.loadWeekly($('#slct_filter').val(), 'all');
     // DASHBOARD.loadMonthly($('#slct_filter').val(), 'all');
     // DASHBOARD.loadYearly($('#slct_filter').val(), 'all');
@@ -43,55 +42,53 @@ const DASHBOARD = (() => {
             $('#btn_filter').html('<i class="fa fa-spinner fa-spin"></i> Loading...').prop("disabled", true);
 
             var select = $('#slct_filter').val();
+            var data = filterValue;
 
-            // if (select === 'all') {
-            //     this_dashboard.loadDaily(data, select);
-            //     this_dashboard.loadWeekly(data, select);
-            //     this_dashboard.loadMonthly(data, select);
-            //     this_dashboard.loadYearly(data, select);
-            // } else {
-            //     switch (select) {
-            //         case 'daily':
-            //             this_dashboard.loadDaily(data, select);
-            //             break;
-            //         case 'weekly':
-            //             this_dashboard.loadWeekly(data, select);
-            //             break;
-            //         case 'monthly':
-            //             this_dashboard.loadMonthly(data, select);
-            //             break;
-            //         case 'yearly':
-            //             this_dashboard.loadYearly(data, select);
-            //             break;
-            //     }
-            // }
-
-            this_dashboard.loadData(filterValue, select);
+            if (select === 'all') {
+                this_dashboard.loadDaily(data, select);
+                this_dashboard.loadWeekly(data, select);
+                // this_dashboard.loadMonthly(data, select);
+                // this_dashboard.loadYearly(data, select);
+            } else {
+                switch (select) {
+                    case 'daily':
+                        this_dashboard.loadDaily(data, select);
+                        break;
+                    case 'weekly':
+                        this_dashboard.loadWeekly(data, select);
+                        break;
+                    case 'monthly':
+                        this_dashboard.loadMonthly(data, select);
+                        break;
+                    case 'yearly':
+                        this_dashboard.loadYearly(data, select);
+                        break;
+                }
+            }
         } else {
             toastr.warning("Do not leave blank");
         }
     });
 
-    this_dashboard.loadData = (data, select) => {
-        var filterValue = $('#filter_option').val();
+    this_dashboard.loadDaily = (data, select) => {
         var datas = {
             filter: select,
-            date: filterValue,
+            date: data,
         }
-        $('.div_filtered_by').addClass('card-loading');
-        console.log(filterValue);
+        $('.div_daily').addClass('card-loading');
+        $('#1').html('<i class="fa fa-eye-slash"></i> &nbsp;Hide');
         axios({
             method: 'post',
-            url: `${APP_URL}/dashboard/report/` + select,
+            url: `${APP_URL}/dashboard/report/daily`,
             data: datas
         }).then(function(response) {
             // agents FTE
-            $('#tbl_agent_fte').DataTable().destroy();
+            $('#tbl_daily_agent_fte').DataTable().destroy();
             var table;
             console.log(response.data.data)
             const data = response.data.data;
 
-            $('.date_filter').text(data.date);
+            $('.daily_filter').text(data.date);
             data.agents_fte.forEach(val => {
                 table +=
                     `<tr>
@@ -105,8 +102,8 @@ const DASHBOARD = (() => {
                     </tr>`;
             });
 
-            $('#tbl_agent_fte tbody').html(table)
-            $('#tbl_agent_fte').DataTable({
+            $('#tbl_daily_agent_fte tbody').html(table)
+            $('#tbl_daily_agent_fte').DataTable({
                 language: {
                     oPaginate: {
                         sNext: '<i class="fa fa-forward"></i>',
@@ -125,7 +122,7 @@ const DASHBOARD = (() => {
             });
 
             // clients FTE
-            $('#tbl_client_fte').DataTable().destroy();
+            $('#tbl_daily_client_fte').DataTable().destroy();
             var table_client_fte;
             let totalRU = 0;
             let count = 0;
@@ -140,12 +137,12 @@ const DASHBOARD = (() => {
                 count++;
             });
 
-            $('#tbl_client_fte tbody').html(table_client_fte);
+            $('#tbl_daily_client_fte tbody').html(table_client_fte);
 
             let overall_average_ru = (count > 0) ? (totalRU / count).toFixed(2) + '%' : '0%';
-            $('#overall_avg_ru').text(overall_average_ru);
+            $('#daily_overall_avg_ru').text(overall_average_ru);
 
-            $('#tbl_client_fte').DataTable({
+            $('#tbl_daily_client_fte').DataTable({
                 language: {
                     oPaginate: {
                         sNext: '<i class="fa fa-forward"></i>',
@@ -163,7 +160,7 @@ const DASHBOARD = (() => {
                 scrollX: true,
             });
 
-            $('.div_filtered_by').removeClass('card-loading');
+            $('.div_daily').removeClass('card-loading');
 
             $('#btn_filter').empty();
             $('#btn_filter').append('<i class="fa fa-filter"></i> Filter');
@@ -175,27 +172,25 @@ const DASHBOARD = (() => {
         });
     }
 
-
-
-    this_dashboard.loadDaily = (data, select) => {
+    this_dashboard.loadWeekly = (data, select) => {
         var datas = {
             filter: select,
             date: data,
         }
-        $('.div_filtered_by').addClass('card-loading');
+        $('.div_weekly').addClass('card-loading');
+        $('#1').html('<i class="fa fa-eye-slash"></i> &nbsp;Hide');
         axios({
             method: 'post',
-            url: `${APP_URL}/dashboard/report/daily`,
+            url: `${APP_URL}/dashboard/report/weekly`,
             data: datas
         }).then(function(response) {
             // agents FTE
-            $('#tbl_agent_fte').DataTable().destroy();
+            $('#tbl_weekly_agent_fte').DataTable().destroy();
             var table;
             console.log(response.data.data)
             const data = response.data.data;
 
-            // $('.filtered_by').text(data.filtered_by);
-            $('.date_filter').text(data.date);
+            $('.weekly_filter').text(data.date);
             data.agents_fte.forEach(val => {
                 table +=
                     `<tr>
@@ -209,8 +204,8 @@ const DASHBOARD = (() => {
                     </tr>`;
             });
 
-            $('#tbl_agent_fte tbody').html(table)
-            $('#tbl_agent_fte').DataTable({
+            $('#tbl_weekly_agent_fte tbody').html(table)
+            $('#tbl_weekly_agent_fte').DataTable({
                 language: {
                     oPaginate: {
                         sNext: '<i class="fa fa-forward"></i>',
@@ -229,7 +224,7 @@ const DASHBOARD = (() => {
             });
 
             // clients FTE
-            $('#tbl_client_fte').DataTable().destroy();
+            $('#tbl_weekly_client_fte').DataTable().destroy();
             var table_client_fte;
             let totalRU = 0;
             let count = 0;
@@ -244,12 +239,12 @@ const DASHBOARD = (() => {
                 count++;
             });
 
-            $('#tbl_client_fte tbody').html(table_client_fte);
+            $('#tbl_weekly_client_fte tbody').html(table_client_fte);
 
             let overall_average_ru = (count > 0) ? (totalRU / count).toFixed(2) + '%' : '0%';
-            $('#overall_avg_ru').text(overall_average_ru);
+            $('#weekly_overall_avg_ru').text(overall_average_ru);
 
-            $('#tbl_client_fte').DataTable({
+            $('#tbl_weekly_client_fte').DataTable({
                 language: {
                     oPaginate: {
                         sNext: '<i class="fa fa-forward"></i>',
@@ -267,7 +262,7 @@ const DASHBOARD = (() => {
                 scrollX: true,
             });
 
-            $('.div_filtered_by').removeClass('card-loading');
+            $('.div_weekly').removeClass('card-loading');
 
             $('#btn_filter').empty();
             $('#btn_filter').append('<i class="fa fa-filter"></i> Filter');

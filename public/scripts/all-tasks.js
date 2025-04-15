@@ -149,7 +149,7 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#editTaskForm')[0].reset();
-                        $("#cluster_activity_id_edit").val(null).trigger("change");
+                        $("#client_activity_id_edit").val(null).trigger("change");
                         $('#description_edit').text('');
                         $('#volume_edit').attr('readonly', true);
                         $('#remarks_edit').attr('readonly', true);

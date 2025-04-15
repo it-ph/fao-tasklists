@@ -37,7 +37,6 @@
             <div class="card-body">
                 {{-- <button type="button" class="btn btn-success btn-sm mb-2" id="btn_export" data-toggle="tooltip" title="Click to download" tabindex="-1"><span class="bx bxs-download"></span> Export</button> --}}
                 {{-- <button type="button" class="btn btn-danger btn-sm mb-2" id="btn_exportPDF" data-toggle="tooltip" title="Click to download" tabindex="-1"><span class="bx bxs-download"></span> PDF</button> --}}
-                {{-- <h5 class="float-end" id="cluster">{{ ucwords(auth()->user()->thepermisssion->thecluster->name) }} </h5> --}}
 
                 {{-- <div class="buttons"><button class="btn btn-success btn-sm btn_hide float-end ihide" id="1"><i  class="fa fa-eye-slash"></i> &nbsp;Hide</button></div> --}}
                 <div class="clearfix mb-2 ihide"></div>

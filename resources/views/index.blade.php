@@ -41,7 +41,7 @@
         {{-- @include('pages.dashboard.agents-fte')
         @include('pages.dashboard.clients-fte') --}}
 
-        @include('pages.dashboard.fte-daily')
+        @include('pages.dashboard.fte')
         {{-- @include('pages.dashboard.fte-weekly')
         @include('pages.dashboard.fte-monthly') --}}
     </div>
