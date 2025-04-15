@@ -50,4 +50,16 @@ class DashboardController extends Controller
 
         return $this->returnResponse($result);
     }
+
+    public function loadYearly(Request $request)
+    {
+        $result = $this->successResponse('Data loaded successfully!');
+        try {
+            $result["data"] = $this->service->getYearly($request->all());
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
+    }
 }

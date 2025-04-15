@@ -23,20 +23,21 @@
         <div class="card w-100">
             <div class="card-body">
                 <div class="input-group">
-                    <select class="form-control mt-2" name="slct_filter" id="slct_filter">
+                    <select class="form-control mt-2 me-2" name="slct_filter" id="slct_filter">
                         {{-- <option value="all">All</option> --}}
                         <option value="daily">Daily</option>
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
-                        {{-- <option value="yearly">Yearly</option> --}}
+                        <option value="yearly">Yearly</option>
+                        {{-- <option value="quarterly">Quarterly</option> --}}
                     </select>
                     <div id="div_filter">
                         <input type="date" class="form-control mt-2" id="filter_option" value="{{ date('Y-m-d') }}" required />
                     </div>
-                    <span class="input-group-btn mt-2">
+                    <span class="input-group-btn mt-2 ms-2">
                         <button type="button" class="btn btn-primary" id="btn_filter" data-toggle="tooltip"
                             title="Filter Data" tabindex="-1">
-                            <span class="fa fa-filter"></span> Filter
+                            <span class="fa fa-filter"></span>
                         </button>
                     </span>
                 </div>
