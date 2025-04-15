@@ -28,7 +28,7 @@
                         <option value="daily">Daily</option>
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
+                        {{-- <option value="yearly">Yearly</option> --}}
                         {{-- <option value="quarterly">Quarterly</option> --}}
                     </select>
                     <div id="div_filter">

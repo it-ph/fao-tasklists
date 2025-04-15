@@ -9,15 +9,15 @@ use Carbon\CarbonImmutable;
 
 class DashboardServices
 {
-    // dashboarddata
-    public function dashboardData($date, $agents_fte, $clients_fte)
+    // get dashboard data
+    public function getDashboardData($date, $agents_fte, $clients_fte)
     {
         $datastorage = [];
 
         $datastorage = [
-            'date'                  => $date,
-            'agents_fte'            => $agents_fte,
-            'clients_fte'           => $clients_fte,
+            'date'          => $date,
+            'agents_fte'    => $agents_fte,
+            'clients_fte'   => $clients_fte,
         ];
 
         return $datastorage;
@@ -202,7 +202,7 @@ class DashboardServices
         $agents_fte = $this->getFteData($where, 'daily');
         $clients_fte = $this->processClientFte($agents_fte);
 
-        return $this->dashboardData($this->dateFilters($where, 'daily')['date'], $agents_fte, $clients_fte);
+        return $this->getDashboardData($this->dateFilters($where, 'daily')['date'], $agents_fte, $clients_fte);
     }
 
     // WEEKLY
@@ -211,7 +211,7 @@ class DashboardServices
         $agents_fte = $this->getFteData($where, 'weekly');
         $clients_fte = $this->processClientFte($agents_fte);
 
-        return $this->dashboardData($this->dateFilters($where, 'weekly')['date'], $agents_fte, $clients_fte);
+        return $this->getDashboardData($this->dateFilters($where, 'weekly')['date'], $agents_fte, $clients_fte);
     }
 
     // MONTHLY
@@ -220,7 +220,7 @@ class DashboardServices
         $agents_fte = $this->getFteData($where, 'monthly');
         $clients_fte = $this->processClientFte($agents_fte);
 
-        return $this->dashboardData($this->dateFilters($where, 'monthly')['date'], $agents_fte, $clients_fte);
+        return $this->getDashboardData($this->dateFilters($where, 'monthly')['date'], $agents_fte, $clients_fte);
     }
 
     // YEARLY
@@ -229,7 +229,7 @@ class DashboardServices
         $agents_fte = $this->getFteData($where, 'yearly');
         $clients_fte = $this->processClientFte($agents_fte);
 
-        return $this->dashboardData($this->dateFilters($where, 'yearly')['date'], $agents_fte, $clients_fte);
+        return $this->getDashboardData($this->dateFilters($where, 'yearly')['date'], $agents_fte, $clients_fte);
     }
 
 
