@@ -205,4 +205,78 @@ class DashboardServices
 
         return $this->dashboardData($date, $agents_fte, $clients_fte);
     }
+
+    // WEEKLY
+    public function getWeekly($where)
+    {
+        $cluster_id = auth()->user()->thepermisssion->cluster_id;
+        $agents = $this->getAgents($cluster_id);
+
+        $d = $this->dateFilters($where, 'weekly');
+        $date = $d['date'];
+        $date_filter = $d['date_filter'];
+
+        $agents_fte = $agents->map(function ($agent) use ($cluster_id,$date_filter) {
+            $client = $agent->theclient ? $agent->theclient->name : '';
+            $employee_name = $agent->theuser->fullname .' '. $agent->theuser->last_name;
+
+            $tasks = $agent->thetasks()
+                ->where('cluster_id',$cluster_id)
+                ->where('status','Completed')
+                ->whereBetween('shift_date', $date_filter)
+                ->get();
+
+            $total_volume = $tasks->sum('volume');
+
+            $sum_aht = number_format($tasks->sum('aht_in_minutes'),2);
+
+            // Count distinct workdays within the date filter
+            $workdays = $tasks->pluck('shift_date')
+                ->map(function ($date) {
+                    return $date->toDateString();
+                })
+                ->unique()
+                ->count();
+
+            $work_minutes = $workdays * 450;
+
+            $ruPercent = $work_minutes > 0
+                ? number_format(($sum_aht / $work_minutes) * 100,2)
+                : '0.00';
+
+            return [
+                'client'        => $client,
+                'employee_name' => $employee_name,
+                'sum_volume'    => $total_volume,
+                'sum_aht'       => $sum_aht,
+                'workdays'      => $workdays,
+                'work_minutes'  => $work_minutes,
+                'ru_percent'    => $ruPercent . '%',
+            ];
+        });
+
+        $clients_fte = collect($agents_fte)->groupBy(function ($item) {
+                // Group by client, or 'No Client' if no client is assigned
+                return $item['client'] ?: '';
+            })->map(function ($group, $client) {
+                $count = $group->count();
+
+            $total_ru = $group->sum(function ($item) {
+                // Strip '%' and convert to float
+                return floatval(str_replace('%', '', $item['ru_percent']));
+            });
+
+            $average_ru = $count > 0 ? number_format($total_ru / $count, 2) . '%' : '0.00%';
+
+            return [
+                'client' => $client,
+                'average_ru' => $average_ru,
+                'agents_count' => $count
+            ];
+        })->values()->toArray();
+
+        return $this->dashboardData($date, $agents_fte, $clients_fte);
+    }
+
+
 }
