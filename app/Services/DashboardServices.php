@@ -39,7 +39,7 @@ class DashboardServices
             case 'team leader':
                 $q = $q->TLPermission();
                 break;
-            case 'agent':
+            case 'accountant':
                 $q = $q->AgentPermission();
                 break;
             default:
@@ -164,7 +164,7 @@ class DashboardServices
         return $agents_fte;
     }
 
-    private function processClientFte($agents_fte)
+    public function processClientFte($agents_fte)
     {
         return collect($agents_fte)->groupBy(function ($item) {
             // Group by client, or 'No Client' if no client is assigned

@@ -20,7 +20,7 @@ class Permission extends Model
 
     public function scopeAgentPermission($query)
     {
-        return $query->where('id',auth()->user()->id);
+        return $query->where('user_id',auth()->user()->emp_id);
     }
 
     public function scopeTLPermission($query)
