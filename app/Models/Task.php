@@ -32,6 +32,13 @@ class Task extends Model
             ->orwhere('agent_id',$user->emp_id);
     }
 
+    public function scopeTaskFunction($query)
+    {
+        return $query->whereHas('theclientactivity', function ($q){
+                $q->where('function','<>','Personiv Admin');
+            });
+    }
+
     public function scopeAccountantPermission($query)
     {
         return $query->where('agent_id',auth()->user()->emp_id);

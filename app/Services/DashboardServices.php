@@ -69,16 +69,6 @@ class DashboardServices
         return $agents->get();
     }
 
-    public function getClients($cluster_id)
-    {
-        $clients = Client::where('cluster_id', $cluster_id)
-            ->select('id','name','cluster_id')
-            ->whereNull('deleted_at')
-            ->orderBy('name','asc');
-
-        return $clients->get();
-    }
-
     public function dateFilters($where, $slct_filter)
     {
         $date = $date_filter = null;
@@ -128,6 +118,7 @@ class DashboardServices
                 $employee_name = $agent->theuser->fullname .' '. $agent->theuser->last_name;
 
                 $tasksQuery = $agent->thetasks()
+                    ->taskfunction()
                     ->where('cluster_id', $cluster_id)
                     ->where('status', 'Completed');
 
