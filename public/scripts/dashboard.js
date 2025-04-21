@@ -188,63 +188,44 @@ const DASHBOARD = (() => {
     }
 
     $('#btn_export').on('click', function() {
+        let filtered_by = $('#slct_filter').val();
+        let filtered_date = $('#filter_option').val();
         let cluster = $('#cluster').text();
         let wb = XLSX.utils.book_new();
         let allData = [];
+        let filename = cluster + '_' + filtered_by + '_' + filtered_date;
 
-        // Capture plain text data from all tables
-        $('table').each(function() {
-            $(this).find('tr').each(function() {
-                allData.push($(this).find('th, td').map(function() {
-                    return $(this).text().trim();
-                }).get());
+        // Temporarily disable pagination
+        $('#btn_export').html('<i class="fa fa-spinner fa-spin"></i>').prop("disabled", true);
+        $('.div_filtered_by').addClass('card-loading');
+        let tables = $.fn.dataTable.tables({ api: true });
+        tables.page.len(-1).draw(); // -1 means "All"
+
+        setTimeout(() => {
+            // Only select visible, original DataTable instances
+            $('table.dataTable').filter(function() {
+                return !$(this).hasClass('DTFC_Cloned') && !$(this).parent().hasClass('dataTables_scrollHeadInner');
+            }).each(function() {
+                $(this).find('tr').each(function() {
+                    allData.push($(this).find('th, td').map(function() {
+                        return $(this).text().trim();
+                    }).get());
+                });
+                allData.push([]); // Empty row between tables
             });
-            allData.push([]); // Add empty row between tables
-        });
 
-        let ws = XLSX.utils.aoa_to_sheet(allData);
-        XLSX.utils.book_append_sheet(wb, ws, `${cluster}`);
-        XLSX.writeFile(wb, `${cluster}.xlsx`);
-    })
+            let ws = XLSX.utils.aoa_to_sheet(allData);
+            XLSX.utils.book_append_sheet(wb, ws, `${cluster}`);
+            XLSX.writeFile(wb, `${filename}.xlsx`);
 
-    $('#btn_exportPDF').on('click', async function() {
-        let cluster = $('#cluster').text();
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        const pageHeight = 277;
-        let yOffset = 10;
-
-        for (const table of $('table')) {
-            let canvas = await html2canvas(table, { scale: 2, useCORS: true });
-            let imgData = canvas.toDataURL('image/png');
-            let imgWidth = 190;
-            let imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            if (yOffset + imgHeight > pageHeight) {
-                doc.addPage();
-                yOffset = 10;
-            }
-
-            doc.addImage(imgData, 'PNG', 10, yOffset, imgWidth, imgHeight);
-            yOffset += imgHeight + 10;
-        }
-
-        doc.save(`${cluster}.pdf`);
+            // Restore pagination
+            $('#btn_export').empty();
+            $('#btn_export').append('<i class="fa fa-download"></i>');
+            $('#btn_export').prop("disabled", false);
+            $('.div_filtered_by').removeClass('card-loading');
+            tables.page.len(20).draw();
+        }, 500);
     });
-
-    $('.btn_hide').on('click', function() {
-        const table = $('.hideTable' + this.id);
-        const button = $(this);
-
-        table.fadeToggle(500, function() {
-            if (table.is(':visible')) {
-                button.html('<i class="fa fa-eye-slash"></i> &nbsp;Hide');
-            } else {
-                button.html('<i class="fa fa-eye"></i> Show');
-            }
-        });
-    });
-
 
     return this_dashboard;
 })()

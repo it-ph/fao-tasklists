@@ -35,9 +35,11 @@
                         <input type="date" class="form-control mt-2" id="filter_option" value="{{ date('Y-m-d') }}" required />
                     </div>
                     <span class="input-group-btn mt-2 ms-2">
-                        <button type="button" class="btn btn-primary" id="btn_filter" data-toggle="tooltip"
-                            title="Filter Data" tabindex="-1">
+                        <button type="button" class="btn btn-primary" id="btn_filter" data-toggle="tooltip" title="Filter Data" tabindex="-1">
                             <span class="fa fa-filter"></span>
+                        </button>
+                        <button type="button" class="btn btn-primary" id="btn_export" data-toggle="tooltip" title="Export Data" tabindex="-1">
+                            <span class="fa fa-download"></span>
                         </button>
                     </span>
                 </div>

@@ -38,12 +38,7 @@
 
     </div>
     <div class="row">
-        {{-- @include('pages.dashboard.agents-fte')
-        @include('pages.dashboard.clients-fte') --}}
-
         @include('pages.dashboard.fte')
-        {{-- @include('pages.dashboard.fte-weekly')
-        @include('pages.dashboard.fte-monthly') --}}
     </div>
 @endsection
 @section('script')
@@ -53,6 +48,8 @@
     <script src="{{ asset('assets/libs/datatables/dataTables.fixedColumns.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/sheet-js/xlsx.full.min.js') }}"></script>
+
 
     {{-- <script>
         $(document).ready(function() {

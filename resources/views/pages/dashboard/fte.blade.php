@@ -2,12 +2,10 @@
     <div class="col-lg-12 col-xl-8">
         <div class="card">
             <div class="card-body">
-                {{-- <button type="button" class="btn btn-success btn-sm mb-2" id="btn_export" data-toggle="tooltip" title="Click to download" tabindex="-1"><span class="bx bxs-download"></span> Export</button> --}}
-                {{-- <button type="button" class="btn btn-danger btn-sm mb-2" id="btn_exportPDF" data-toggle="tooltip" title="Click to download" tabindex="-1"><span class="bx bxs-download"></span> PDF</button> --}}
-
+                <h5 class="float-end ihide" id="cluster">{{ ucwords(auth()->user()->thepermisssion->thecluster->name) }}</h5>
                 <div class="clearfix mb-2 ihide"></div>
                 <div class="div_filtered_by">
-                    <table id="tbl_agent_fte" class="table table-bordered table-striped table-sm nowrap w-100 hideTable1">
+                    <table id="tbl_agent_fte" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 {{-- <th class="text-center filtered_by"></th> --}}
@@ -35,13 +33,9 @@
     <div class="col-lg-12 col-xl-4">
         <div class="card">
             <div class="card-body">
-                {{-- <button type="button" class="btn btn-success btn-sm mb-2" id="btn_export" data-toggle="tooltip" title="Click to download" tabindex="-1"><span class="bx bxs-download"></span> Export</button> --}}
-                {{-- <button type="button" class="btn btn-danger btn-sm mb-2" id="btn_exportPDF" data-toggle="tooltip" title="Click to download" tabindex="-1"><span class="bx bxs-download"></span> PDF</button> --}}
-
                 <div class="clearfix mb-2 ihide"></div>
                 <div class="div_filtered_by">
-                    <table id="tbl_client_fte"
-                        class="table table-bordered table-striped table-sm nowrap w-100 hideTable1">
+                    <table id="tbl_client_fte" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 {{-- <th class="text-center filtered_by"></th> --}}
