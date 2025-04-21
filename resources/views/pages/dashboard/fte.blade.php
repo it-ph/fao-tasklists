@@ -21,8 +21,6 @@
                                 <th class="text-center">RU %</th>
                             </tr>
                         </thead>
-                        <tbody id="task-data">
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -46,8 +44,6 @@
                                 <th class="text-center col-2">Average of RU %</th>
                             </tr>
                         </thead>
-                        <tbody id="task-data-daily">
-                        </tbody>
                         <tfoot>
                             <tr>
                                 <td class="fw-bold">Grand Total</td>

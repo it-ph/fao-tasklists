@@ -188,42 +188,60 @@ const DASHBOARD = (() => {
     }
 
     $('#btn_export').on('click', function() {
-        let filtered_by = $('#slct_filter').val();
-        let filtered_date = $('#filter_option').val();
-        let cluster = $('#cluster').text();
-        let wb = XLSX.utils.book_new();
+        const cluster = $('#cluster').text();
+        const filteredBy = $('#slct_filter').val();
+        const filteredDate = $('#filter_option').val();
+        const filename = `${cluster}_${filteredBy}_${filteredDate}`;
+        const wb = XLSX.utils.book_new();
         let allData = [];
-        let filename = cluster + '_' + filtered_by + '_' + filtered_date;
 
-        // Temporarily disable pagination
-        $('#btn_export').html('<i class="fa fa-spinner fa-spin"></i>').prop("disabled", true);
+        // UI Feedback & Pagination Handling
+        const $btn = $('#btn_export');
+        $btn.html('<i class="fa fa-spinner fa-spin"></i>').prop("disabled", true);
         $('.div_filtered_by').addClass('card-loading');
-        let tables = $.fn.dataTable.tables({ api: true });
-        tables.page.len(-1).draw(); // -1 means "All"
+
+        const tables = $.fn.dataTable.tables({ api: true });
+        tables.page.len(-1).draw(); // Show all rows
 
         setTimeout(() => {
-            // Only select visible, original DataTable instances
-            $('table.dataTable').filter(function() {
-                return !$(this).hasClass('DTFC_Cloned') && !$(this).parent().hasClass('dataTables_scrollHeadInner');
-            }).each(function() {
-                $(this).find('tr').each(function() {
-                    allData.push($(this).find('th, td').map(function() {
-                        return $(this).text().trim();
-                    }).get());
+            $('table.dataTable').each(function() {
+                const $table = $(this);
+
+                // Skip DataTables' cloned elements
+                if ($table.hasClass('DTFC_Cloned') || $table.parent().hasClass('dataTables_scrollHeadInner')) {
+                    return;
+                }
+
+                const tableData = [];
+
+                // Process thead
+                $table.find('thead tr').each(function() {
+                    tableData.push($(this).children().map((_, cell) => $(cell).text().trim()).get());
                 });
-                allData.push([]); // Empty row between tables
+
+                // Process tbody
+                $table.find('tbody tr').each(function() {
+                    tableData.push($(this).children('td').map((_, cell) => $(cell).text().trim()).get());
+                });
+
+                // Process tfoot (if exists)
+                $table.find('tfoot tr').each(function() {
+                    tableData.push($(this).children('td').map((_, cell) => $(cell).text().trim()).get());
+                });
+
+                allData = allData.concat(tableData, [
+                    []
+                ]); // Add empty row after each table
             });
 
-            let ws = XLSX.utils.aoa_to_sheet(allData);
-            XLSX.utils.book_append_sheet(wb, ws, `${cluster}`);
+            const ws = XLSX.utils.aoa_to_sheet(allData);
+            XLSX.utils.book_append_sheet(wb, ws, cluster);
             XLSX.writeFile(wb, `${filename}.xlsx`);
 
-            // Restore pagination
-            $('#btn_export').empty();
-            $('#btn_export').append('<i class="fa fa-download"></i>');
-            $('#btn_export').prop("disabled", false);
+            // Restore UI
+            $btn.html('<i class="fa fa-download"></i>').prop("disabled", false);
             $('.div_filtered_by').removeClass('card-loading');
-            tables.page.len(20).draw();
+            tables.page.len(20).draw(); // Restore original page length
         }, 500);
     });
 
