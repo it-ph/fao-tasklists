@@ -195,7 +195,6 @@ const DASHBOARD = (() => {
         const wb = XLSX.utils.book_new();
         let allData = [];
 
-        // UI Feedback & Pagination Handling
         const $btn = $('#btn_export');
         $btn.html('<i class="fa fa-spinner fa-spin"></i>').prop("disabled", true);
         $('.div_filtered_by').addClass('card-loading');
@@ -207,8 +206,11 @@ const DASHBOARD = (() => {
             $('table.dataTable').each(function() {
                 const $table = $(this);
 
-                // Skip DataTables' cloned elements
-                if ($table.hasClass('DTFC_Cloned') || $table.parent().hasClass('dataTables_scrollHeadInner')) {
+                // Skip DataTables clones (headers, footers, fixed columns)
+                if (
+                    $table.hasClass('DTFC_Cloned') ||
+                    $table.closest('.dataTables_scrollFoot, .dataTables_scrollHeadInner').length
+                ) {
                     return;
                 }
 
@@ -224,10 +226,13 @@ const DASHBOARD = (() => {
                     tableData.push($(this).children('td').map((_, cell) => $(cell).text().trim()).get());
                 });
 
-                // Process tfoot (if exists)
-                $table.find('tfoot tr').each(function() {
-                    tableData.push($(this).children('td').map((_, cell) => $(cell).text().trim()).get());
-                });
+                // Process only the original tfoot (exclude clones)
+                const originalTfoot = $table.get(0).tFoot;
+                if (originalTfoot) {
+                    $(originalTfoot).find('tr').each(function() {
+                        tableData.push($(this).children('td').map((_, cell) => $(cell).text().trim()).get());
+                    });
+                }
 
                 allData = allData.concat(tableData, [
                     []
