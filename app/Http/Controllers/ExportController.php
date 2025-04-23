@@ -41,7 +41,7 @@ class ExportController extends Controller
                 'thecluster:id,name',
                 'theclient:id,name',
                 'theagent:id,fullname',
-                'theclientactivity:id,name'
+                'theclientactivity:id,name,function'
             ])
             ->whereRaw(
                 "shift_date >= ? AND shift_date <= ?",

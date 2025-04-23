@@ -32,10 +32,9 @@ class UserController extends GlobalVariableController
     public function getAccountants($user_id)
     {
         $users = User::query()
-                ->select(['id','id','fullname','permission','status'])
+                ->select(['id','fullname','permission','status'])
                 ->where('permission','<>','superadmin')
-                ->orderBy('fullname')
-                ->get();
+                ->orderBy('fullname');
 
         if(auth()->user()->isAdmin())
         {

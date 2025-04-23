@@ -25,9 +25,9 @@ use App\Models\TaskPause;
                         <label for="function" class="col-form-label custom-label"><strong>FUNCTION:<span class="important">*</span></strong></label>
                         <select name="function" class="form-control">
                             <option value="">-- Select Function --</option>
-                            <option value="P2P">P2P</option>
-                            <option value="O2C">O2C</option>
-                            <option value="RTR">RTR</option>
+                            <option value="Procure to Pay (P2P)">Procure to Pay (P2P)</option>
+                            <option value="Order to Cash (O2C)">Order to Cash (O2C)</option>
+                            <option value="Record to Report (R2R)">Record to Report (R2R)</option>
                             <option value="Client Admin">Client Admin</option>
                             <option value="Personiv Admin">Personiv Admin</option>
                         </select>

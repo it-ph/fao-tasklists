@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Client;
-use App\Models\Permission;
-use App\Models\UserClient;
 use App\Traits\ResponseTraits;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\ClientResource;
 use App\Http\Resources\ClientCollection;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
@@ -151,10 +149,9 @@ class ClientController extends GlobalVariableController
     {
         $client = Client::findOrfail($id);
         $has_related_task = Task::where('client_id', $client->id)->first();
-        $has_user_client = UserClient::where('client_id', $client->id)->first();
-        $has_related_permission = Permission::where('client_id', $client->id)->first();
+        $has_related_user = User::where('client_id', $client->id)->first();
 
-        if($has_related_task || $has_user_client || $has_related_permission)
+        if($has_related_task || $has_related_user)
         {
             $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
         }

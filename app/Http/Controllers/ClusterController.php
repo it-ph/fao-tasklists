@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClusterRequest;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Cluster;
 use App\Models\Permission;
 use App\Traits\ResponseTraits;
 use App\Services\ClustersServices;
+use App\Http\Requests\ClusterRequest;
 use App\Http\Resources\ClusterResource;
 use App\Http\Requests\StoreClusterRequest;
 use App\Http\Requests\UpdateClusterRequest;
@@ -128,10 +129,10 @@ class ClusterController extends Controller
     public function destroy($id)
     {
         $cluster = Cluster::findOrfail($id);
-        $has_related_permission = Permission::where('cluster_id', $cluster->id)->first();
+        $has_related_user = User::where('cluster_id', $cluster->id)->first();
         $has_related_task = Task::where('cluster_id', $cluster->id)->first();
 
-        if($has_related_permission || $has_related_task)
+        if($has_related_user || $has_related_task)
         {
             $result = $this->failedDeleteValidationResponse('Data cannot be deleted due to existence of related record.');
         }

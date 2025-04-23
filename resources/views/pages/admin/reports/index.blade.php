@@ -139,7 +139,7 @@
                 });
                 $.ajax({
                     type: 'GET',
-                    url: `{{ url('permissions/get_accountants/${user_id}') }}`,
+                    url: `{{ url('users/get_accountants/${user_id}') }}`,
                     dataType: 'json',
                     success: function(result){
                         console.log(result);
@@ -152,7 +152,7 @@
                             });
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#filtered_to').append('<option value="'+ value.user_id +'">' + value.fullname + ' ' + value.last_name +'</option>');
+                                $('#filtered_to').append('<option value="'+ value.id +'">' + value.fullname + '</option>');
                             });
 
                         }

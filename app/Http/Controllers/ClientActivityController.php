@@ -30,7 +30,7 @@ class ClientActivityController extends GlobalVariableController
     {
         if($request['user_id'])
         {
-            $client_activities = new ClientActivityCollection(ClientActivity::where('agent_id', $request['user_id'])->get());
+            $client_activities = ClientActivity::where('agent_id', $request['user_id'])->get();
 
             return view('pages.admin.client-activities.user-client-activities', compact('client_activities'));
         }
@@ -92,7 +92,7 @@ class ClientActivityController extends GlobalVariableController
      */
     public function store(StoreClientActivityRequest $request)
     {
-        $client_activity = new ClientActivityResource(ClientActivity::updateOrCreate(
+        $client_activity = ClientActivity::updateOrCreate(
             [
                 'agent_id' => $request['agent_id'],
                 'name' => $request['name']
@@ -102,7 +102,7 @@ class ClientActivityController extends GlobalVariableController
                 'schedule' => $request['schedule'],
                 'function' => $request['function'],
             ]
-        ));
+        );
         return redirect()->back()->with('with_success', "Activity created successfully!");
     }
 

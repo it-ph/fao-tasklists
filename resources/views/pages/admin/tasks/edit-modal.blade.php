@@ -55,6 +55,7 @@
                                                 @endif
                                             @endforeach
                                     </select>
+                                    <label id="cluster_id_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
@@ -62,19 +63,15 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_id" class="col-form-label custom-label"><strong>CLIENT NAME:<span class="important">*</span></strong></label>
-                                    @if(auth()->user()->client_id)
-                                        <input class="form-control" type="hidden" name="client_id" value="{{ auth()->user()->client_id }}">
-                                        <input class="form-control" type="text" disabled value="{{ auth()->user()->theclient->name }}">
-                                    @else
-                                        <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
-                                            <option value="" selected disabled>-- Select Client -- </option>
-                                                @foreach ($clients as $client )
-                                                    @if($client)
-                                                        <option value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
-                                                    @endif
-                                                @endforeach
-                                        </select>
-                                    @endif
+                                    <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
+                                        <option value="" selected disabled>-- Select Client -- </option>
+                                            @foreach ($clients as $client )
+                                                @if($client)
+                                                    <option value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
+                                                @endif
+                                            @endforeach
+                                    </select>
+                                    <label id="client_id_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
