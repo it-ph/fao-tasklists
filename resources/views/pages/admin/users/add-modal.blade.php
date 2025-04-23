@@ -23,21 +23,6 @@
                         <label id="emailError" class="error" style="display:none"></label>
                     </div>
 
-                    {{-- <div class="form-group">
-                        <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                        <select class="form-control select2" name="user_id" style="width:100%;">
-                            <option value="" selected disabled>-- Select Employee -- </option>
-                                @foreach ($users as $user )
-                                    @if($user)
-                                        <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                            value="{{ $user->id }}">{{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}
-                                        </option>
-                                    @endif
-                                @endforeach
-                        </select>
-                        <label id="user_idError" class="error" style="display:none"></label>
-                    </div> --}}
-
                     <div class="form-group">
                         <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="cluster_id" id="cluster_id" style="width:100%;" onchange="getClientTLOMs()">
@@ -78,7 +63,7 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            @if(Auth::user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif
+                            @if(auth()->user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif
                             <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant" >Accountant</option>
                             <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
@@ -90,8 +75,8 @@
                         <label for="status" class="col-form-label custom-label"><strong>STATUS:<span class="important">*</span></strong></label>
                         <select class="form-control" name="status" id="sstatus">
                             <option value="" disabled>-- Select Status --</option>
-                            <option {{ old('status') == "Active" ? "selected" : "" }} value="Active" selected>Active</option>
-                            <option {{ old('status') == "Inactive" ? "selected" : "" }} value="Inactive">Inactive</option>
+                            <option {{ old('status') == "active" ? "selected" : "" }} value="active" selected>Active</option>
+                            <option {{ old('status') == "inactive" ? "selected" : "" }} value="inactive">Inactive</option>
                         </select>
                         <label id="sstatusError" class="error" style="display:none"></label>
                     </div>

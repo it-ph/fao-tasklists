@@ -10,20 +10,15 @@
                 <form id="editPermissionForm" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                        <select class="form-control select2" name="user_id" id="user_id_edit" style="width:100%;">
-                            <option value="" disabled>-- Select Employee -- </option>
-                                @foreach ($users as $user )
-                                    @if($user)
-                                        @isset($user)
-                                            <option {{ old('user_id') == $user->id ? "selected" : "" }}
-                                                value="{{ $user->id }}">@isset($user){{ ucwords($user->fullname) }} {{ ucwords($user->last_name) }}@endisset
-                                            </option>
-                                        @endisset
-                                    @endif
-                                @endforeach
-                        </select>
-                        <label id="user_id_editError" class="error"></label>
+                        <label for="fullname" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
+                        <input type="text" class="form-control" name="fullname" id="fullname_edit" placeholder="Enter Full Name">
+                        <label id="fullname_editameError" class="error" style="display:none"></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-form-label custom-label"><strong>EMAIL ADDRESS:<span class="important">*</span></strong></label>
+                        <input type="email" class="form-control" name="email" id="email_edit" placeholder="Enter Amail Address">
+                        <label id="email_editError" class="error" style="display:none"></label>
                     </div>
 
                     <div class="form-group">
@@ -61,9 +56,9 @@
                             <option value="">-- Select Team Leader -- </option>
                                 @foreach ($tls as $tl )
                                     @if($tl)
-                                        @isset($tl->theuser)
-                                            <option {{ old('tl_id') == $tl->theuser->id ? "selected" : "" }}
-                                                value="{{ $tl->theuser->id }}">@isset($tl->theuser){{ ucwords($tl->theuser->fullname) }} {{ ucwords($tl->theuser->last_name) }}@endisset
+                                        @isset($tl)
+                                            <option {{ old('tl_id') == $tl->id ? "selected" : "" }}
+                                                value="{{ $tl->id }}">@isset($tl){{ ucwords($tl->fullname) }} {{ ucwords($tl->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -77,9 +72,9 @@
                             <option value="">-- Select Operations Manager -- </option>
                                 @foreach ($oms as $om )
                                     @if($om)
-                                        @isset($om->theuser)
-                                            <option {{ old('om_id') == $om->theuser->id ? "selected" : "" }}
-                                                value="{{ $om->theuser->id }}">@isset($om->theuser){{ ucwords($om->theuser->fullname) }} {{ ucwords($om->theuser->last_name) }}@endisset
+                                        @isset($om)
+                                            <option {{ old('om_id') == $om->id ? "selected" : "" }}
+                                                value="{{ $om->id }}">@isset($om){{ ucwords($om->fullname) }} {{ ucwords($om->last_name) }}@endisset
                                             </option>
                                         @endisset
                                     @endif
@@ -91,12 +86,23 @@
                         <label for="permission" class="col-form-label custom-label"><strong>PERMISSION:<span class="important">*</span></strong></label>
                         <select class="form-control" name="permission" id="permission_edit">
                             <option value="" disabled selected>-- Select Permission --</option>
-                            <option {{ old("permission") == "admin" ? "selected" : "" }} value="admin"@if(!Auth::user()->isAdmin()) disabled @endif>Admin</option>
+                            <option {{ old("permission") == "admin" ? "selected" : "" }} value="admin"@if(!auth()->user()->isAdmin()) disabled @endif>Admin</option>
                             <option {{ old("permission") == "accountant" ? "selected" : "" }} value="accountant">Accountant</option>
                             <option {{ old("permission") == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old("permission") == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
                         </select>
                         <label id="permission_editError" class="error"></label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status" class="col-form-label custom-label"><strong>STATUS:<span
+                                    class="important">*</span></strong></label>
+                        <select class="form-control" name="status" id="sstatus_edit">
+                            <option value="" disabled>-- Select Status --</option>
+                            <option {{ old('status')=="active" ? "selected" : "" }} value="active" selected>Active</option>
+                            <option {{ old('status')=="inactive" ? "selected" : "" }} value="inactive">Inactive</option>
+                        </select>
+                        <label id="sstatus_editError" class="error" style="display:none"></label>
                     </div>
             </div>
             <div class="modal-footer">

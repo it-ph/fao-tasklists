@@ -20,12 +20,12 @@ class Permission extends Model
 
     public function scopeAgentPermission($query)
     {
-        return $query->where('user_id',auth()->user()->emp_id);
+        return $query->where('user_id',auth()->user()->id);
     }
 
     public function scopeTLPermission($query)
     {
-        return $query->where('tl_id',auth()->user()->emp_id)->where('cluster_id',auth()->user()->thepermisssion->cluster_id)->orwhere('user_id',auth()->user()->emp_id);
+        return $query->where('tl_id',auth()->user()->id)->where('cluster_id',auth()->user()->thepermisssion->cluster_id)->orwhere('user_id',auth()->user()->id);
     }
 
     public function scopeOMPermission($query)
@@ -35,7 +35,7 @@ class Permission extends Model
 
     public function theuser()
     {
-        return $this->belongsTo(User::class, 'user_id', 'emp_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function getFullNameAttribute()

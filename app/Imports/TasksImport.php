@@ -26,7 +26,7 @@ class TasksImport implements ToModel, WithHeadingRow,WithValidation,SkipsEmptyRo
         $task_number = 'FT'.random_int(100000, 999999);
         // $cluster_id = Cluster::where('name', $row['cluster'])->pluck('id');
         // $client_id = Client::where('name', $row['client'])->pluck('id');
-        // $user_id = User::where('emp_id', $row['employee_number'])->where('status', 'active')->pluck('id');
+        // $user_id = User::where('id', $row['employee_number'])->where('status', 'active')->pluck('id');
         // $agent_id = Permission::where('user_id','user_id')->pluck('user_id');
         // $dashboard_activity_id = DashboardActivitty::where('name', $row['dashboard_activity'])->pluck('id');
         // $client_activity_id = ClientActivity::where('name', $row['client_activity'])->pluck('id');

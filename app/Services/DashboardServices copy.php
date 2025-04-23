@@ -54,7 +54,7 @@ class DashboardServices
     {
         $agents = Permission::where('cluster_id', $cluster_id)
             ->with([
-                'theuser:id,emp_id,fullname,last_name,employment_status',
+                'theuser:id,fullname,last_name,employment_status',
                 'theclient:id,name',
                 'thetasks'
             ])

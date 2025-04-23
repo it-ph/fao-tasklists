@@ -63,7 +63,7 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task created successfully!');
         try {
-            $request['created_by'] = Auth::user()->emp_id;
+            $request['created_by'] = Auth::user()->id;
             $request['start_date'] = Carbon::now();
             $this->model->create($request->all());
 
@@ -80,7 +80,7 @@ class TasksController extends GlobalVariableController
         try {
             $result["data"] = $this->model::query()
                 ->with([
-                    'theagent:emp_id,fullname,last_name',
+                    'theagent:id,fullname',
                     'thecluster:id,name',
                     'theclient:id,name',
                     'theclientactivity:id,name'
@@ -98,9 +98,12 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task updated successfully!');
         try {
-            $actual_handling_time = $request['actual_handling_time'];
-            list($days, $hours, $minutes, $seconds) = explode(":", $actual_handling_time);
-            $request['aht_in_minutes'] = number_format(($days * 24 * 60 + $hours * 60 + $minutes + $seconds / 60),2);
+            if($request['status'] == 'Completed')
+            {
+                $actual_handling_time = $request['actual_handling_time'];
+                list($days, $hours, $minutes, $seconds) = explode(":", $actual_handling_time);
+                $request['aht_in_minutes'] = number_format(($days * 24 * 60 + $hours * 60 + $minutes + $seconds / 60),2);
+            }
 
             $this->model->findOrfail($id)->update($request->all());
 
@@ -147,7 +150,7 @@ class TasksController extends GlobalVariableController
                 'task_id' => $task->id,
                 'start' => Carbon::now(),
                 'end' => null,
-                'created_by' => auth()->user()->emp_id,
+                'created_by' => auth()->user()->id,
             ]);
 
         } catch (\Throwable $th) {

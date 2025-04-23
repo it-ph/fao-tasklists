@@ -30,17 +30,16 @@ const PERMISSION = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: `${APP_URL}/permission/store`,
+                    url: `${APP_URL}/user/store`,
                     data: formdata
                 }).then(function(response) {
                     console.log(response.data.status)
                     if (response.data.status === 'success') {
                         $('#loader').show();
-                        $("#tbl_permission > tbody").empty();
-                        $("#tbl_permission_info").hide();
-                        $("#tbl_permission_paginate").hide();
+                        $("#tbl_user > tbody").empty();
+                        $("#tbl_user_info").hide();
+                        $("#tbl_user_paginate").hide();
                         $('#storePermissionForm')[0].reset();
-                        // $("#user_id").val(null).trigger("change");
                         $("#cluster_id").val(null).trigger("change");
                         $("#client_id").val(null).trigger("change");
                         $("#tl_id").val(null).trigger("change");
@@ -71,58 +70,11 @@ const PERMISSION = (() => {
 
     // load data
     this_permission.load = () => {
-        // axios(`${APP_URL}/permission/all`).then(function(response) {
-        //     $('#tbl_permission').DataTable().destroy();
-        //     var table;
-        //     console.log(response.data.data)
-        //     response.data.data.forEach(val => {
-        //         table +=
-        //             `<tr>
-        //                 <td>${val.employee_name}</td>
-        //                 <td>${val.email_address}</td>
-        //                 <td>${val.cluster}</td>
-        //                 <td>${val.client}</td>
-        //                 <td>${val.team_leader}</td>
-        //                 <td>${val.operations_manager}</td>
-        //                 <td>${val.permission}</td>
-        //                 <td>${val.employment_status}</td>
-        //                 <td class="text-center">${val.action}</td>
-        //             </tr>`;
-        //     });
-        //     $('#tbl_permission tbody').html(table)
-
-        //     $('#tbl_permission').DataTable({
-        //         language: {
-        //             oPaginate: {
-        //                 sNext: '<i class="fa fa-forward"></i>',
-        //                 sPrevious: '<i class="fa fa-backward"></i>',
-        //                 sFirst: '<i class="fa fa-step-backward"></i>',
-        //                 sLast: '<i class="fa fa-step-forward"></i>'
-        //             },
-        //         },
-        //         dom: 'Bfrtip',
-        //         buttons: [
-        //             'excel'
-        //         ],
-        //         "pageLength": 20,
-        //         "pagingType": "full_numbers",
-        //         "scrollX": true,
-        //     });
-
-        //     $('#loader').hide();
-        //     if (response.data.data.length > 0)
-        //         toastr.success(response.data.message);
-        //     else
-        //         toastr.info(response.data.message);
-        // }).catch(error => {
-        //     toastr.error(null);
-        // });
-
         $.fn.dataTable.ext.errMode = 'none';
 
-        $('#tbl_permission').DataTable().clear().draw();
-        $('#tbl_permission').DataTable().destroy();
-        $('#tbl_permission').DataTable({
+        $('#tbl_user').DataTable().clear().draw();
+        $('#tbl_user').DataTable().destroy();
+        $('#tbl_user').DataTable({
             // "bStateSave": true,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
@@ -144,7 +96,7 @@ const PERMISSION = (() => {
             processing: true,
             serverSide: true,
             ajax: {
-                url: `${APP_URL}/permission/api/all`,
+                url: `${APP_URL}/user/api/all`,
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -177,7 +129,6 @@ const PERMISSION = (() => {
         $('#editPermissionModal').modal('show');
         $('.error').hide();
         $('.error').text('');
-        $("#user_id_edit").val(null).trigger("change");
         $("#cluster_id_edit").val(null).trigger("change");
         $("#client_id_edit").val(null).trigger("change");
         $("#tl_id_edit").val(null).trigger("change");
@@ -186,9 +137,10 @@ const PERMISSION = (() => {
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
-        axios(`${APP_URL}/permission/show/${id}`).then(function(response) {
+        axios(`${APP_URL}/user/show/${id}`).then(function(response) {
             _permission_id = id;
-            $("#user_id_edit").val(response.data.data.user_id).trigger("change");
+            $("#fullname_edit").val(response.data.data.fullname);
+            $("#email_edit").val(response.data.data.email);
             $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
             $("#tl_id_edit").val(response.data.data.tl_id).trigger("change");
@@ -230,17 +182,16 @@ const PERMISSION = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: `${APP_URL}/permission/update/${id}`,
+                    url: `${APP_URL}/user/update/${id}`,
                     data: formdata
                 }).then(function(response) {
                     console.log(response.data.status)
                     if (response.data.status === 'success') {
                         $('#loader').show();
-                        $("#tbl_permission > tbody").empty();
-                        $("#tbl_permission_info").hide();
-                        $("#tbl_permission_paginate").hide();
+                        $("#tbl_user > tbody").empty();
+                        $("#tbl_user_info").hide();
+                        $("#tbl_user_paginate").hide();
                         $('#editPermissionForm')[0].reset();
-                        $("#user_id_edit").val(null).trigger("change");
                         $("#cluster_id_edit").val(null).trigger("change");
                         $("#client_id_edit").val(null).trigger("change");
                         $("#tl_id_edit").val(null).trigger("change");
@@ -285,12 +236,12 @@ const PERMISSION = (() => {
             if (result.isConfirmed) {
                 axios({
                         method: 'post',
-                        url: `${APP_URL}/permission/delete/${id}`,
+                        url: `${APP_URL}/user/delete/${id}`,
                     })
                     .then(function(response) {
                         console.log(response.data.status)
                         if (response.data.status === 'success') {
-                            $('#tbl_permission').DataTable().destroy();
+                            $('#tbl_user').DataTable().destroy();
                             toastr.success(response.data.message);
                             PERMISSION.load();
                         } else {

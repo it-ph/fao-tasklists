@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
@@ -36,30 +37,29 @@ class ClientActivityController extends GlobalVariableController
         else
         {
             // accountant
-            if(Auth::user()->isAccountant())
+            if(auth()->user()->isAccountant())
             {
                 return view('errors.401');
             }
 
-            $permissions = Permission::with([
-                'theuser:emp_id,email,emp_code,fullname,last_name',
+            $permissions = User::with([
                 'theclientactivities:agent_id'
             ])
-            ->select('id','user_id','cluster_id','client_id','tl_id','om_id','permission')
+            ->select('id','fullname','cluster_id','client_id','tl_id','om_id','permission')
             ->where('permission','<>','superadmin');
 
             // admin
-            if(Auth::user()->isAdmin())
+            if(auth()->user()->isAdmin())
             {
                 $permissions = $permissions->get();
             }
             // operations manager
-            elseif(Auth::user()->isOperationsManager())
+            elseif(auth()->user()->isOperationsManager())
             {
                 $permissions = $permissions->OMPermission()->get();
             }
             // team leader
-            elseif(Auth::user()->isTeamLeader())
+            elseif(auth()->user()->isTeamLeader())
             {
                 $permissions = $permissions->TLPermission()->get();
             }
@@ -70,7 +70,7 @@ class ClientActivityController extends GlobalVariableController
 
     public function showActivities()
     {
-        $client_activities = ClientActivity::where('agent_id', Auth::user()->emp_id)->get();
+        $client_activities = ClientActivity::where('agent_id', auth()->user()->id)->get();
         return view('pages.agent.activities.list', compact('client_activities'));
     }
 

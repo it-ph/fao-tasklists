@@ -2,7 +2,7 @@
     <div class="col-lg-12 col-xl-8">
         <div class="card">
             <div class="card-body">
-                <h5 class="float-end ihide" id="cluster">{{ ucwords(auth()->user()->thepermisssion->thecluster->name) }}</h5>
+                <h5 class="float-end ihide" id="cluster">{{ ucwords(auth()->user()->thecluster->name) }}</h5>
                 <div class="clearfix mb-2 ihide"></div>
                 <div class="div_filtered_by">
                     <table id="tbl_agent_fte" class="table table-bordered table-striped table-sm nowrap w-100">

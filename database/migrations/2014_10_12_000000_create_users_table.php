@@ -15,15 +15,19 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('emp_id');
             $table->string('email')->unique();
-            $table->string('emp_code')->nullable();
             $table->string('fullname');
-            $table->string('last_name');
-            $table->string('position')->nullable();
-            $table->string('date_hired')->nullable();
-            $table->string('employment_status');
             $table->string('password')->nullable();
+            $table->integer('cluster_id')->nullable();
+            $table->integer('client_id')->nullable();
+            $table->integer('tl_id')->nullable();
+            $table->integer('om_id')->nullable();
+            $table->string('permission');
+            $table->string('status');
+            $table->datetime('shift_date')->nullable();
+            $table->string('two_factor_code')->nullable();
+            $table->dateTime('two_factor_expires_at')->nullable();
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

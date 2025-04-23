@@ -20,7 +20,7 @@ class VerifyAccess
     public function handle(Request $request, Closure $next)
     {
         $validate_access = MsGraphToken::query()
-            ->where('user_id', Auth::user()->emp_id)
+            ->where('user_id', Auth::user()->id)
             ->first();
 
         if($validate_access)

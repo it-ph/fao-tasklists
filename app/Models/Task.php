@@ -19,17 +19,17 @@ class Task extends Model
 
     public function scopeOMPermission($query)
     {
-        return $query->where('cluster_id',auth()->user()->thepermisssion->cluster_id);
+        return $query->where('cluster_id',auth()->user()->cluster_id);
     }
 
     public function scopeTLPermission($query)
     {
         $user = auth()->user();
         return $query->whereHas('thepermission', function ($q){
-                $q->where('tl_id',$user->emp_id);
+                $q->where('tl_id',$user->id);
             })
-            ->where('cluster_id',$user->thepermisssion->cluster_id)
-            ->orwhere('agent_id',$user->emp_id);
+            ->where('cluster_id',$user->cluster_id)
+            ->orwhere('agent_id',$user->id);
     }
 
     public function scopeTaskFunction($query)
@@ -41,7 +41,7 @@ class Task extends Model
 
     public function scopeAccountantPermission($query)
     {
-        return $query->where('agent_id',auth()->user()->emp_id);
+        return $query->where('agent_id',auth()->user()->id);
     }
 
     public function thecluster()
@@ -56,7 +56,7 @@ class Task extends Model
 
     public function theagent()
     {
-        return $this->belongsTo(User::class, 'agent_id', 'emp_id');
+        return $this->belongsTo(User::class, 'agent_id', 'id');
     }
 
     public function getAgentFullNameAttribute()

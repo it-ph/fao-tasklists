@@ -43,7 +43,7 @@ class LoginController extends Controller
     public function logout()
     {
         $is_logged_in = MsGraphToken::query()
-            ->where('user_id', Auth::user()->emp_id)
+            ->where('user_id', auth()->user()->id)
             ->delete();
 
         if($is_logged_in)

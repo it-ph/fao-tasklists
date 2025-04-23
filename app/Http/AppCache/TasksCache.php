@@ -12,7 +12,7 @@ class TasksCache
     public static function getAgentTasks($status)
     {
         $status = strtolower($status);
-        $agent_id = Auth::user()->emp_id;
+        $agent_id = Auth::user()->id;
         $cachedTasks = Redis::get(preg_replace('/\s+/', '_',$status).'_tasks_of_agent_'.$agent_id);
         if(isset($cachedTasks))
         {
@@ -24,7 +24,7 @@ class TasksCache
                 ->with([
                     'thecluster:id,name',
                     'theclient:id,name',
-                    'theagent:emp_id,email,emp_code,fullname,last_name',
+                    'theagent:id,email,emp_code,fullname,last_name',
                     'theclientactivity:id,name'
                 ])
                 ->where('agent_id', $agent_id);

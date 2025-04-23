@@ -32,7 +32,7 @@
                     </a>
                 </li>
 
-            @if(Auth::user()->isAccountant())
+            @if(auth()->user()->isAccountant())
                 {{--REPORTS --}}
                 <li class="menu-title" key="t-menu">Reports</li>
                 <li>
@@ -48,7 +48,7 @@
         {{-- End of Active Users --}}
 
         {{-- Start of ADMIN / TL / OM --}}
-            @if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin())
+            @if(auth()->user()->isTeamLeaderOrAdmin() || auth()->user()->isOperationsManagerOrAdmin())
                 <li>
                     <a href="{{ url('tasks/?status=all') }}" class="waves-effect" @if(\Request::has('status')) style="color:#fff" @endif>
                         <i class="bx bx-task" @if(\Request::has('status')) style="color:#fff" @endif></i>
@@ -68,8 +68,14 @@
                 {{-- MANAGE --}}
                 <li class="menu-title" key="t-apps">Manage</li>
 
-                <li>
+                {{-- <li>
                     <a href="{{ url('permissions') }}" class="waves-effect">
+                        <i class="bx bxs-user-detail"></i>
+                        <span key="t-users">Users</span>
+                    </a>
+                </li> --}}
+                <li>
+                    <a href="{{ url('users') }}" class="waves-effect">
                         <i class="bx bxs-user-detail"></i>
                         <span key="t-users">Users</span>
                     </a>
@@ -90,13 +96,13 @@
                 </li>
 
                 <li>
-                    <a href="{{ url('client-activities') }}@if(Auth::user()->isAccountant())/?user_id={{ Auth::user()->id }}&employeename=@isset(Auth::user()->employeeprofile){{ strtolower(Auth::user()->employeeprofile->fullname) }} {{ strtolower(Auth::user()->employeeprofile->last_name) }}@endisset @endif" class="waves-effect">
+                    <a href="{{ url('client-activities') }}@if(auth()->user()->isAccountant())/?user_id={{ auth()->user()->id }}&employeename=@isset(auth()->user()->employeeprofile){{ strtolower(auth()->user()->employeeprofile->fullname) }} {{ strtolower(auth()->user()->employeeprofile->last_name) }}@endisset @endif" class="waves-effect">
                         <i class="bx bx-list-ul" @if(\Request::has('employeename')) style="color:#fff" @endif></i>
-                        <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(Auth::user()->isTeamLeaderOrAdmin() || Auth::user()->isOperationsManagerOrAdmin()) Users' @endif Activities</span>
+                        <span key="t-client-activities" @if(\Request::has('employeename')) style="color:#fff" @endif>@if(auth()->user()->isTeamLeaderOrAdmin() || auth()->user()->isOperationsManagerOrAdmin()) Users' @endif Activities</span>
                     </a>
                 </li>
             @endif
-            @if(Auth::user()->isAdmin())
+            @if(auth()->user()->isAdmin())
                 <li>
                     <a href="{{ url('settings') }}" class="waves-effect">
                         <i class="bx bxs-cog"></i>

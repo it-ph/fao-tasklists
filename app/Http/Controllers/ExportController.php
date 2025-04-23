@@ -40,7 +40,7 @@ class ExportController extends Controller
             ->with([
                 'thecluster:id,name',
                 'theclient:id,name',
-                'theagent:emp_id,email,fullname,last_name',
+                'theagent:id,fullname',
                 'theclientactivity:id,name'
             ])
             ->whereRaw(
@@ -53,24 +53,24 @@ class ExportController extends Controller
             ->orderBy('start_date','DESC');
 
         // admin
-        if(Auth::user()->isAdmin())
+        if(auth()->user()->isAdmin())
         {
             $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
         }
         // operations manager
-        elseif(Auth::user()->isOperationsManager())
+        elseif(auth()->user()->isOperationsManager())
         {
             $tasks = $tasks->OMPermission();
             $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
         }
         // team leader
-        elseif(Auth::user()->isTeamLeader())
+        elseif(auth()->user()->isTeamLeader())
         {
             $tasks = $tasks->TLPermission();
             $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
         }
         // accountant
-        elseif(Auth::user()->isAccountant())
+        elseif(auth()->user()->isAccountant())
         {
             $tasks = $tasks->AccountantPermission()->get();
         }

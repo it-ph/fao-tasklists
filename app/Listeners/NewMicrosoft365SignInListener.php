@@ -17,18 +17,20 @@ class NewMicrosoft365SignInListener
         $user = User::query()
             ->where('email',$event->token['info']['mail'])
             ->orwhere('email',$event->token['info']['userPrincipalName'])
+            ->where('status','Active')
             ->first();
 
-        $has_permission = Permission::query()
-            ->where('user_id',$user->emp_id)
-            ->first();
+        // $has_permission = Permission::query()
+        //     ->where('user_id',$user->id)
+        //     ->first();
 
         // check if user is already exists in hrportal
-        if($user && $has_permission)
+        // if($user && $has_permission)
+        if($user)
         {
             // update MsGraphToken
             MsGraphToken::findOrfail($tokenId)->update([
-                'user_id' => $user->emp_id,
+                'user_id' => $user->id,
                 'email' => $user->email,
             ]);
 

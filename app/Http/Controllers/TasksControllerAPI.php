@@ -18,14 +18,14 @@ class TasksControllerAPI extends Controller
         $status = $request['status'];
         if($request->ajax())
         {
-            $agent_id = auth()->user()->emp_id;
+            $agent_id = auth()->user()->id;
 
             $tasks = Task::query()
                 ->with([
-                    'theagent:emp_id,email,emp_code,fullname,last_name',
+                    'theagent:id,fullname',
                     'thecluster:id,name',
                     'theclient:id,name',
-                    'theclientactivity:id,name'
+                    'theclientactivity:id,name,function'
                 ])
                 ->where('agent_id', $agent_id);
 
@@ -57,7 +57,7 @@ class TasksControllerAPI extends Controller
                     return $status;
                 }))
                 ->editColumn('agent_id', function ($value) {
-                        return $value->theagent->fullname.' '.$value->theagent->last_name;
+                        return $value->theagent->fullname;
                 })
                 ->editColumn('shift_date', (function($value){
                     return $value->shift_date ? date("Y-m-d",strtotime($value->shift_date)) : '';
@@ -139,10 +139,10 @@ class TasksControllerAPI extends Controller
         {
             $tasks = Task::query()
                 ->with([
-                    'theagent:emp_id,email,emp_code,fullname,last_name',
+                    'theagent:id,fullname',
                     'thecluster:id,name',
                     'theclient:id,name',
-                    'theclientactivity:id,name'
+                    'theclientactivity:id,name,function'
                 ])
                 ->select('tasks.*');
 
@@ -192,7 +192,7 @@ class TasksControllerAPI extends Controller
                     return $status;
                 }))
                 ->editColumn('agent_id', function ($value) {
-                        return $value->theagent->fullname.' '.$value->theagent->last_name;
+                        return $value->theagent->fullname;
                 })
                 ->editColumn('shift_date', (function($value){
                     return $value->shift_date ? date("Y-m-d",strtotime($value->shift_date)) : '';

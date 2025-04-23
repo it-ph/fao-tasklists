@@ -30,13 +30,13 @@
                         <label class="mt-1"><strong>Filter Report</strong> <span style="font-weight: bold; color: red">*</span></label>
                         <div class="row">
 
-                            @if(Auth::user()->isAccountant())
+                            @if(auth()->user()->isAccountant())
                                 <div class="col-md-12">
                                     <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->format('m-d-Y')}} - {{date('m-d-Y')}}">
                                 </div>
                             @else
-                                <input type="hidden" name="cluster_id" id="cluster_id" class="form-control" value="{{ Auth::user()->thepermisssion->cluster_id }}">
-                                <input type="hidden" name="user_id" id="user_id" class="form-control" value="{{ Auth::user()->thepermisssion->user_id }}">
+                                <input type="hidden" name="cluster_id" id="cluster_id" class="form-control" value="{{ auth()->user()->cluster_id }}">
+                                <input type="hidden" name="user_id" id="user_id" class="form-control" value="{{ auth()->user()->id }}">
                                 <div class="col-md-3 mb-2">
                                     <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->subDays(7)->format('m-d-Y')}} - {{date('m-d-Y')}}">
                                 </div>

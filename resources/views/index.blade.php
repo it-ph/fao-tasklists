@@ -23,7 +23,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="text-white m-3">
-                                <h6 class="text-white">Welcome Back, {{ Auth::user()->fullname }} {{ Auth::user()->last_name }}!</h6>
+                                <h6 class="text-white">Welcome Back, {{ auth()->user()->fullname }}!</h6>
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,6 @@
     <div class="row">
         @include('pages.dashboard.filters')
         @include('pages.dashboard.counts')
-
     </div>
     <div class="row">
         @include('pages.dashboard.fte')

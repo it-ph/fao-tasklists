@@ -21,14 +21,14 @@ class ClientActivityImport implements ToModel, WithHeadingRow,WithValidation,Ski
     {
         $ctr_error = 0;
         array_push($this->has_error, "Something went wrong, Please check all entries that you have encoded.");
-        $user = User::where('email', $row['email_address'])->select('emp_id')->first();
+        $user = User::where('email', $row['email_address'])->select('id')->first();
 
         // check if haspermission
 
         $this->row_number += 1;
         if($user)
         {
-            $user_id = $user->emp_id;
+            $user_id = $user->id;
         }
         else
         {

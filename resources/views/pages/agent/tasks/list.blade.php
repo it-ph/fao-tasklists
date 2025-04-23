@@ -57,12 +57,12 @@
                                 <th>Status</th>
                                 <th>Action</th>
                                 <th>Employee Name</th>
-                                <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
                                 <th>Activity</th>
+                                <th>Function</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>

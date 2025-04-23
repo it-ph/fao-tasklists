@@ -55,12 +55,12 @@
                                 <th>Status</th>
                                 @if(auth()->user()->isOperationsManagerOrAdmin())<th>Action</th>@endif
                                 <th>Employee Name</th>
-                                <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Date Received</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
                                 <th>Client Activity</th>
+                                <th>Function</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>

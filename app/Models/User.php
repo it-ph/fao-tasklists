@@ -13,7 +13,7 @@ class User extends Authenticatable
 
     // protected $connection = 'mysql2';
     protected $table = 'users';
-    protected $dates = ['two_facor_expires_at'];
+    protected $dates = ['two_factor_expires_at','deleted_at','created_at','updated_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -41,25 +41,55 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    function thepermisssion()
+    public function scopeAgentPermission($query)
     {
-        return $this->hasOne(Permission::class, 'user_id', 'emp_id');
+        return $query->where('id',auth()->user()->id);
+    }
+
+    public function scopeTLPermission($query)
+    {
+        return $query->where('tl_id',auth()->user()->id)->where('cluster_id',auth()->user()->cluster_id)->orwhere('id',auth()->user()->id);
+    }
+
+    public function scopeOMPermission($query)
+    {
+        return $query->where('cluster_id',auth()->user()->cluster_id);
+    }
+
+    public function thecluster()
+    {
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();;
+    }
+
+    public function theclient()
+    {
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();;
     }
 
     public function theclientactivities()
     {
-        return $this->hasMany(ClientActivity::class, 'agent_id', 'emp_id');
+        return $this->hasMany(ClientActivity::class, 'agent_id', 'id');
+    }
+
+    public function thetl()
+    {
+        return $this->belongsTo(User::class, 'tl_id', 'id');
+    }
+
+    public function theom()
+    {
+        return $this->belongsTo(User::class, 'om_id', 'id');
     }
 
     public function thetasks()
     {
-        return $this->hasMany(Task::class, 'agent_id', 'emp_id');
+        return $this->hasMany(Task::class, 'agent_id', 'id');
     }
 
     public function hasActiveTask()
     {
         $hasActiveTask = Task::query()
-            ->where('agent_id', $this->emp_id)
+            ->where('agent_id', $this->id)
             ->where('status', 'In Progress')
             ->count();
 
@@ -71,10 +101,10 @@ class User extends Authenticatable
     public function isStatusActive()
     {
         $hasPermission = User::query()
-            ->where('emp_id', $this->emp_id)
+            ->where('id', $this->id)
             ->first();
 
-        if($this->employment_status  == 'active' && $hasPermission)
+        if($this->status  == 'active' && $hasPermission)
         {
             return true;
         }
@@ -89,11 +119,11 @@ class User extends Authenticatable
     public function isAccountant()
     {
         $permission = 'accountant';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 $permission
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)
@@ -108,12 +138,12 @@ class User extends Authenticatable
     public function isAdmin()
     {
         $permission = 'admin';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 'superadmin',
                 $permission
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)
@@ -128,12 +158,12 @@ class User extends Authenticatable
     public function isTeamLeader()
     {
         $permission = 'team leader';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 'superadmin',
                 $permission
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)
@@ -148,12 +178,12 @@ class User extends Authenticatable
     public function isOperationsManager()
     {
         $permission = 'operations manager';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 'superadmin',
                 $permission
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)
@@ -168,13 +198,13 @@ class User extends Authenticatable
     public function isTeamLeaderOrAdmin()
     {
         $permission = 'team leader';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 'superadmin',
                 'admin',
                 $permission
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)
@@ -189,13 +219,13 @@ class User extends Authenticatable
     public function isOperationsManagerOrAdmin()
     {
         $permission = 'operations manager';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 'superadmin',
                 'admin',
                 $permission
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)
@@ -211,14 +241,14 @@ class User extends Authenticatable
     {
         $tl = 'team leader';
         $om = 'operations manager';
-        $hasPermission = Permission::query()
+        $hasPermission = User::query()
             ->whereIn('permission',[
                 'superadmin',
                 'admin',
                 $tl,
                 $om
             ])
-            ->where('user_id',$this->emp_id)
+            ->where('id',$this->id)
             ->first();
 
         if($hasPermission)

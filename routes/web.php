@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExportController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ClusterController;
 use App\Http\Controllers\TaskLogController;
+use App\Http\Controllers\UserControllerAPI;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksControllerAPI;
 use App\Http\Controllers\Auth\AuthController;
@@ -119,7 +121,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     Route::post('export', [ExportController::class, 'export'])->name('export');
 
     // Shift Date Setting
-    Route::post('shift-date', [PermissionController::class, 'updateShiftDate'])->name('shift-date.update');
+    Route::post('shift-date', [UserController::class, 'updateShiftDate'])->name('shift-date.update');
 
     /**
      * DASHBOARD
@@ -175,20 +177,35 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
 
             Route::get('clients/get_clients/{clusterId}', [ClientController::class,'getClients'])->name('clients.get_clients');
 
-            Route::resource('permissions', PermissionController::class);
-            Route::get('permissions/get_tloms/{clusterId}', [PermissionController::class,'getTLOMs'])->name('permissions.get_tloms');
-            Route::get('permissions/get_accountants/{userId}', [PermissionController::class,'getAccountants'])->name('permissions.get_accountants');
+            // Route::resource('permissions', PermissionController::class);
+            // Route::get('permissions/get_tloms/{clusterId}', [PermissionController::class,'getTLOMs'])->name('permissions.get_tloms');
+            // Route::get('permissions/get_accountants/{userId}', [PermissionController::class,'getAccountants'])->name('permissions.get_accountants');
 
-            Route::get('permissions', [PageController::class, 'showPermissions'])->name('permissions.index');
-            Route::group(['prefix' => 'permission'],
+            // Route::get('permissions', [PageController::class, 'showPermissions'])->name('permissions.index');
+            // Route::group(['prefix' => 'permission'],
+            // function ()
+            // {
+            //     Route::post('api/all', [PermissionControllerAPI::class,'getAllUsers'])->name('api.get.users');
+            //     Route::get('/all', [PermissionController::class,'index'])->name('permission.index');
+            //     Route::post('/store', [PermissionController::class,'store'])->name('permission.store');
+            //     Route::get('/show/{id}', [PermissionController::class,'show'])->name('permission.show');
+            //     Route::post('/update/{id}', [PermissionController::class,'update'])->name('permission.update');
+            //     Route::post('/delete/{id}', [PermissionController::class,'destroy'])->name('permission.delete');
+            // });
+
+            Route::get('users/get_tloms/{clusterId}', [UserController::class,'getTLOMs'])->name('users.get_tloms');
+            Route::get('users/get_accountants/{userId}', [UserController::class,'getAccountants'])->name('users.get_accountants');
+
+            Route::get('users', [PageController::class, 'showUsers'])->name('users.index');
+            Route::group(['prefix' => 'user'],
             function ()
             {
-                Route::post('api/all', [PermissionControllerAPI::class,'getAllUsers'])->name('api.get.permissions');
-                Route::get('/all', [PermissionController::class,'index'])->name('permission.index');
-                Route::post('/store', [PermissionController::class,'store'])->name('permission.store');
-                Route::get('/show/{id}', [PermissionController::class,'show'])->name('permission.show');
-                Route::post('/update/{id}', [PermissionController::class,'update'])->name('permission.update');
-                Route::post('/delete/{id}', [PermissionController::class,'destroy'])->name('permission.delete');
+                Route::post('api/all', [UserControllerAPI::class,'getAllUsers'])->name('api.get.users');
+                Route::get('/all', [UserController::class,'index'])->name('user.index');
+                Route::post('/store', [UserController::class,'store'])->name('user.store');
+                Route::get('/show/{id}', [UserController::class,'show'])->name('user.show');
+                Route::post('/update/{id}', [UserController::class,'update'])->name('user.update');
+                Route::post('/delete/{id}', [UserController::class,'destroy'])->name('user.delete');
             });
 
             Route::resource('dashboard-activities', DashboardActivityController::class);

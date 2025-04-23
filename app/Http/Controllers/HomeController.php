@@ -34,27 +34,27 @@ class HomeController extends Controller
             ->with([
                 'thecluster:id,name',
                 'theclient:id,name',
-                'theagent:emp_id,emp_code,fullname,last_name',
+                'theagent:id,fullname',
                 'theclientactivity:id,name'
             ])
-            ->where('agent_id', Auth::user()->emp_id)
+            ->where('agent_id', auth()->user()->id)
             ->latest()
             ->take(20)
             ->get();
 
         $in_progress = Task::query()
             ->where('status','In Progress')
-            ->where('agent_id', Auth::user()->emp_id)
+            ->where('agent_id', auth()->user()->id)
             ->count();
 
         $on_hold = Task::query()
             ->where('status','On Hold')
-            ->where('agent_id', Auth::user()->emp_id)
+            ->where('agent_id', auth()->user()->id)
             ->count();
 
         $completed = Task::query()
             ->where('status','Completed')
-            ->where('agent_id', Auth::user()->emp_id)
+            ->where('agent_id', auth()->user()->id)
             ->count();
 
         $all = $in_progress + $on_hold + $completed;

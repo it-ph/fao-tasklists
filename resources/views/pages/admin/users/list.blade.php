@@ -30,12 +30,9 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addPermissionModal"><i class="fas fa-plus"></i> Create</button>
-                            {{-- <a href="{{ url('HREmployeeProfileAPI') }}">
-                                <button class="btn btn-primary btn-sm waves-effect waves-light" title="Click to update the employees list in create user."><i class="fa fa-sync"></i> Sync HR Portal Employees</button>
-                            </a> --}}
                         </div>
                     </div>
-                    <table id="tbl_permission" class="table table-bordered table-striped table-sm nowrap w-100">
+                    <table id="tbl_user" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>
@@ -55,8 +52,8 @@
         </div> <!-- end col -->
     </div>
 
-    @include('pages.admin.permissions.add-modal')
-    @include('pages.admin.permissions.edit-modal')
+    @include('pages.admin.users.add-modal')
+    @include('pages.admin.users.edit-modal')
 @endsection
 
 @section('script')
@@ -103,7 +100,7 @@
                 // load TL / OM
                 $.ajax({
                     type: 'GET',
-                    url: `{{ url('permissions/get_tloms/${cluster_id}') }}`,
+                    url: `{{ url('users/get_tloms/${cluster_id}') }}`,
                     dataType: 'json',
                     success: function(result){
                         console.log(result);
@@ -113,14 +110,14 @@
                             $('#tl_id').append('<option value="">'+ '-- Select Team Leader --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#tl_id').append('<option value="'+ value.id +'">' + value.fullname+'</option>');
+                                $('#tl_id').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
 
                             $('#om_id').empty();
                             $('#om_id').append('<option value="">'+ '-- Select Operations Manager --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#om_id').append('<option value="'+ value.id +'">' + value.fullname+'</option>');
+                                $('#om_id').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
                         }
                         else
@@ -178,7 +175,7 @@
                 // load TL / OM
                 $.ajax({
                     type: 'GET',
-                    url: `{{ url('permissions/get_tloms/${cluster_id}') }}`,
+                    url: `{{ url('users/get_tloms/${cluster_id}') }}`,
                     dataType: 'json',
                     success: function(result){
                         console.log(result);
@@ -188,14 +185,14 @@
                             $('#tl_id_edit').append('<option value="">'+ '-- Select Team Leader --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#tl_id_edit').append('<option value="'+ value.id +'">' + value.fullname+'</option>');
+                                $('#tl_id_edit').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
 
                             $('#om_id_edit').empty();
                             $('#om_id_edit').append('<option value="">'+ '-- Select Operations Manager --' +'</option>');
                             $.each(result, function(index, value){
                                 // console.log(value);
-                                $('#om_id_edit').append('<option value="'+ value.id +'">' + value.fullname+'</option>');
+                                $('#om_id_edit').append('<option value="'+ value.id +'">' + value.fullname +'</option>');
                             });
                         }
                         else
@@ -221,7 +218,7 @@
 @endsection
 
 @section('custom-js')
-    <script src="{{asset('scripts/permissions.js')}}"></script>
+    <script src="{{asset('scripts/users.js')}}"></script>
 @endsection
 
 

@@ -14,8 +14,8 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="agent_id" id="agent_id" value="{{ Auth::user()->emp_id }}">
-                                    <input class="form-control" type="text" disabled value="{{ Auth::user()->fullname }} {{ Auth::user()->last_name }}">
+                                    <input class="form-control" type="hidden" name="agent_id" id="agent_id" value="{{ auth()->user()->id }}">
+                                    <input class="form-control" type="text" disabled value="{{ auth()->user()->fullname }}">
                                 </div>
                             </div>
                         </div>
@@ -47,9 +47,9 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                                    @if(Auth::user()->thepermisssion->cluster_id)
-                                        <input class="form-control" type="hidden" name="cluster_id" value="{{ Auth::user()->thepermisssion->cluster_id }}">
-                                        <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->thecluster->name }}">
+                                    @if(auth()->user()->cluster_id)
+                                        <input class="form-control" type="hidden" name="cluster_id" value="{{ auth()->user()->cluster_id }}">
+                                        <input class="form-control" type="text" disabled value="{{ auth()->user()->thecluster->name }}">
                                     @else
                                         <select class="form-control select2" name="cluster_id" style="width:100%;">
                                             <option value="" selected disabled>-- Select Cluster -- </option>
@@ -67,9 +67,9 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_id" class="col-form-label custom-label"><strong>CLIENT NAME:<span class="important">*</span></strong></label>
-                                    @if(Auth::user()->thepermisssion->client_id)
-                                        <input class="form-control" type="hidden" name="client_id" value="{{ Auth::user()->thepermisssion->client_id }}">
-                                        <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->theclient->name }}">
+                                    @if(auth()->user()->client_id)
+                                        <input class="form-control" type="hidden" name="client_id" value="{{ auth()->user()->client_id }}">
+                                        <input class="form-control" type="text" disabled value="{{ auth()->user()->theclient->name }}">
                                     @else
                                         <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
                                             <option value="" selected disabled>-- Select Client -- </option>

@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Client;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Client;
 use App\Models\Permission;
 use Carbon\CarbonImmutable;
 
@@ -26,7 +27,7 @@ class DashboardServices
     public function scopeQuery($q)
     {
         // Get user permission
-        $userPermission = auth()->user()->thepermisssion->permission;
+        $userPermission = auth()->user()->permission;
 
         // Filter tasks based on user permission
         switch ($userPermission) {
@@ -51,18 +52,15 @@ class DashboardServices
 
     public function getAgents($cluster_id)
     {
-        $agents = Permission::where('cluster_id', $cluster_id)
+        $agents = User::where('cluster_id', $cluster_id)
             ->with([
-                'theuser:id,emp_id,fullname,last_name,employment_status',
                 'theclient:id,name',
                 'thetasks'
             ])
-            ->select('id','user_id','client_id')
+            ->select('id','client_id','fullname')
             ->where('permission','<>','superadmin')
             ->whereNull('deleted_at')
-            ->whereHas('theuser', function($query) {
-                $query->where('employment_status', 'active');
-            });
+            ->where('status', 'active');
 
         $agents = $this->scopeQuery($agents);
 
@@ -104,7 +102,7 @@ class DashboardServices
 
     public function getFteData($where, $period)
     {
-        $cluster_id = auth()->user()->thepermisssion->cluster_id;
+        $cluster_id = auth()->user()->cluster_id;
         $agents = $this->getAgents($cluster_id);
 
         $d = $this->dateFilters($where, $period);
@@ -115,7 +113,7 @@ class DashboardServices
         foreach ($agents->chunk(100) as $agentChunk) {
             foreach ($agentChunk as $agent) {
                 $client = $agent->theclient ? $agent->theclient->name : '';
-                $employee_name = $agent->theuser->fullname .' '. $agent->theuser->last_name;
+                $employee_name = $agent->fullname;
 
                 $tasksQuery = $agent->thetasks()
                     ->taskfunction()
@@ -263,7 +261,7 @@ class DashboardServices
     // // DAILY
     // public function getDaily($where)
     // {
-    //     $cluster_id = auth()->user()->thepermisssion->cluster_id;
+    //     $cluster_id = auth()->user()->cluster_id;
     //     $agents = $this->getAgents($cluster_id);
 
     //     $d = $this->dateFilters($where, 'daily');
@@ -335,7 +333,7 @@ class DashboardServices
     // // WEEKLY
     // public function getWeekly($where)
     // {
-    //     $cluster_id = auth()->user()->thepermisssion->cluster_id;
+    //     $cluster_id = auth()->user()->cluster_id;
     //     $agents = $this->getAgents($cluster_id);
 
     //     $d = $this->dateFilters($where, 'weekly');
@@ -407,7 +405,7 @@ class DashboardServices
     // // MONTHLY
     // public function getMonthly($where)
     // {
-    //     $cluster_id = auth()->user()->thepermisssion->cluster_id;
+    //     $cluster_id = auth()->user()->cluster_id;
     //     $agents = $this->getAgents($cluster_id);
 
     //     $d = $this->dateFilters($where, 'monthly');

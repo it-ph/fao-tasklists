@@ -11,7 +11,7 @@
                     @csrf
                     <div class="form-group">
                         <label for="name" class="col-form-label custom-label"><strong>DEFAULT SHIFT DATE: <span class="important">*</span></strong></label>
-                        <input class="form-control" type="date" name="shift_date" @if(Auth::user()->thepermisssion->shift_date) value="{{ date('Y-m-d', strtotime(Auth::user()->thepermisssion->shift_date)) }}" @endif>
+                        <input class="form-control" type="date" name="shift_date" @if(auth()->user()->shift_date) value="{{ date('Y-m-d', strtotime(auth()->user()->shift_date)) }}" @endif>
                     </div>
                 </form>
             </div>

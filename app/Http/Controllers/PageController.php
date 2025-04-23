@@ -26,6 +26,14 @@ class PageController extends GlobalVariableController
     }
 
     /**
+     * Users
+     */
+    public function showUsers(Request $request)
+    {
+        return view('pages.admin.users.list');
+    }
+
+    /**
      * Clusters
      */
     public function showClusters()
@@ -37,7 +45,7 @@ class PageController extends GlobalVariableController
     public function showAgentTaskLists(Request $request)
     {
         // accountant
-        if(Auth::user()->isAccountant())
+        if(auth()->user()->isAccountant())
         {
             return redirect()->route('unauthorized');
         }
@@ -65,11 +73,11 @@ class PageController extends GlobalVariableController
             return view('errors.404');
         }
 
-        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
+        $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster')->get() : Client::with('thecluster')->cluster()->get();
 
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')
-            ->where('agent_id', Auth::user()->emp_id)
+            ->where('agent_id', auth()->user()->id)
             ->orderBy('name', 'ASC')
             ->get();
 
@@ -84,7 +92,7 @@ class PageController extends GlobalVariableController
         $status = $request['status'];
 
         // accountant
-        if(Auth::user()->isAccountant())
+        if(auth()->user()->isAccountant())
         {
             return redirect()->route('unauthorized');
         }
@@ -94,7 +102,7 @@ class PageController extends GlobalVariableController
         {
             return view('errors.404');
         }
-        $clients = Auth::user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
+        $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
 
         $user_client_activities = ClientActivity::query()
             ->select('id','agent_id','name')

@@ -15,13 +15,13 @@ class TasksServices
         // $tasks = TasksCache::getAgentTasks($status); disabled TasksCache due to realtime checking if edit of task is already locked
 
         $status = strtolower($status);
-        $agent_id = Auth::user()->emp_id;
+        $agent_id = Auth::user()->id;
 
         $tasks = Task::query()
             ->with([
                 'thecluster:id,name',
                 'theclient:id,name',
-                'theagent:emp_id,email,emp_code,fullname,last_name',
+                'theagent:id,email,emp_code,fullname,last_name',
                 'theclientactivity:id,name'
             ])
             ->where('agent_id', $agent_id);
@@ -154,7 +154,7 @@ class TasksServices
                 'thecluster:id,name',
                 'theclient:id,name',
                 'theagent:id,email',
-                'theagent:emp_id,fullname,last_name',
+                'theagent:id,fullname,last_name',
                 'theclientactivity:id,name'
             ]);
 

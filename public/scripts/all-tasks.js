@@ -4,6 +4,7 @@ $(document).ready(function() {
 
 const TASK = (() => {
     const isAdmin = $('#permission').text();
+    const orderTable = isAdmin ? 3 : 2;
     let this_task = {}
 
     // load data
@@ -30,8 +31,8 @@ const TASK = (() => {
                 [10, 20, 50, 100],
                 [10, 20, 50, 100]
             ],
-            order: [3, "desc"],
-            columnDefs: [{ type: 'date', 'targets': [3] }],
+            order: [orderTable, "desc"],
+            columnDefs: [{ type: 'date', 'targets': [orderTable] }],
             processing: true,
             serverSide: true,
             ajax: {
@@ -45,12 +46,12 @@ const TASK = (() => {
                 { data: 'status', name: 'status', className: 'text-center' },
                 ...(isAdmin ? [{ data: 'action', name: 'action', className: 'text-center' }] : []),
                 { data: 'agent_id', name: 'theagent.fullname' },
-                { data: 'agent_id', name: 'theagent.last_name', className: 'hide-column' },
                 { data: 'shift_date', name: 'shift_date', className: 'text-center' },
                 { data: 'date_received', name: 'date_received', className: 'text-center' },
                 { data: 'thecluster.name', name: 'thecluster.name' },
                 { data: 'theclient.name', name: 'theclient.name' },
                 { data: 'theclientactivity.name', name: 'theclientactivity.name' },
+                { data: 'theclientactivity.function', name: 'theclientactivity.function' },
                 { data: 'description', name: 'description' },
                 { data: 'start_date', name: 'start_date', className: 'text-center' },
                 { data: 'end_date', name: 'end_date', className: 'text-center' },
@@ -88,7 +89,7 @@ const TASK = (() => {
             var allow_remarks = response.data.data.status == 'Completed' ? false : true;
 
             $('#agent_id').val(response.data.data.agent_id);
-            $('#employee_name').val(response.data.data.theagent.fullname + ' ' + response.data.data.theagent.last_name);
+            $('#employee_name').val(response.data.data.theagent.fullname);
             $('#shift_date_edit').val(shift_date);
             $('#date_received_edit').val(date_received);
             $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
