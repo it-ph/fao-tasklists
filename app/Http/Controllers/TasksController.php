@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\ClientActivity;
 use App\Traits\ResponseTraits;
 use App\Services\TasksServices;
+use App\Http\Requests\UpdateTasksRequest;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
@@ -94,7 +95,7 @@ class TasksController extends GlobalVariableController
         return $this->returnResponse($result);
     }
 
-    public function update(TaskRequest $request, $id)
+    public function update(UpdateTasksRequest $request, $id)
     {
         $result = $this->successResponse('Task updated successfully!');
         try {

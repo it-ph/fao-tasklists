@@ -129,11 +129,13 @@ const PERMISSION = (() => {
         $('#editPermissionModal').modal('show');
         $('.error').hide();
         $('.error').text('');
+        $('#editPermissionForm')[0].reset();
         $("#cluster_id_edit").val(null).trigger("change");
         $("#client_id_edit").val(null).trigger("change");
         $("#tl_id_edit").val(null).trigger("change");
         $("#om_id_edit").val(null).trigger("change");
         $("#permission_edit").val(null).trigger("change");
+        $("#sstatus_edit").val(null).trigger("change");
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
@@ -146,6 +148,7 @@ const PERMISSION = (() => {
             $("#tl_id_edit").val(response.data.data.tl_id).trigger("change");
             $("#om_id_edit").val(response.data.data.om_id).trigger("change");
             $("#permission_edit").val(response.data.data.permission).trigger("change");
+            $("#sstatus_edit").val(response.data.data.status).trigger("change");
             $('#btn_update').empty();
             $('#btn_update').append('<i class="fa fa-save"></i> Update');
             $('#btn_update').prop("disabled", false);
@@ -197,6 +200,7 @@ const PERMISSION = (() => {
                         $("#tl_id_edit").val(null).trigger("change");
                         $("#om_id_edit").val(null).trigger("change");
                         $("#permission_edit").val(null).trigger("change");
+                        $("#sstatus_edit").val(null).trigger("change");
                         PERMISSION.load();
                         $('.error').hide();
                         $('.error').text('');

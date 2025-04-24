@@ -47,7 +47,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="cluster_id" id='cluster_id_edit' style="width:100%;">
+                                    <select class="form-control select2" name="cluster_id_edit" id='cluster_id_edit' style="width:100%;" disabled>
                                         <option value="" selected disabled>-- Select Cluster -- </option>
                                             @foreach ($clusters as $cluster )
                                                 @if($cluster)
@@ -63,7 +63,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="client_id" class="col-form-label custom-label"><strong>CLIENT NAME:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
+                                    <select class="form-control select2" name="client_id_edit" id="client_id_edit" style="width:100%;" disabled>
                                         <option value="" selected disabled>-- Select Client -- </option>
                                             @foreach ($clients as $client )
                                                 @if($client)
