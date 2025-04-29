@@ -64,7 +64,7 @@
                         <select class="form-control" name="permission">
                             <option value="" disabled selected>-- Select Permission --</option>
                             @if(auth()->user()->isAdmin())<option {{ old('permission') == "admin" ? "selected" : "" }} value="admin" >Admin</option>@endif
-                            <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant" >Accountant</option>
+                            <option {{ old('permission') == "accountant" ? "selected" : "" }} value="accountant">Accountant</option>
                             <option {{ old('permission') == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old('permission') == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
                         </select>

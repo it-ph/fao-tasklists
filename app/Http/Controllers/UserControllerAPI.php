@@ -18,7 +18,7 @@ class UserControllerAPI extends Controller
                 'thetl:id,fullname',
                 'theom:id,fullname',
             ])
-            ->select('id','id','email','fullname','cluster_id','client_id','tl_id','om_id','permission','status')
+            ->select('id','email','fullname','cluster_id','client_id','tl_id','om_id','permission','status')
             ->where('permission','<>','superadmin');
 
             // admin
@@ -44,10 +44,10 @@ class UserControllerAPI extends Controller
                 ->addColumn('theom', function ($value) {
                     return $value->theom ? $value->theom->fullname : "";
                 })
-                ->addColumn('thecluster', function ($value) {
+                ->editColumn('cluster_id', function ($value) {
                     return $value->thecluster ? $value->thecluster->name : "";
                 })
-                ->addColumn('theclient', function ($value) {
+                ->editColumn('client_id', function ($value) {
                     return $value->theclient ? $value->theclient->name : "";
                 })
                 ->addColumn('permission', function ($value) {

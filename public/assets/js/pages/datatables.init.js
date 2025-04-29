@@ -22,12 +22,26 @@
                     sLast: '<i class="fa fa-step-forward"></i>'
                 },
             },
-            dom: 'Bfrtip',
+            dom: `
+                <"d-flex justify-content-between align-items-center mb-2"
+                    <"d-flex align-items-center gap-2 left-section"B l>
+                    <"right-section"f>
+                >
+                rt
+                <"d-flex justify-content-between align-items-center mt-2"
+                    <"info-section"i>
+                    <"pagination-section"p>
+                >
+            `,
             buttons: [
                 'excel'
             ],
             "pageLength": 20,
             "pagingType": "full_numbers",
+            lengthMenu: [
+                [10, 20, 50, -1],
+                [10, 20, 50, "All"]
+            ],
             // "columnDefs": [{ type: 'date', 'targets': [1] }],
             // "order": [0, "desc"],
             // orderCellsTop: true,

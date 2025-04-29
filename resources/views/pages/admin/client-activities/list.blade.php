@@ -42,13 +42,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($permissions as $permission)
+                            @foreach ($users as $user)
                                 <tr>
-                                    <td>@isset($permission) {{ $permission->fullname }} {{ $permission->last_name }} @endisset</td>
-                                    <td>@isset($permission) {{ strtolower($permission->email) }} @endisset</td>
+                                    <td>@isset($user) {{ $user->fullname }} @endisset</td>
+                                    <td>@isset($user) {{ strtolower($user->email) }} @endisset</td>
                                     <td class="text-center">
-                                        <a href="{{ url('client-activities') }}/?user_id={{ $permission->id }}&employeename={{ strtolower($permission->fullname) }} {{ strtolower($permission->last_name) }}" title="View Client Activities">
-                                            <button class="btn btn-primary btn-sm"><span class="badge" style="background-color:#fff; color:#00599D">{{ $permission->theclientactivities->count() }}</span> View Activities <i class="fa fa-chevron-right"></i></button>
+                                        <a href="{{ url('client-activities') }}/?user_id={{ $user->id }}&employeename={{ strtolower($user->fullname) }}" title="View Client Activities">
+                                            <button class="btn btn-primary btn-sm"><span class="badge" style="background-color:#fff; color:#00599D">{{ $user->theclientactivities->count() }}</span> View Activities <i class="fa fa-chevron-right"></i></button>
                                         </a>
                                     </td>
                                 </tr>

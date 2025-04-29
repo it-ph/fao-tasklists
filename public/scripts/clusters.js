@@ -73,7 +73,7 @@ const CLUSTER = (() => {
         $('#tbl_cluster').DataTable({
             // "bStateSave": true,
             language: {
-                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw mt-3"></i><span class="sr-only">Loading...</span> ',
                 oPaginate: {
                     sNext: '<i class="fa fa-forward"></i>',
                     sPrevious: '<i class="fa fa-backward"></i>',
@@ -85,8 +85,8 @@ const CLUSTER = (() => {
             pagingType: "full_numbers",
             pageLength: 20,
             lengthMenu: [
-                [10, 20, 50, 100],
-                [10, 20, 50, 100]
+                [10, 20, 50, -1],
+                [10, 20, 50, "All"]
             ],
             order: [0, "asc"],
             processing: true,
@@ -103,7 +103,17 @@ const CLUSTER = (() => {
                 { data: 'updated_at', name: 'updated_at' },
                 { data: 'action', name: 'action', className: 'text-center' },
             ],
-            dom: 'Bfrtip',
+            dom: `
+                <"d-flex justify-content-between align-items-center mb-2"
+                    <"d-flex align-items-center gap-2 left-section"B l>
+                    <"right-section"f>
+                >
+                rt
+                <"d-flex justify-content-between align-items-center mt-2"
+                    <"info-section"i>
+                    <"pagination-section"p>
+                >
+            `,
             buttons: [
                 'excel',
             ]

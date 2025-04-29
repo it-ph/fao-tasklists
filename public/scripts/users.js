@@ -77,7 +77,7 @@ const PERMISSION = (() => {
         $('#tbl_user').DataTable({
             // "bStateSave": true,
             language: {
-                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw mt-3"></i><span class="sr-only">Loading...</span> ',
                 oPaginate: {
                     sNext: '<i class="fa fa-forward"></i>',
                     sPrevious: '<i class="fa fa-backward"></i>',
@@ -89,8 +89,8 @@ const PERMISSION = (() => {
             pagingType: "full_numbers",
             pageLength: 20,
             lengthMenu: [
-                [10, 20, 50, 100],
-                [10, 20, 50, 100]
+                [10, 20, 50, -1],
+                [10, 20, 50, "All"]
             ],
             order: [0, "asc"],
             processing: true,
@@ -105,15 +105,25 @@ const PERMISSION = (() => {
             columns: [
                 { data: 'fullname', name: 'fullname' },
                 { data: 'email', name: 'email' },
-                { data: 'thecluster', name: 'thecluster' },
-                { data: 'theclient', name: 'theclient' },
+                { data: 'cluster_id', name: 'thecluster.name' },
+                { data: 'client_id', name: 'theclient.name' },
                 { data: 'thetl', name: 'thetl' },
                 { data: 'theom', name: 'theom' },
                 { data: 'permission', name: 'permission' },
                 { data: 'status', name: 'status' },
                 { data: 'action', name: 'action', className: 'text-center' },
             ],
-            dom: 'Bfrtip',
+            dom: `
+                <"d-flex justify-content-between align-items-center mb-2"
+                    <"d-flex align-items-center gap-2 left-section"B l>
+                    <"right-section"f>
+                >
+                rt
+                <"d-flex justify-content-between align-items-center mt-2"
+                    <"info-section"i>
+                    <"pagination-section"p>
+                >
+            `,
             buttons: [
                 'excel',
             ]
