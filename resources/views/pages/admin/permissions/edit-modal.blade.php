@@ -13,7 +13,7 @@
                         <label for="user_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="user_id" id="user_id_edit" style="width:100%;">
                             <option value="" disabled>-- Select Employee -- </option>
-                                @foreach ($users as $user )
+                                @foreach ($users as $user)
                                     @if($user)
                                         @isset($user)
                                             <option {{ old('user_id') == $user->id ? "selected" : "" }}
@@ -30,7 +30,7 @@
                         <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="cluster_id" id="cluster_id_edit" style="width:100%;">
                             <option value="" disabled>-- Select Cluster -- </option>
-                                @foreach ($clusters as $cluster )
+                                @foreach ($clusters as $cluster)
                                     @if($cluster)
                                         <option {{ old('cluster_id') == $cluster->id ? "selected" : "" }}
                                             value="{{ $cluster->id }}">{{ ucwords($cluster->name) }}
@@ -45,7 +45,7 @@
                         <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:</strong></label>
                         <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
                             <option value="">-- Select Client -- </option>
-                                @foreach ($clients as $client )
+                                @foreach ($clients as $client)
                                     @if($client)
                                         <option {{ old('client_id') == $client->id ? "selected" : "" }}
                                             value="{{ $client->id }}">{{ ucwords($client->name) }}
@@ -59,7 +59,7 @@
                         <label for="tl_id" class="col-form-label custom-label"><strong>TEAM LEADER:</strong></label>
                         <select class="form-control select2" name="tl_id" id="tl_id_edit" style="width:100%;">
                             <option value="">-- Select Team Leader -- </option>
-                                @foreach ($tls as $tl )
+                                @foreach ($tls as $tl)
                                     @if($tl)
                                         @isset($tl->theuser)
                                             <option {{ old('tl_id') == $tl->theuser->id ? "selected" : "" }}
@@ -75,7 +75,7 @@
                         <label for="om_id" class="col-form-label custom-label"><strong>OPERATIONS MANAGER:</strong></label>
                         <select class="form-control select2" name="om_id" id="om_id_edit" style="width:100%;">
                             <option value="">-- Select Operations Manager -- </option>
-                                @foreach ($oms as $om )
+                                @foreach ($oms as $om)
                                     @if($om)
                                         @isset($om->theuser)
                                             <option {{ old('om_id') == $om->theuser->id ? "selected" : "" }}
