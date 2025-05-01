@@ -17,19 +17,26 @@
         @slot('title') Dashboard @endslot
     @endcomponent
 
-        <div class="col-xl-12">
-            <div class="card overflow-hidden">
-                <div class="bg-primary bg-soft">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="text-white m-3">
-                                <h6 class="text-white">Welcome Back, {{ auth()->user()->fullname }}!</h6>
-                            </div>
+    <div class="row">
+        <div class="col-md-12">
+            @include('notifications.success')
+            @include('notifications.error')
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <div class="card overflow-hidden">
+            <div class="bg-primary bg-soft">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-white m-3">
+                            <h6 class="text-white">Welcome Back, {{ auth()->user()->fullname }}!</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
     {{-- @include('pages.dashboard.latest-tasks') --}}
     <div class="row">

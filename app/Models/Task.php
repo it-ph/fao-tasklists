@@ -25,7 +25,7 @@ class Task extends Model
     public function scopeTLPermission($query)
     {
         $user = auth()->user();
-        return $query->whereHas('thepermission', function ($q){
+        return $query->whereHas('thepermission', function ($q) use ($user){
                 $q->where('tl_id',$user->id);
             })
             ->where('cluster_id',$user->cluster_id)
@@ -46,27 +46,22 @@ class Task extends Model
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();;
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();
     }
 
     public function theclient()
     {
-        return $this->belongsTo(Client::class, 'client_id')->withTrashed();;
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();
     }
 
     public function theagent()
     {
-        return $this->belongsTo(User::class, 'agent_id', 'id');
-    }
-
-    public function getAgentFullNameAttribute()
-    {
-        return $this->theagent->fullname . ' ' . $this->theagent->last_name;
+        return $this->belongsTo(User::class, 'agent_id', 'id')->withTrashed();
     }
 
     public function thepermission()
     {
-        return $this->hasOne(Permission::class, 'user_id', 'agent_id')->withTrashed();;
+        return $this->hasOne(User::class, 'id', 'agent_id')->withTrashed();
     }
 
     public function thedashboardactivity()
@@ -76,12 +71,12 @@ class Task extends Model
 
     public function theclientactivity()
     {
-        return $this->belongsTo(ClientActivity::class, 'client_activity_id')->withTrashed();;
+        return $this->belongsTo(ClientActivity::class, 'client_activity_id')->withTrashed();
     }
 
     public function thecreatedby()
     {
-        return $this->belongsTo(User::class, 'created_by')->withTrashed();;
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     public function thetasklogs()

@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    use SoftDeletes;
 
     // protected $connection = 'mysql2';
     protected $table = 'users';
@@ -58,27 +60,27 @@ class User extends Authenticatable
 
     public function thecluster()
     {
-        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();;
+        return $this->belongsTo(Cluster::class, 'cluster_id')->withTrashed();
     }
 
     public function theclient()
     {
-        return $this->belongsTo(Client::class, 'client_id')->withTrashed();;
+        return $this->belongsTo(Client::class, 'client_id')->withTrashed();
     }
 
     public function theclientactivities()
     {
-        return $this->hasMany(ClientActivity::class, 'agent_id', 'id');
+        return $this->hasMany(ClientActivity::class, 'agent_id', 'id')->withTrashed();
     }
 
     public function thetl()
     {
-        return $this->belongsTo(User::class, 'tl_id', 'id');
+        return $this->belongsTo(User::class, 'tl_id', 'id')->withTrashed();
     }
 
     public function theom()
     {
-        return $this->belongsTo(User::class, 'om_id', 'id');
+        return $this->belongsTo(User::class, 'om_id', 'id')->withTrashed();
     }
 
     public function thetasks()

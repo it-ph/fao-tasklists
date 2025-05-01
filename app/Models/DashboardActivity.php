@@ -23,6 +23,6 @@ class DashboardActivity extends Model
 
     public function scopeCluster($query)
     {
-        return $query->where('cluster_id',Auth::user()->thepermisssion->cluster_id);
+        return $query->where('cluster_id',auth()->user()->cluster_id);
     }
 }
