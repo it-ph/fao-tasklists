@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\View;
 
 class GlobalVariableController extends Controller
 {
-    public $clusters,$clients,$client_activities,$users,$permissions,$tls,$oms;
+    public $clusters,$clients,$client_activities,$users,$permissions,$tls,$oms,$functions;
 
     public function __construct()
     {
@@ -36,6 +36,12 @@ class GlobalVariableController extends Controller
             ->select('id','email','fullname','status')
             ->where('status','active')
             ->orderBy('fullname', 'ASC')
+            ->get();
+
+        $this->functions = ClientActivity::query()
+            ->select('function')
+            ->distinct()
+            ->orderBy('function')
             ->get();
 
         // $this->permissions = Permission::with([
@@ -70,5 +76,6 @@ class GlobalVariableController extends Controller
         View::share('permissions', $this->permissions);
         View::share('tls', $this->tls);
         View::share('oms', $this->oms);
+        View::share('functions', $this->functions);
     }
 }

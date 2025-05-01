@@ -23,14 +23,22 @@
                         <label for="schedule" class="col-form-label custom-label"><strong>SCHEDULE:<span class="important">*</span></strong></label>
                         <input type="text" class="form-control" name="schedule" value="{{ $client_activity->schedule }}" required>
                         <label for="function" class="col-form-label custom-label"><strong>FUNCTION:<span class="important">*</span></strong></label>
-                        <select name="function" class="form-control" @if(Auth::user()->isAccountant()) disabled @endif>
+                        {{-- <select name="function" class="form-control" @if(Auth::user()->isAccountant()) disabled @endif>
                             <option value="">-- Select Frequency --</option>
                             <option value="Procure to Pay (P2P)" @if($client_activity->function == 'Procure to Pay (P2P)') selected @endif>Procure to Pay (P2P)</option>
                             <option value="Order to Cash (O2C)" @if($client_activity->function == 'Order to Cash (O2C)') selected @endif>Order to Cash (O2C)</option>
                             <option value="Record to Report (R2R)" @if($client_activity->function == 'Record to Report (R2R)') selected @endif>Record to Report (R2R)</option>
                             <option value="Client Admin" @if($client_activity->function == 'Client Admin') selected @endif>Client Admin</option>
                             <option value="Personiv Admin" @if($client_activity->function == 'Personiv Admin') selected @endif>Personiv Admin</option>
-                        </select>
+                        </select> --}}
+
+                        <input list="functions" id="comboBox" name="function" class="form-control functions" placeholder="Type or select a function" value="{{ old('function', $client_activity->function ?? '') }}" @if(Auth::user()->isAccountant()) disabled @endif>
+                        <datalist id="functions">
+                            @foreach ($functions as $function)
+                                <option value="{{ $function->function }}">
+                            @endforeach
+                        </datalist>
+
                         <input type="hidden" class="form-control" name="agent_id" value ="{{ $client_activity->agent_id }}" required>
                     </div>
                 </form>
