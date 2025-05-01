@@ -51,7 +51,7 @@ class UserControllerAPI extends Controller
                     return $value->theclient ? $value->theclient->name : "";
                 })
                 ->addColumn('permission', function ($value) {
-                    return ucfirst($value->permission);
+                    return ucwords($value->permission);
                 })
                 ->addColumn('status', function ($value) {
                     return $value->status == 'active' ? '<span class="text-success"><strong>Active</strong></span>' : '<label class="text-danger"><strong>Inactive</strong></label>';
