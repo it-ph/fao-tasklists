@@ -12,6 +12,16 @@ use Facades\App\Http\Helpers\TimeElapsedHelper;
 
 class TasksControllerAPI extends Controller
 {
+    // FOR TESTING ONLY
+
+    public function getTimeTaken() {
+        $working_hours = TimeElapsedHelper::getWorkingHours();
+        $hms = TimeElapsedHelper::convertTime($working_hours);
+
+        // return $working_hours;
+        return $hms;
+    }
+
     //GET AGENT TASKS
     public function getAgentTasks(Request $request)
     {

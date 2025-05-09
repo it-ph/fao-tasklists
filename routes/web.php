@@ -64,6 +64,9 @@ Route::GET('redis/clear-cache', function () {
 // HRPORTAL API
 Route::GET('HREmployeeProfileAPI', [PermissionController::class, 'hrportalusers']);
 
+// GET TIMETAKE HELPER TEST
+Route::GET('jobs/timetaken', [TasksControllerAPI::class, 'getTimeTaken']);
+
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
  */

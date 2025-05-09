@@ -20,7 +20,7 @@
 
                 <li>
                     <a href="{{ url('activities') }}" class="waves-effect">
-                        <i class="bx bx-task" @if(\Request::routeIs('activities')) style="color:#fff" @endif></i>
+                        <i class="bx bx-list-ul" @if(\Request::routeIs('activities')) style="color:#fff" @endif></i>
                         <span key="t-activities" @if(\Request::routeIs('activities')) style="color:#fff" @endif>My Activities</span>
                     </a>
                 </li>
@@ -51,7 +51,7 @@
             @if(auth()->user()->isTeamLeaderOrAdmin() || auth()->user()->isOperationsManagerOrAdmin())
                 <li>
                     <a href="{{ url('tasks/?status=all') }}" class="waves-effect" @if(\Request::has('status')) style="color:#fff" @endif>
-                        <i class="bx bx-task" @if(\Request::has('status')) style="color:#fff" @endif></i>
+                        <i class="bx bx-data" @if(\Request::has('status')) style="color:#fff" @endif></i>
                         <span key="t-tasks-list">Task Lists</span>
                     </a>
                 </li>

@@ -11,24 +11,24 @@ class TimeElapsedHelper
     public function getWorkingHours()
     {
         // Client Work Shift
-        $workStart = '07:00:00';
-        $workEnd = '21:00:00';
+        $workStart = '00:00:00';
+        $workEnd = '23:59:59';
 
         // Job Start & End Time
-        $start = '2024-09-20 17:00:00';
-        $end = '2024-09-23 17:00:00';
+        $start = '2025-05-09 23:59:52';
+        $end = '2025-05-10 01:54:09';
 
         // $end = null;
         // $end = $end == null ? Carbon::now()->format('Y-m-d H:i:s'): $end;
 
         // Job Pauses
         $pauses = [
-            ['start' => new DateTime('2024-09-23 07:00:00'), 'end' => new DateTime('2024-09-23 08:00:00')],
+            // ['start' => new DateTime('2024-09-23 07:00:00'), 'end' => new DateTime('2024-09-23 08:00:00')],
         ];
 
         // Special Events within Job
         $specialEvents = [
-            ['start' => new DateTime('2024-09-23 16:00:00'), 'end' => new DateTime('2024-09-23 16:30:00')],
+            // ['start' => new DateTime('2024-09-23 16:00:00'), 'end' => new DateTime('2024-09-23 16:30:00')],
         ];
 
         return $this->calculateWorkingTime($start, $end, $workStart, $workEnd, $pauses, $specialEvents);
@@ -85,7 +85,7 @@ class TimeElapsedHelper
 
             // If after work ends, jump to the next day
             if ($currentTimeOfDay >= $workEndTime) {
-                $current = strtotime('next weekday ' . $workStart->format('H:i:s'), $current);
+                $current = strtotime('next day ' . $workStart->format('H:i:s'), $current);
                 continue;
             }
 
