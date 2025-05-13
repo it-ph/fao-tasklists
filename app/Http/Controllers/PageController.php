@@ -41,6 +41,14 @@ class PageController extends GlobalVariableController
         return view('pages.admin.clusters.list');
     }
 
+    /**
+     * Change Requests
+     */
+    public function showChangeRequests()
+    {
+        return view('pages.admin.change-requests.list');
+    }
+
     // ADMIN, TL, & OM ACCESS
     public function showAgentTaskLists(Request $request)
     {

@@ -102,6 +102,14 @@
                     </a>
                 </li>
             @endif
+
+            <li>
+                <a href="{{ url('change-requests') }}" class="waves-effect">
+                    <i class="bx bx-history"></i>
+                    <span key="t-change-requests">Change Requests</span>
+                </a>
+            </li>
+
             @if(auth()->user()->isAdmin())
                 <li>
                     <a href="{{ url('settings') }}" class="waves-effect">

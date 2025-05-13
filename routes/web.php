@@ -126,9 +126,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
     // Shift Date Setting
     Route::post('shift-date', [UserController::class, 'updateShiftDate'])->name('shift-date.update');
 
-    /**
-     * DASHBOARD
-     */
+    // Dashboard
     Route::group(['prefix' => 'dashboard/report'],
         function () {
             Route::post('daily', [DashboardController::class,'loadDaily']);
@@ -137,6 +135,21 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
             Route::post('yearly', [DashboardController::class, 'loadYearly']);
         }
     );
+
+    // Change Requests
+    Route::get('/change-requests', [PageController::class, 'showChangeRequests'])->name('change-requests.index');
+    Route::group(['prefix' => 'change-request'],
+    function ()
+    {
+        Route::post('api/all', [ChangeRequestControllerAPI::class,'getAllChangeRequests'])->name('api.get.change-requests');
+        Route::get('/all', [ChangeRequestController::class,'index'])->name('change-request.index');
+        Route::post('/store', [ChangeRequestController::class,'store'])->name('change-request.store');
+        Route::get('/show/{id}', [ChangeRequestController::class,'show'])->name('change-request.show');
+        Route::post('/update/{id}', [ChangeRequestController::class,'update'])->name('change-request.update');
+        Route::post('/delete/{id}', [ChangeRequestController::class,'destroy'])->name('change-request.delete');
+    });
+
+
 
     /**
      * START OF ADMIN, TL, OM
