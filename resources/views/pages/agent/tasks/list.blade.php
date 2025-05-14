@@ -54,6 +54,7 @@
                     <table id="tbl_task" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Status</th>
                                 <th>Action</th>
                                 <th>Employee Name</th>

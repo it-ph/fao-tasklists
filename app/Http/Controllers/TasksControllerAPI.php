@@ -37,7 +37,8 @@ class TasksControllerAPI extends Controller
                     'theclient:id,name',
                     'theclientactivity:id,name,function'
                 ])
-                ->where('agent_id', $agent_id);
+                ->where('agent_id', $agent_id)
+                ->select('tasks.*');
 
             // filter by status
             if (in_array($status, (['all']))) {

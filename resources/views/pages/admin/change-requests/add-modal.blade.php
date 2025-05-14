@@ -1,18 +1,31 @@
-<div class="modal fade" id="addClusterModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-    aria-labelledby="addClusterModalLabel" aria-hidden="true">
+<div class="modal fade" id="addChangeRequestModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+    aria-labelledby="addChangeRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addClusterModalLabel">Add New Cluster</h5>
+                <h5 class="modal-title" id="addChangeRequestModalLabel">Create New Change Request</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="storeClusterForm" method="POST">
+                <form id="storeChangeRquestForm" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="name" class="col-form-label custom-label"><strong>CLUSTER NAME:<span class="important">*</span></strong></label>
-                        <input type="text" class="form-control" name="name" id="name">
-                        <label id="nameError" class="error"></label>
+                        <label for="name" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
+                        <select class="form-control select2" name="task_id" id="task_id" style="width:100%;">
+                            <option value="" selected disabled>-- Select Task ID -- </option>
+                            @foreach ($tasks as $task)
+                                @if($task)
+                                    <option {{ old('task_id')==$task->id ? "selected" : "" }}
+                                        value="{{ $task->id }}">{{ ucwords($task->id) }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                        <label id="task_idError" class="error"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">*</span></strong></label>
+                        <textarea class="form-control" name="remarks" id="remarks"></textarea>
                     </div>
             </div>
             <div class="modal-footer">

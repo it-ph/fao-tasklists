@@ -46,7 +46,8 @@ class PageController extends GlobalVariableController
      */
     public function showChangeRequests()
     {
-        return view('pages.admin.change-requests.list');
+        $tasks = Task::all();
+        return view('pages.admin.change-requests.list',compact('tasks'));
     }
 
     // ADMIN, TL, & OM ACCESS

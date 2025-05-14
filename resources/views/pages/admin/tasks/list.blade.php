@@ -52,6 +52,7 @@
                     <table id="tbl_task" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Status</th>
                                 @if(auth()->user()->isOperationsManagerOrAdmin())<th>Action</th>@endif
                                 <th>Employee Name</th>

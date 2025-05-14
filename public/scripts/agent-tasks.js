@@ -91,8 +91,8 @@ const TASK = (() => {
                 [10, 20, 50, 100],
                 [10, 20, 50, 100]
             ],
-            order: [3, "desc"],
-            columnDefs: [{ type: 'date', 'targets': [3] }],
+            order: [4, "desc"],
+            columnDefs: [{ type: 'date', 'targets': [4] }],
             processing: true,
             serverSide: true,
             ajax: {
@@ -103,6 +103,7 @@ const TASK = (() => {
                 },
             },
             columns: [
+                { data: 'id', name: 'id', className: 'text-center' },
                 { data: 'status', name: 'status', className: 'text-center' },
                 { data: 'action', name: 'action', className: 'text-center' },
                 { data: 'agent_id', name: 'theagent.fullname' },

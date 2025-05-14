@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 const TASK = (() => {
     const isAdmin = $('#permission').text();
-    const orderTable = isAdmin ? 3 : 2;
+    const orderTable = isAdmin ? 4 : 3;
     let this_task = {}
 
     // load data
@@ -43,6 +43,7 @@ const TASK = (() => {
                 },
             },
             columns: [
+                { data: 'id', name: 'id', className: 'text-center' },
                 { data: 'status', name: 'status', className: 'text-center' },
                 ...(isAdmin ? [{ data: 'action', name: 'action', className: 'text-center' }] : []),
                 { data: 'agent_id', name: 'theagent.fullname' },
