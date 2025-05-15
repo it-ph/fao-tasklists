@@ -37,7 +37,7 @@
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada text-white"></i>
-                    <span class="badge bg-danger rounded-pill change_request_counts">{{ auth()->user()->isAdmin() ? $change_requests->count() : $change_requests->OMPermission()->count() }}</span>
+                    <span class="badge bg-danger rounded-pill change_request_counts"></span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                     aria-labelledby="page-header-notifications-dropdown">
@@ -57,7 +57,7 @@
                                     </span>
                                 </div>
                                 <div class="media-body">
-                                    <h6 class="mt-0 mb-1 change_re quest_counts" key="t-shipped">There are <strong>{{ auth()->user()->isAdmin() ? $change_requests->count() : $change_requests->OMPermission()->count() }}</strong></h6>
+                                    <h6 class="mt-0 mb-1 change_re quest_counts" key="t-shipped">There are <strong></strong></h6>
                                     <div class="font-size-12 text-muted">
                                         <p class="mb-1" key="t-grammer">New Change Requests</p>
                                     </div>

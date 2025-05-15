@@ -65,14 +65,6 @@ const CHANGEREQUEST = (() => {
         });
     });
 
-    function refreshChangeRequestCount() {
-        axios(`${APP_URL}/change-request/count`).then(function(response) {
-            $('.change_request_counts').text(response.data.count);
-        }).catch(error => {
-            toastr.error(error);
-        });
-    }
-
     // load data
     this_change_request.load = () => {
         $.fn.dataTable.ext.errMode = 'none';

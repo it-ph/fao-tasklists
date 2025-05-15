@@ -85,6 +85,18 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+            refreshChangeRequestCount();
+        });
+
+        function refreshChangeRequestCount() {
+            axios(`${APP_URL}/change-request/count`).then(function(response) {
+                $('.change_request_counts').text(response.data.count);
+                }).catch(error => {
+                toastr.error(error);
+            });
+        }
     </script>
 </body>
 
