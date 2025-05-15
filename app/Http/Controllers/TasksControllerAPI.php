@@ -162,9 +162,10 @@ class TasksControllerAPI extends Controller
 
             // Filter tasks based on user permission
             switch ($userPermission) {
+                case 'superadmin':
                 case 'admin':
                     $tasks = $tasks;
-
+                    break;
                 case 'operations manager':
                     $tasks = $tasks->OMPermission();
                     break;

@@ -23,8 +23,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClusterControllerAPI;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserClientController;
+use App\Http\Controllers\ChangeRequestController;
 use App\Http\Controllers\PermissionControllerAPI;
 use App\Http\Controllers\ClientActivityController;
+use App\Http\Controllers\ChangeRequestControllerAPI;
 use App\Http\Controllers\DashboardActivityController;
 
 // LOGIN
@@ -147,6 +149,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
         Route::get('/show/{id}', [ChangeRequestController::class,'show'])->name('change-request.show');
         Route::post('/update/{id}', [ChangeRequestController::class,'update'])->name('change-request.update');
         Route::post('/delete/{id}', [ChangeRequestController::class,'destroy'])->name('change-request.delete');
+        Route::post('/close/{id}', [ChangeRequestController::class,'close'])->name('change-request.close');
     });
 
 

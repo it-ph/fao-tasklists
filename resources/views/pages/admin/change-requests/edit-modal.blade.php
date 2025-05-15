@@ -1,23 +1,37 @@
-<div class="modal fade" id="editClusterModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-    aria-labelledby="editClusterModalLabel" aria-hidden="true">
+<div class="modal fade" id="editChangeRequestModal" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+    aria-labelledby="editChangeRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editClusterModalLabel">Edit Cluster</h5>
+                <h5 class="modal-title" id="editChangeRequestModalLabel">Edit Change Request</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editClusterForm" method="POST">
+                <form id="editChangeRequestForm" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="name" class="col-form-label custom-label"><strong>CLUSTER NAME:<span class="important">*</span></strong></label>
-                        <input type="text" class="form-control" name="name" id="name_edit">
-                        <label id="name_editError" class="error"></label>
+                        <label for="name" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
+                        <select class="form-control select2" name="task_id" id="task_id_edit" style="width:100%;">
+                            <option value="" selected disabled>-- Select Task ID -- </option>
+                            @foreach ($tasks as $task)
+                            @if($task)
+                            <option {{ old('task_id')==$task->id ? "selected" : "" }}
+                                value="{{ $task->id }}">{{ ucwords($task->id) }}
+                            </option>
+                            @endif
+                            @endforeach
+                        </select>
+                        <label id="task_id_editError" class="error"></label>
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">*</span></strong></label>
+                        <textarea class="form-control" name="remarks" id="remarks_edit" rows="5"></textarea>
+                        <label id="remarks_editError" class="error"></label>
                     </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" id="btn_update" class="btn btn-primary waves-effect waves-light"><i class="fa fa-save"></i> Update</button>
-                <button type="button" class="btn btn-danger waves-effect waves-light" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="btn-times" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
                 </form>
             </div>
         </div>

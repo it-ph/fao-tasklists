@@ -2,10 +2,14 @@
 
 namespace App\Http\Requests;
 
+use App\Traits\ResponseTraits;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreUpdateChangeRequest extends FormRequest
 {
+    use ResponseTraits;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +17,7 @@ class StoreUpdateChangeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +28,22 @@ class StoreUpdateChangeRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'task_id' => ['required'],
+            'remarks' => ['required'],
         ];
+    }
+
+    public function messages()
+    {
+        return [
+            'task_id.required' => 'Task ID is required.',
+            'remarks.required' => 'Remarks is required.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $response = $this->failedValidationResponse($validator->errors());
+        throw new HttpResponseException(response()->json($response, 200));
     }
 }

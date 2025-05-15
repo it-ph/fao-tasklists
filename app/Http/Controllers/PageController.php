@@ -46,7 +46,29 @@ class PageController extends GlobalVariableController
      */
     public function showChangeRequests()
     {
-        $tasks = Task::all();
+        $tasks = Task::query()
+            ->select('id')
+            ->where('status','Completed');
+
+            // Get user permission
+            $userPermission = auth()->user()->permission;
+
+            // Filter tasks based on user permission
+            switch ($userPermission) {
+                case 'superadmin':
+                case 'admin':
+                    $tasks = $tasks->get();
+                    break;
+                case 'operations manager':
+                    $tasks = $tasks->OMPermission()->get();
+                    break;
+                case 'team leader':
+                case 'accountant':
+                    $tasks = $tasks->AccountantPermission()->get();
+                    break;
+                default:
+                    break;
+            }
         return view('pages.admin.change-requests.list',compact('tasks'));
     }
 

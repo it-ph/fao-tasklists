@@ -20,6 +20,8 @@ class CreateChangeRequestsTable extends Migration
             $table->integer('cluster_id');
             $table->string('status')->default('Open'); // Open and Closed
             $table->longText('remarks')->nullable();
+            $table->dateTime('closed_at')->nullable();
+            $table->integer('changed_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

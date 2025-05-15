@@ -32,7 +32,7 @@
                             <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addChangeRequestModal"><i class="fas fa-plus"></i> Create</button>
                         </div>
                     </div>
-                    <table id="tbl_cluster" class="table table-bordered table-striped table-sm nowrap w-100">
+                    <table id="tbl_change_request" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Task ID</th>
@@ -40,6 +40,8 @@
                                 <th>Cluster</th>
                                 <th>Remarks</th>
                                 <th>Status</th>
+                                <th>Closed At</th>
+                                <th>Closed By</th>
                                 <th width="5%"></th>
                             </tr>
                         </thead>
@@ -64,5 +66,5 @@
 @endsection
 
 @section('custom-js')
-    {{-- <script src="{{asset('scripts/change-requests.js')}}"></script> --}}
+    <script src="{{asset('scripts/change-requests.js')}}"></script>
 @endsection

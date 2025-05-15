@@ -73,7 +73,7 @@ const CHANGEREQUEST = (() => {
         $('#tbl_change_request').DataTable({
             // "bStateSave": true,
             language: {
-                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw mt-3"></i><span class="sr-only">Loading...</span> ',
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> ',
                 oPaginate: {
                     sNext: '<i class="fa fa-forward"></i>',
                     sPrevious: '<i class="fa fa-backward"></i>',
@@ -88,7 +88,6 @@ const CHANGEREQUEST = (() => {
                 [10, 20, 50, -1],
                 [10, 20, 50, "All"]
             ],
-            order: [0, "asc"],
             processing: true,
             serverSide: true,
             ajax: {
@@ -99,24 +98,15 @@ const CHANGEREQUEST = (() => {
                 },
             },
             columns: [
-                { data: 'name', name: 'name' },
-                { data: 'updated_at', name: 'updated_at' },
+                { data: 'task_id', name: 'task_id', className: 'text-center' },
+                { data: 'thecreatedby.fullname', name: 'thecreatedby.fullname' },
+                { data: 'thecluster.name', name: 'thecluster.name' },
+                { data: 'remarks', name: 'remarks' },
+                { data: 'status', name: 'status', className: 'text-center' },
+                { data: 'closed_at', name: 'closed_at', className: 'text-center' },
+                { data: 'changed_by', name: 'thechangedby.fullname' },
                 { data: 'action', name: 'action', className: 'text-center' },
             ],
-            dom: `
-                <"d-flex justify-content-between align-items-center mb-2"
-                    <"d-flex align-items-center gap-2 left-section"B l>
-                    <"right-section"f>
-                >
-                rt
-                <"d-flex justify-content-between align-items-center mt-2"
-                    <"info-section"i>
-                    <"pagination-section"p>
-                >
-            `,
-            buttons: [
-                'excel',
-            ]
         });
 
         $.fn.dataTable.ext.errMode = function(settings, helpPage, message) {
@@ -124,20 +114,53 @@ const CHANGEREQUEST = (() => {
         };
     }
 
+    // edit data
+    this_change_request.edit = (id) => {
+        $('#editChangeRequestModal').modal('show');
+        $('.error').hide();
+        $('.error').text('');
+        $("#task_id_edit").val(null).trigger("change");
+        $("#remarks_edit").text("");
+        $('#task_id_edit').prop("disabled", false);
+        $('#remarks_edit').removeAttr('readonly');
+        $('#btn_update').empty();
+        $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
+        $('#btn_update').prop("disabled", true);
+        $('#btn_update').prop("disabled", true);
+        axios(`${APP_URL}/change-request/show/${id}`).then(function(response) {
+            _change_request_id = id;
+            $("#task_id_edit").val(response.data.data.task_id).trigger("change");
+            $("#remarks_edit").text(response.data.data.remarks);
+            $('#btn_update').empty();
+            $('#btn_update').append('<i class="fa fa-save"></i> Update');
+            $('#btn_update').prop("disabled", false);
+            $('.error').hide();
+            $('.error').text('');
+            toastr.success(response.data.message);
+        }).catch(error => {
+            toastr.error(error);
+        });
+    }
+
     // show data
     this_change_request.show = (id) => {
         $('#editChangeRequestModal').modal('show');
         $('.error').hide();
         $('.error').text('');
-        $("#name_edit").val('');
+        $("#task_id_edit").val(null).trigger("change");
+        $('#task_id_edit').prop("disabled", true);
+        $('#remarks_edit').attr('readonly', 'true');
+        $("#remarks_edit").text("");
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
+        $('#btn_update').prop("disabled", true);
         axios(`${APP_URL}/change-request/show/${id}`).then(function(response) {
             _change_request_id = id;
-            $("#name_edit").val(response.data.data.name);
+            $("#task_id_edit").val(response.data.data.task_id).trigger("change");
+            $("#remarks_edit").text(response.data.data.remarks);
             $('#btn_update').empty();
-            $('#btn_update').append('<i class="fa fa-save"></i> Update');
+            $('#btn_update').append('<i class="fa fa-check"></i> Mark as Closed');
             $('#btn_update').prop("disabled", false);
             $('.error').hide();
             $('.error').text('');
@@ -205,6 +228,56 @@ const CHANGEREQUEST = (() => {
             }
         });
     });
+
+    // close change request
+    this_change_request.close = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#00599D",
+            cancelButtonColor: "#F46A6A",
+            confirmButtonText: 'Yes, close it!',
+            cancelButtonText: 'No, cancel!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#btn-close-' + id).empty();
+                $('#btn-close-' + id).append('<i class="fa fa-spinner fa-spin"></i>');
+                $('#btn-close-' + id).prop("disabled", true);
+                // Send a POST request
+                axios({
+                    method: 'post',
+                    url: `${APP_URL}/change-request/close/${id}`,
+                }).then(function(response) {
+                    console.log(response.data.status)
+                    if (response.data.status === 'success') {
+                        $('#loader').show();
+                        $("#tbl_change_request > tbody").empty();
+                        $("#tbl_change_request_info").hide();
+                        $("#tbl_change_request_paginate").hide();
+                        CHANGEREQUEST.load();
+                        $('.error').hide();
+                        $('.error').text('');
+                        toastr.success(response.data.message);
+                    } else if (response.data.status === 'warning') {
+                        Object.keys(response.data.error).forEach((key) => {
+                            $(`#${[key]}_editError`).show();
+                            $(`#${[key]}_editError`).text(response.data.error[key][0]);
+                        });
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                    $('#btn-close-' + id).empty();
+                    $('#btn-close-' + id).append('<i class="fa fa-check"></i>');
+                    $('#btn-close-' + id).prop("disabled", false);
+                }).catch(error => {
+                    toastr.error(error);
+                });
+            }
+        });
+    }
 
     // destroy data
     this_change_request.destroy = (id) => {

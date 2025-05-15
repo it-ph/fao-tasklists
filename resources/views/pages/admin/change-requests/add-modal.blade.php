@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="storeChangeRquestForm" method="POST">
+                <form id="storeChangeRequestForm" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="name" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
@@ -25,7 +25,8 @@
                     </div>
                     <div class="form-group">
                         <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">*</span></strong></label>
-                        <textarea class="form-control" name="remarks" id="remarks"></textarea>
+                        <textarea class="form-control" name="remarks" id="remarks" rows="5"></textarea>
+                        <label id="remarksError" class="error"></label>
                     </div>
             </div>
             <div class="modal-footer">
