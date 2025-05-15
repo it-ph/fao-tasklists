@@ -27,9 +27,9 @@
                                     @endforeach
                             </select>
                             <label id="cluster_id_editError" class="error"></label>
-                        @elseif(auth()->user()->thepermisssion->cluster_id)
-                            <input class="form-control" type="hidden" name="cluster_id" value="{{ auth()->user()->thepermisssion->cluster_id }}">
-                            <input class="form-control" type="text" disabled value="{{ auth()->user()->thepermisssion->thecluster->name }}">
+                        @elseif(auth()->user()->cluster_id)
+                            <input class="form-control" type="hidden" name="cluster_id" value="{{ auth()->user()->cluster_id }}">
+                            <input class="form-control" type="text" disabled value="{{ auth()->user()->thecluster->name }}">
                         @endif
 
                     </div>

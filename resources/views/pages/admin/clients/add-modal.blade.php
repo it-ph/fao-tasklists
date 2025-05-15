@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group">
                         <label for="cluster_id" class="col-form-label custom-label"><strong>CLUSTER:<span class="important">*</span></strong></label>
-                        @if(Auth::user()->isAdmin())
+                        @if(auth()->user()->isAdmin())
                             <select class="form-control select2" name="cluster_id" id="cluster_id" style="width:100%;">
                                 <option value="" selected disabled>-- Select Cluster -- </option>
                                     @foreach ($clusters as $cluster )
@@ -28,9 +28,9 @@
                                     @endforeach
                             </select>
                             <label id="cluster_idError" class="error"></label>
-                        @elseif(Auth::user()->thepermisssion->cluster_id)
-                            <input class="form-control" type="hidden" name="cluster_id" value="{{ Auth::user()->thepermisssion->cluster_id }}">
-                            <input class="form-control" type="text" disabled value="{{ Auth::user()->thepermisssion->thecluster->name }}">
+                        @elseif(auth()->user()->cluster_id)
+                            <input class="form-control" type="hidden" name="cluster_id" value="{{ auth()->user()->cluster_id }}">
+                            <input class="form-control" type="text" disabled value="{{ auth()->user()->thecluster->name }}">
                         @endif
                     </div>
             </div>

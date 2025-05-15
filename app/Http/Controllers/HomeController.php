@@ -10,16 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class HomeController extends Controller
+class HomeController extends GlobalVariableController
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
+        parent::__construct();
     }
 
     /**

@@ -32,11 +32,12 @@
                 </button>
             </div>
 
+            @if(auth()->user()->isOperationsManagerOrAdmin())
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada text-white"></i>
-                    <span class="badge bg-danger rounded-pill">23</span>
+                    <span class="badge bg-danger rounded-pill change_request_counts">{{ auth()->user()->isAdmin() ? $change_requests->count() : $change_requests->OMPermission()->count() }}</span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                     aria-labelledby="page-header-notifications-dropdown">
@@ -48,7 +49,7 @@
                         </div>
                     </div>
                     <div data-simplebar style="max-height: 230px;">
-                        <a href="" class="text-reset notification-item">
+                        <a href="{{ url('change-requests') }}" class="text-reset notification-item">
                             <div class="media">
                                 <div class="avatar-xs me-3">
                                     <span class="avatar-title bg-danger rounded-circle font-size-16">
@@ -56,9 +57,9 @@
                                     </span>
                                 </div>
                                 <div class="media-body">
-                                    <h6 class="mt-0 mb-1" key="t-shipped">There are <strong>23</strong></h6>
+                                    <h6 class="mt-0 mb-1 change_re quest_counts" key="t-shipped">There are <strong>{{ auth()->user()->isAdmin() ? $change_requests->count() : $change_requests->OMPermission()->count() }}</strong></h6>
                                     <div class="font-size-12 text-muted">
-                                        <p class="mb-1" key="t-grammer">Change Requests</p>
+                                        <p class="mb-1" key="t-grammer">New Change Requests</p>
                                     </div>
                                 </div>
                             </div>
@@ -66,6 +67,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"

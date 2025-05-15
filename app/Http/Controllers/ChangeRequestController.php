@@ -81,4 +81,16 @@ class ChangeRequestController extends Controller
 
         return $this->returnResponse($result);
     }
+
+    public function count()
+    {
+        $change_requests = ChangeRequest::query()
+            ->where('status','Open');
+
+        $count = auth()->user()->isAdmin()
+            ? $change_requests->count()
+            : $change_requests->OMPermission()->count();
+
+        return response()->json(['count' => $count]);
+    }
 }

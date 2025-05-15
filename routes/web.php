@@ -150,6 +150,7 @@ Route::group(['middleware' => ['verify.access','web','active.user'],],function (
         Route::post('/update/{id}', [ChangeRequestController::class,'update'])->name('change-request.update');
         Route::post('/delete/{id}', [ChangeRequestController::class,'destroy'])->name('change-request.delete');
         Route::post('/close/{id}', [ChangeRequestController::class,'close'])->name('change-request.close');
+        Route::get('/count', [ChangeRequestController::class,'count'])->name('change-request.count');
     });
 
 

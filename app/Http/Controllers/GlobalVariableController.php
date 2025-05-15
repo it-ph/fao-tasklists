@@ -7,13 +7,14 @@ use App\Models\Client;
 use App\Models\Cluster;
 use App\Models\Permission;
 use App\Models\UserProfile;
+use App\Models\ChangeRequest;
 use App\Models\ClientActivity;
 use App\Models\DashboardActivity;
 use Illuminate\Support\Facades\View;
 
 class GlobalVariableController extends Controller
 {
-    public $clusters,$clients,$client_activities,$users,$permissions,$tls,$oms,$functions;
+    public $clusters,$clients,$client_activities,$users,$permissions,$tls,$oms,$functions,$change_requests;
 
     public function __construct()
     {
@@ -43,6 +44,9 @@ class GlobalVariableController extends Controller
             ->distinct()
             ->orderBy('function')
             ->get();
+
+        $this->change_requests = ChangeRequest::query()
+            ->where('status','Open');
 
         // $this->permissions = Permission::with([
         //         'theuser:id,email',
@@ -77,5 +81,6 @@ class GlobalVariableController extends Controller
         View::share('tls', $this->tls);
         View::share('oms', $this->oms);
         View::share('functions', $this->functions);
+        View::share('change_requests', $this->change_requests);
     }
 }

@@ -43,6 +43,7 @@ const CHANGEREQUEST = (() => {
                         $("#name").val('');
                         $('.error').hide();
                         $('.error').text('');
+                        refreshChangeRequestCount();
                         CHANGEREQUEST.load();
                         $('#addChangeRequestModal').modal('hide');
                         toastr.success(response.data.message);
@@ -63,6 +64,14 @@ const CHANGEREQUEST = (() => {
             }
         });
     });
+
+    function refreshChangeRequestCount() {
+        axios(`${APP_URL}/change-request/count`).then(function(response) {
+            $('.change_request_counts').text(response.data.count);
+        }).catch(error => {
+            toastr.error(error);
+        });
+    }
 
     // load data
     this_change_request.load = () => {
@@ -257,6 +266,7 @@ const CHANGEREQUEST = (() => {
                         $("#tbl_change_request > tbody").empty();
                         $("#tbl_change_request_info").hide();
                         $("#tbl_change_request_paginate").hide();
+                        refreshChangeRequestCount()
                         CHANGEREQUEST.load();
                         $('.error').hide();
                         $('.error').text('');
