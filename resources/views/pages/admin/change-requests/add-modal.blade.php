@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">*</span></strong></label>
-                        <textarea class="form-control" name="remarks" id="remarks" rows="5"></textarea>
+                        <textarea class="form-control" name="remarks" id="remarks" rows="5">{{ "START DATE/TIME: \nEND DATE/TIME: \nAHT: " }}</textarea>
                         <label id="remarksError" class="error"></label>
                     </div>
             </div>

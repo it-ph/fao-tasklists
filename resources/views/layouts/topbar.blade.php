@@ -57,7 +57,7 @@
                                     </span>
                                 </div>
                                 <div class="media-body">
-                                    <h6 class="mt-0 mb-1 change_re quest_counts" key="t-shipped">There are <strong></strong></h6>
+                                    <h6 class="mt-0 mb-1" key="t-shipped">There are <strong><span class="change_request_counts"></span></strong></h6>
                                     <div class="font-size-12 text-muted">
                                         <p class="mb-1" key="t-grammer">New Change Requests</p>
                                     </div>

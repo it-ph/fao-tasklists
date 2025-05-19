@@ -40,7 +40,7 @@ const CHANGEREQUEST = (() => {
                         $("#tbl_change_request_info").hide();
                         $("#tbl_change_request_paginate").hide();
                         $('#storeChangeRequestForm')[0].reset();
-                        $("#name").val('');
+                        $("#task_id").val(null).trigger("change");
                         $('.error').hide();
                         $('.error').text('');
                         refreshChangeRequestCount();
