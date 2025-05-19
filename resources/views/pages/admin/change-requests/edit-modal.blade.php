@@ -10,6 +10,7 @@
                 <form id="editChangeRequestForm" method="POST">
                     @csrf
                     <div class="form-group">
+                        <input type="hidden" id="cr_update_close">
                         <label for="name" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="task_id" id="task_id_edit" style="width:100%;">
                             <option value="" selected disabled>-- Select Task ID -- </option>

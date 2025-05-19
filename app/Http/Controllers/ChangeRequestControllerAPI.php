@@ -76,7 +76,10 @@ class ChangeRequestControllerAPI extends Controller
                         //     $action .= '<button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>';
                         //     break;
                         case 'Open':
-                            $action .= ' <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Mark as Closed" onclick=CHANGEREQUEST.close('.$value->id.') id="btn-close-'.$value->id.'"><i class="fas fa-check"></i></button>';
+                            $action .= auth()->user()->isOperationsManagerOrAdmin()
+                            ? ' <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Mark as Closed" onclick=CHANGEREQUEST.close('.$value->id.') id="btn-close-'.$value->id.'"><i class="fas fa-check"></i></button>'
+                            : '';
                             break;
                         case 'Closed':
                             $action = '-';

@@ -120,6 +120,7 @@ const CHANGEREQUEST = (() => {
         $('#editChangeRequestModal').modal('show');
         $('.error').hide();
         $('.error').text('');
+        $("#cr_update_close").val("update");
         $("#task_id_edit").val(null).trigger("change");
         $("#remarks_edit").text("");
         $('#task_id_edit').prop("disabled", false);
@@ -148,6 +149,7 @@ const CHANGEREQUEST = (() => {
         $('#editChangeRequestModal').modal('show');
         $('.error').hide();
         $('.error').text('');
+        $("#cr_update_close").val("close");
         $("#task_id_edit").val(null).trigger("change");
         $('#task_id_edit').prop("disabled", true);
         $('#remarks_edit').attr('readonly', 'true');
@@ -188,6 +190,7 @@ const CHANGEREQUEST = (() => {
             if (result.isConfirmed) {
                 id = _change_request_id;
                 var formdata = new FormData(this);
+                var cr_update_close = $("#cr_update_close").val();
                 $('.error').hide();
                 $('.error').text('');
                 $('#btn_update').empty();
@@ -196,7 +199,7 @@ const CHANGEREQUEST = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: `${APP_URL}/change-request/update/${id}`,
+                    url: `${APP_URL}/change-request/${cr_update_close}/${id}`,
                     data: formdata
                 }).then(function(response) {
                     console.log(response.data.status)
@@ -207,6 +210,7 @@ const CHANGEREQUEST = (() => {
                         $("#tbl_change_request_paginate").hide();
                         $('#editChangeRequestForm')[0].reset();
                         $("#name_edit").val('');
+                        refreshChangeRequestCount();
                         CHANGEREQUEST.load();
                         $('.error').hide();
                         $('.error').text('');
@@ -258,7 +262,7 @@ const CHANGEREQUEST = (() => {
                         $("#tbl_change_request > tbody").empty();
                         $("#tbl_change_request_info").hide();
                         $("#tbl_change_request_paginate").hide();
-                        refreshChangeRequestCount()
+                        refreshChangeRequestCount();
                         CHANGEREQUEST.load();
                         $('.error').hide();
                         $('.error').text('');
