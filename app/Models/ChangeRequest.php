@@ -20,7 +20,17 @@ class ChangeRequest extends Model
         return $query->where('cluster_id',auth()->user()->cluster_id);
     }
 
-    public function scopeUserPermission($query)
+    public function scopeTLPermission($query)
+    {
+        $user = auth()->user();
+        return $query->whereHas('thepermission', function ($q) use ($user){
+                $q->where('tl_id',$user->id);
+            })
+            ->where('cluster_id',$user->cluster_id)
+            ->orwhere('created_by',$user->id);
+    }
+
+    public function scopeAccountantPermission($query)
     {
         return $query->where('created_by',auth()->user()->id);
     }
@@ -33,6 +43,11 @@ class ChangeRequest extends Model
     public function thechangedby()
     {
         return $this->belongsTo(User::class, 'changed_by')->withTrashed();
+    }
+
+    public function thepermission()
+    {
+        return $this->hasOne(User::class, 'id', 'created_by')->withTrashed();
     }
 
     public function thetask()

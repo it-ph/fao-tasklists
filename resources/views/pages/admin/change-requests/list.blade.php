@@ -40,6 +40,7 @@
                                 <th>Cluster</th>
                                 <th>Remarks</th>
                                 <th>Status</th>
+                                <th>Created At</th>
                                 <th>Closed At</th>
                                 <th>Closed By</th>
                                 <th width="5%"></th>

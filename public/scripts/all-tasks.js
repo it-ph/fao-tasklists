@@ -31,8 +31,8 @@ const TASK = (() => {
                 [10, 20, 50, 100],
                 [10, 20, 50, 100]
             ],
-            order: [orderTable, "desc"],
-            columnDefs: [{ type: 'date', 'targets': [orderTable] }],
+            order: [4, "desc"],
+            columnDefs: [{ type: 'date', 'targets': [4] }],
             processing: true,
             serverSide: true,
             ajax: {
@@ -45,7 +45,8 @@ const TASK = (() => {
             columns: [
                 { data: 'id', name: 'id', className: 'text-center' },
                 { data: 'status', name: 'status', className: 'text-center' },
-                ...(isAdmin ? [{ data: 'action', name: 'action', className: 'text-center' }] : []),
+                // ...(isAdmin ? [{ data: 'action', name: 'action', className: 'text-center' }] : []),
+                { data: 'action', name: 'action', className: 'text-center' },
                 { data: 'agent_id', name: 'theagent.fullname' },
                 { data: 'shift_date', name: 'shift_date', className: 'text-center' },
                 { data: 'date_received', name: 'date_received', className: 'text-center' },

@@ -89,6 +89,7 @@ const CHANGEREQUEST = (() => {
                 [10, 20, 50, -1],
                 [10, 20, 50, "All"]
             ],
+            // order: [4, "desc"],
             processing: true,
             serverSide: true,
             ajax: {
@@ -104,6 +105,7 @@ const CHANGEREQUEST = (() => {
                 { data: 'thecluster.name', name: 'thecluster.name' },
                 { data: 'remarks', name: 'remarks' },
                 { data: 'status', name: 'status', className: 'text-center' },
+                { data: 'created_at', name: 'created_at', className: 'text-center' },
                 { data: 'closed_at', name: 'closed_at', className: 'text-center' },
                 { data: 'changed_by', name: 'thechangedby.fullname' },
                 { data: 'action', name: 'action', className: 'text-center' },
@@ -122,7 +124,7 @@ const CHANGEREQUEST = (() => {
         $('.error').text('');
         $("#cr_update_close").val("update");
         $("#task_id_edit").val(null).trigger("change");
-        $("#remarks_edit").text("");
+        $("#remarks_edit").text(null);
         $('#task_id_edit').prop("disabled", false);
         $('#remarks_edit').removeAttr('readonly');
         $('#btn_update').empty();
@@ -152,8 +154,8 @@ const CHANGEREQUEST = (() => {
         $("#cr_update_close").val("close");
         $("#task_id_edit").val(null).trigger("change");
         $('#task_id_edit').prop("disabled", true);
-        $('#remarks_edit').attr('readonly', 'true');
-        $("#remarks_edit").text("");
+        // $('#remarks_edit').attr('readonly', 'true');
+        $("#remarks_edit").text(null);
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
@@ -161,7 +163,7 @@ const CHANGEREQUEST = (() => {
         axios(`${APP_URL}/change-request/show/${id}`).then(function(response) {
             _change_request_id = id;
             $("#task_id_edit").val(response.data.data.task_id).trigger("change");
-            $("#remarks_edit").text(response.data.data.remarks);
+            $("#remarks_edit").text(response.data.data.remarks + '\n');
             $('#btn_update').empty();
             $('#btn_update').append('<i class="fa fa-check"></i> Mark as Closed');
             $('#btn_update').prop("disabled", false);

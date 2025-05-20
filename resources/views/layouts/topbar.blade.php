@@ -32,7 +32,7 @@
                 </button>
             </div>
 
-            @if(auth()->user()->isOperationsManagerOrAdmin())
+            @if(auth()->user()->isOperationsManagerOrAdmin() || auth()->user()->isTeamLeaderOrAdmin())
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

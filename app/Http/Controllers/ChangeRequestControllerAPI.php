@@ -18,6 +18,7 @@ class ChangeRequestControllerAPI extends Controller
                     'thecluster:id,name',
                     'thechangedby:id,fullname',
                 ])
+                ->orderBy('status','desc')
                 ->orderBy('created_at','desc');
 
                 // Get user permission
@@ -33,14 +34,19 @@ class ChangeRequestControllerAPI extends Controller
                         $change_requests = $change_requests->OMPermission();
                         break;
                     case 'team leader':
+                        $change_requests = $change_requests->TLPermission();
+                        break;
                     case 'accountant':
-                        $change_requests = $change_requests->UserPermission();
+                        $change_requests = $change_requests->AccountantPermission();
                         break;
                     default:
                         break;
                 }
 
             return datatables($change_requests)
+                ->editColumn('created_at', (function($value){
+                    return $value->created_at ? date('d-M-y h:i:s a', strtotime($value->created_at)) : '';
+                }))
                 ->editColumn('changed_by', function ($value) {
                     return $value->thechangedby ? $value->thechangedby->fullname : '';
                 })
@@ -76,7 +82,7 @@ class ChangeRequestControllerAPI extends Controller
                         //     $action .= '<button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>';
                         //     break;
                         case 'Open':
-                            $action .= auth()->user()->isOperationsManagerOrAdmin()
+                            $action .= auth()->user()->isOperationsManagerOrAdmin() || auth()->user()->isTeamLeaderOrAdmin()
                             ? ' <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>
                                 <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Mark as Closed" onclick=CHANGEREQUEST.close('.$value->id.') id="btn-close-'.$value->id.'"><i class="fas fa-check"></i></button>'
                             : '';

@@ -66,14 +66,24 @@ class ChangeRequestController extends Controller
         try {
             $change_request = $this->model->findOrfail($id);
             $status = $request['status'];
+            $remarks = $request['remarks'] ?? null;  // Default to null if 'remarks' is not set
             $closed_at = Carbon::now();
             $changed_by = auth()->user()->id;
 
-            $change_request->update([
+            // Prepare the update data
+            $updateData = [
                 'status' => $status,
                 'closed_at' => $closed_at,
                 'changed_by' => $changed_by,
-            ]);
+            ];
+
+            // Only update 'remarks' if it's not empty
+            if ($remarks) {
+                $updateData['remarks'] = $remarks;
+            }
+
+            // Perform the update
+            $change_request->update($updateData);
 
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
@@ -90,6 +100,28 @@ class ChangeRequestController extends Controller
         $count = auth()->user()->isAdmin()
             ? $change_requests->count()
             : $change_requests->OMPermission()->count();
+
+        // Get user permission
+        $userPermission = auth()->user()->permission;
+
+        // Filter tasks based on user permission
+        switch ($userPermission) {
+            case 'superadmin':
+            case 'admin':
+                $count = $change_requests->count();
+                break;
+            case 'operations manager':
+                $count = $change_requests->OMPermission()->count();
+                break;
+            case 'team leader':
+                $count = $change_requests->TLPermission()->count();
+                break;
+            case 'accountant':
+                $count = $change_requests->AccountantPermission()->count();
+                break;
+            default:
+                break;
+        }
 
         return response()->json(['count' => $count]);
     }

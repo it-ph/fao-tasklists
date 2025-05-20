@@ -63,6 +63,8 @@ class PageController extends GlobalVariableController
                     $tasks = $tasks->OMPermission()->get();
                     break;
                 case 'team leader':
+                    $tasks = $tasks->TLPermission()->get();
+                    break;
                 case 'accountant':
                     $tasks = $tasks->AccountantPermission()->get();
                     break;

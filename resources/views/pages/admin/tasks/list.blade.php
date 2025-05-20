@@ -54,7 +54,8 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Status</th>
-                                @if(auth()->user()->isOperationsManagerOrAdmin())<th>Action</th>@endif
+                                {{-- @if(auth()->user()->isOperationsManagerOrAdmin())<th>Action</th>@endif --}}
+                                <th>Action</th>
                                 <th>Employee Name</th>
                                 <th>Shift Date</th>
                                 <th>Date Received</th>
