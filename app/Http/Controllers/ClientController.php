@@ -44,7 +44,8 @@ class ClientController extends GlobalVariableController
     public function getClients($cluster_id)
     {
         $clients = Client::query()
-            ->with('thecluster');
+            ->with('thecluster')
+            ->orderBy('name');
 
         if(Auth::user()->isAdmin())
         {
