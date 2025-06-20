@@ -25,21 +25,21 @@ use App\Models\TaskPause;
                         <input type="text" class="form-control" name="schedule" required>
 
                         <label for="function" class="col-form-label custom-label"><strong>FUNCTION:<span class="important">*</span></strong></label>
-                        {{-- <select name="function" class="form-control">
+                        <select name="function" class="form-control">
                             <option value="">-- Select Function --</option>
                             <option value="Procure to Pay (P2P)">Procure to Pay (P2P)</option>
                             <option value="Order to Cash (O2C)">Order to Cash (O2C)</option>
                             <option value="Record to Report (R2R)">Record to Report (R2R)</option>
                             <option value="Client Admin">Client Admin</option>
                             <option value="Personiv Admin">Personiv Admin</option>
-                        </select> --}}
+                        </select>
 
-                        <input list="functions" id="comboBox" name="function" class="form-control" placeholder="Type or select a function">
+                        {{-- <input list="functions" id="comboBox" name="function" class="form-control" placeholder="Type or select a function">
                         <datalist id="functions">
                             @foreach ($functions as $function)
                                 <option value="{{ $function->function }}">
                             @endforeach
-                        </datalist>
+                        </datalist> --}}
 
                         <input type="hidden" class="form-control" name="agent_id" value="{{ \Request::get('user_id') }}">
                     </div>
