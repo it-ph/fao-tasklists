@@ -58,15 +58,15 @@
                             </div>
                             <div class="card-body pt-3">
                                 <div class="p-2">
-                                    {{-- <form class="form-horizontal" method="POST" action="{{ route('login') }}"> --}}
-                                    <form class="form-horizontal" method="GET" action="{{ route('connect') }}">
+                                    {{-- <form class="form-horizontal" method="GET" action="{{ route('connect') }}"> --}}
+                                    <form id="signInForm" class="form-horizontal" method="POST" action="{{ route('login') }}">
                                         @csrf
-                                        {{-- <div class="mb-3">
-                                            <label for="username" class="form-label">Email Address</label>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email Address</label>
                                             <input name="email" type="email"
                                                 class="form-control @error('email') is-invalid @enderror"
-                                                value="{{ old('email') }}" id="username"
-                                                placeholder="Enter your email address" autocomplete="email" autofocus>
+                                                value="{{ old('email') }}" id="email" placeholder="Enter your email address"
+                                                autocomplete="email" autofocus>
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -74,14 +74,15 @@
                                             @enderror
                                         </div>
 
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <label class="form-label">Password</label>
                                             <div
                                                 class="input-group auth-pass-inputgroup @error('password') is-invalid @enderror">
                                                 <input type="password" name="password"
                                                     class="form-control  @error('password') is-invalid @enderror"
-                                                    id="userpassword" value="" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                    aria-label="Password" aria-describedby="password-addon">
+                                                    id="userpassword" value="" 
+                                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                    aria-label="Password" aria-describedby="password-addon" autocomplete="off">
                                                 @error('password')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
@@ -90,24 +91,24 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-check">
+                                        {{-- <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="remember"
                                                 {{ old('remember') ? 'checked' : '' }}>
                                             <label class="form-check-label" for="remember">
                                                 Remember me
                                             </label>
                                         </div> --}}
+                                        <br>
 
-                                        <div class="mt-3 d-grid">
-                                            <button class="btn btn-primary btn-block w-100 text-uppercase" type="submit">SIGN IN (SINGLE SIGN-ON)</button>
+                                        <div class="mt-1 mb-2 d-grid">
+                                            <button class="btn btn-primary btn-block w-100 text-uppercase" type="submit" id="btn_submit">SIGN IN</button>
                                         </div>
                                     </form>
                                 </div>
 
                             </div>
                         </div>
-                        <div class="mt-5 text-center">
-
+                        <div class="mt-4 text-center">
                             <div>Copyright © <script nonce="{{ csp_nonce() }}">document.write(new Date().getFullYear())</script>
                                 Personiv | FAO Tasklists v3.0.0
                             </div>
@@ -119,4 +120,8 @@
         </div>
         <!-- end account-pages -->
 
+    @endsection
+
+    @section('custom-js')
+        <script src="{{asset('scripts/auth.js')}}"></script>
     @endsection
