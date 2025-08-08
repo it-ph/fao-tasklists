@@ -35,6 +35,7 @@ class GlobalVariableController extends Controller
         $this->users = User::query()
             ->select('id','email','emp_id','fullname','last_name','employment_status')
             ->where('employment_status','active')
+            ->where('email','<>',NULL)
             ->orderBy('email', 'ASC')
             ->get();
 

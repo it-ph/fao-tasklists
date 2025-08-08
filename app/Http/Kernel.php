@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'om.admin' => \App\Http\Middleware\OperationsManagerOrAdmin::class,
         'tlom.admin' => \App\Http\Middleware\TLOMOrAdmin::class,
         'verify.access' => \App\Http\Middleware\VerifyAccess::class,
+        'twofactor' => \App\Http\Middleware\TwoFactor::class,
     ];
 }

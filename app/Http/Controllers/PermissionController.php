@@ -32,25 +32,28 @@ class PermissionController extends GlobalVariableController
     {
         $hrportal = env('HRPORTAL_URL');
         $response = Http::withOptions(['verify' => false])->get($hrportal.'/api/HREmployeeProfileAPI/eyJ0eXAiOiJKV1QiLCJub25jZSI6InlVTmhITXhtYnNkemdKdXBRTFZLV3c3RGprNUc4eW5uRzFUM2lrMzZPTE0iLC');
-        $jsonData = $response->json();
-        $users = json_encode($jsonData);
-        $hrportal_users = json_decode($users);
 
-        foreach($hrportal_users as $data)
+        if ($response->failed()) {
+            return redirect()->back()->with('error', "Failed to sync with the HR Portal.");
+        }
+
+        $jsonData = $response->json();
+
+        foreach($jsonData as $data)
         {
             User::updateOrcreate(
             [
-                'email' => $data->email,
+                'emp_id' => $data['emp_id'],
             ],
             [
-                'emp_id' => $data->emp_id,
-                'email' => $data->email,
-                'emp_code' => $data->emp_code,
-                'fullname' => $data->fullname,
-                'last_name' => $data->last_name,
-                'position' => $data->position,
-                'date_hired' => $data->date_hired,
-                'employment_status' => $data->employment_status,
+                'emp_id' => $data['emp_id'],
+                'email' => $data['email'],
+                'emp_code' => $data['emp_code'],
+                'fullname' => $data['fullname'],
+                'last_name' => $data['last_name'],
+                'position' => $data['position'],
+                'date_hired' => $data['date_hired'],
+                'employment_status' => $data['employment_status'],
                 'password' => null
             ]);
         }

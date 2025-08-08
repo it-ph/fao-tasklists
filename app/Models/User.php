@@ -13,7 +13,7 @@ class User extends Authenticatable
 
     // protected $connection = 'mysql2';
     protected $table = 'users';
-    protected $dates = ['two_facor_expires_at'];
+    protected $dates = ['two_factor_expires_at'];
 
     /**
      * The attributes that are mass assignable.

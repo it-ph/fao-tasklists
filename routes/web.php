@@ -13,12 +13,13 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ClusterController;
 use App\Http\Controllers\TaskLogController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserClientController;
 use App\Http\Controllers\ClientActivityController;
 use App\Http\Controllers\DashboardActivityController;
-use App\Http\Controllers\SettingsController;
 
 // LOGIN
 Auth::routes(['register' => false]);
@@ -57,10 +58,15 @@ Route::GET('redis/clear-cache', function () {
 // HRPORTAL API
 Route::GET('HREmployeeProfileAPI', [PermissionController::class, 'hrportalusers']);
 
+// 2FA
+Route::GET('verify/resend', [TwoFactorController::class, 'resend'])->name('verify.resend');
+Route::GET('verify', [TwoFactorController::class, 'index'])->name('verify.index');
+Route::POST('verify', [TwoFactorController::class, 'store'])->name('verify.store');
+
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
  */
-Route::group(['middleware' => ['verify.access','web','active.user'],],function () {
+Route::group(['middleware' => ['web','active.user','twofactor'],],function () {
 
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [HomeController::class, 'index'])->name('index');
