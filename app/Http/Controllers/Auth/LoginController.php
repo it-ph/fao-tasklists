@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use Adldap\Auth\BindException;
 use Adldap\Laravel\Facades\Adldap;
@@ -119,11 +120,16 @@ class LoginController extends Controller
 
         // Log the user in
         Auth::login($localUser);
-
-        // 2FA
-        $localUser->generateTwoFactorCode();
-        $localUser->notify(new TwoFactorCode());
-        return redirect()->intended('home');
+            $has_permission = Permission::where('user_id', auth()->user()->emp_id)->first();
+            if(!$has_permission) {
+                return redirect('unauthorized');
+            }
+            else {
+                // 2FA
+                $localUser->generateTwoFactorCode();
+                $localUser->notify(new TwoFactorCode());
+                return redirect()->intended('home');
+            }
     }
 
     // Fallback to local database authentication
@@ -133,11 +139,16 @@ class LoginController extends Controller
 
         if ($localUser && Hash::check($credentials['password'], $localUser->password)) {
             Auth::login($localUser);
-
-            // 2FA
-            $localUser->generateTwoFactorCode();
-            $localUser->notify(new TwoFactorCode());
-            return redirect()->intended('home');
+            $has_permission = Permission::where('user_id', auth()->user()->emp_id)->first();
+            if(!$has_permission) {
+                return redirect('unauthorized');
+            }
+            else {
+                // 2FA
+                $localUser->generateTwoFactorCode();
+                $localUser->notify(new TwoFactorCode());
+                return redirect()->intended('home');
+            }
         }
 
         return back()->withErrors(['email' => 'Invalid credentials or directory service unavailable. Please try again later.'])->withInput();
