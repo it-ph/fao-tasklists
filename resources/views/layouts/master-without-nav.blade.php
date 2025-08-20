@@ -31,7 +31,7 @@
 
     @yield('content')
 
-    @include('layouts.vendor-scripts')
+    {{-- @include('layouts.vendor-scripts') --}}
     @yield('custom-js')
     </body>
 </html>
