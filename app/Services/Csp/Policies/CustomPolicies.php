@@ -13,21 +13,28 @@ class CustomPolicies extends Policy
         $this->setDefaultPolicies();
         $this->addGoogleFontPolicies();
         $this->addDataImgPolicies();
-        $this->addJSResourcesPolicies();
     }
 
     private function setDefaultPolicies()
     {
-        return $this->addDirective(Directive::BASE, 'self')
-            ->addDirective(Directive::CONNECT, 'self')
-            ->addDirective(Directive::DEFAULT, 'self')
-            // ->addDirective(Directive::FORM_ACTION, 'self')
-            ->addDirective(Directive::IMG, 'self')
-            // ->addDirective(Directive::MEDIA, 'self')
-            // ->addDirective(Directive::OBJECT, 'self')
-            ->addDirective(Directive::FONT, 'self')
-            ->addDirective(Directive::SCRIPT, 'self')
-            ->addDirective(Directive::STYLE, 'self')
+        return $this->addDirective(Directive::BASE, Keyword::SELF)
+            ->addDirective(Directive::CONNECT, Keyword::SELF)
+            ->addDirective(Directive::DEFAULT, Keyword::SELF)
+            // ->addDirective(Directive::FORM_ACTION, Keyword::SELF)
+            ->addDirective(Directive::IMG, Keyword::SELF)
+            // ->addDirective(Directive::MEDIA, Keyword::SELF)
+            // ->addDirective(Directive::OBJECT, Keyword::SELF)
+            ->addDirective(Directive::FONT, Keyword::SELF)
+            ->addDirective(Directive::SCRIPT, [
+                Keyword::SELF,
+                Keyword::UNSAFE_INLINE,     // safe when nonce is used
+                Keyword::STRICT_DYNAMIC,
+                'https:',                   // allow HTTPS scripts with valid nonce
+            ])
+            ->addDirective(Directive::STYLE, [
+                Keyword::SELF,
+                Keyword::UNSAFE_INLINE      // required for Google Fonts and inline styles
+            ])
             ->addNonceForDirective(Directive::SCRIPT)
             ->addNonceForDirective(Directive::STYLE);
     }
@@ -55,17 +62,5 @@ class CustomPolicies extends Policy
                 'data:',
                 'blob:'
             ]);
-    }
-
-    private function addJSResourcesPolicies()
-    {
-        $this->addDirective(Directive::SCRIPT, [
-            'code.jquery.com',
-            'cdn.datatables.net',
-            'cdn.jsdelivr.net',
-            'ajax.googleapis.com',
-            'maxcdn.bootstrapcdn.com',
-            'cdnjs.cloudflare.com',
-        ]);
     }
 }

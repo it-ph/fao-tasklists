@@ -115,5 +115,6 @@
     @endsection
 
     @section('custom-js')
+        <script nonce="{{ csp_nonce() }}" src="{{ asset('assets/libs/jquery/jquery.min.js')}}"></script>
         <script src="{{asset('scripts/auth.js')}}"></script>
     @endsection
