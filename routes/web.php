@@ -78,7 +78,7 @@ Route::POST('verify', [TwoFactorController::class, 'store'])->name('verify.store
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
  */
-Route::group(['middleware' => ['web','active.user','twofactor'],],function () {
+Route::group(['middleware' => ['web','auth','active.user','twofactor'],],function () {
 
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('index', [HomeController::class, 'index'])->name('index');
