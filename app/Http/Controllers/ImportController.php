@@ -13,7 +13,7 @@ class ImportController extends Controller
     public function importTasks(Request $request)
     {
         $request->validate([
-            'import_file'   => 'required'
+            'import_file'   => 'required|file|mimes:xlsx',
         ],$messages = array('import_file.required' => 'File to upload is required'));
 
         $path = $request->file('import_file')->getRealPath();
@@ -35,7 +35,7 @@ class ImportController extends Controller
     public function importClientActivity(Request $request)
     {
         $request->validate([
-            'import_file'   => 'required'
+            'import_file'   => 'required|file|mimes:xlsx',
         ],$messages = array('import_file.required' => 'File to upload is required'));
 
         $path = $request->file('import_file')->getRealPath();
@@ -57,7 +57,7 @@ class ImportController extends Controller
     public function importDashboardActivity(Request $request)
     {
         $request->validate([
-            'import_file'   => 'required'
+            'import_file'   => 'required|file|mimes:xlsx',
         ],$messages = array('import_file.required' => 'File to upload is required'));
 
         $path = $request->file('import_file')->getRealPath();

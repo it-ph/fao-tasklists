@@ -12,6 +12,7 @@
         "adldap2/adldap2-laravel": "^6.1",
         "dcblogdev/laravel-microsoft-graph": "^3.2",
         "doctrine/dbal": "^3.6",
+        "ezyang/htmlpurifier": "^4.19",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
