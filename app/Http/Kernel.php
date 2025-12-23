@@ -76,5 +76,6 @@ class Kernel extends HttpKernel
         'verify.access' => \App\Http\Middleware\VerifyAccess::class,
         'twofactor' => \App\Http\Middleware\TwoFactor::class,
         'prevent.back.history' => \App\Http\Middleware\PreventBackHistory::class,
+        'validate.referer' => \App\Http\Middleware\ValidateReferer::class,
     ];
 }

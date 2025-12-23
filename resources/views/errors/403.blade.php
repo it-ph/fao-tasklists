@@ -3,5 +3,6 @@
 @section('code', '403')
 @section('message')
     <h2>Oops! you're FORBIDDEN to access this page.</h2>
+    <p>The referer you provided is not trusted, and the request has been blocked for your safety.</p>
     <p>If you think this is an error. please contact your system administrator.</p>
 @endsection

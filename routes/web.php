@@ -75,6 +75,10 @@ Route::GET('verify/resend', [TwoFactorController::class, 'resend'])->name('verif
 Route::GET('verify', [TwoFactorController::class, 'index'])->name('verify.index');
 Route::POST('verify', [TwoFactorController::class, 'store'])->name('verify.store');
 
+Route::get('/safe-redirect', function () {
+    return view('errors.403'); // Render the safe_redirect view
+})->name('safe_redirect');
+
 /**
  *  START OF AUTHORIZE & ACTIVE USERS
  */
@@ -127,7 +131,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
         // });
 
         Route::get('client-activity-upload-template', [ExportController::class, 'uploadClientActivityTemplate'])->name('upload.client-activity.template');
-        Route::post('client-activity-import', [ImportController::class, 'importClientActivity'])->name('client-activity-import');
+        Route::post('client-activity-import', [ImportController::class, 'importClientActivity'])->name('client-activity-import')->middleware('validate.referer');
 
         // Report
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
@@ -171,12 +175,12 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
             {
                 // Dashboard Activity
                 Route::get('dashboard-activity-upload-template', [ExportController::class, 'uploadDashboardActivityTemplate'])->name('upload.dashboard-activity.template');
-                Route::post('dashboard-activity-import', [ImportController::class, 'importDashboardActivity'])->name('dashboard-activity-import');
+                Route::post('dashboard-activity-import', [ImportController::class, 'importDashboardActivity'])->name('dashboard-activity-import')->middleware('validate.referer');
 
                 // Task Import / Export - removed
                 Route::get('tasks-upload', [TasksController::class, 'upload'])->name('upload');
                 Route::get('tasks-upload-task-template', [ExportController::class, 'uploadTasksTemplate'])->name('upload.tasks.template');
-                Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import');
+                Route::post('tasks-import', [ImportController::class, 'importTasks'])->name('tasks-import')->middleware('validate.referer');
 
                 // Clusters
                 Route::get('/clusters', [PageController::class, 'showClusters'])->name('clusters.index');
