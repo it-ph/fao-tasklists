@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'tlom.admin' => \App\Http\Middleware\TLOMOrAdmin::class,
         'verify.access' => \App\Http\Middleware\VerifyAccess::class,
         'twofactor' => \App\Http\Middleware\TwoFactor::class,
+        'prevent.back.history' => \App\Http\Middleware\PreventBackHistory::class,
     ];
 }
