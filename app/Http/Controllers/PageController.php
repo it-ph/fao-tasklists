@@ -48,7 +48,8 @@ class PageController extends GlobalVariableController
     {
         $tasks = Task::query()
             ->select('id')
-            ->where('status','Completed');
+            ->where('status','Completed')
+            ->where('end_date', '>=', now()->subMonth());
 
             // Get user permission
             $userPermission = auth()->user()->permission;

@@ -104,20 +104,15 @@ const CLIENT = (() => {
                 { data: 'updated_at', name: 'updated_at' },
                 { data: 'action', name: 'action', className: 'text-center' },
             ],
-            dom: `
-                <"d-flex justify-content-between align-items-center mb-2"
-                    <"d-flex align-items-center gap-2 left-section"B l>
-                    <"right-section"f>
-                >
-                rt
-                <"d-flex justify-content-between align-items-center mt-2"
-                    <"info-section"i>
-                    <"pagination-section"p>
-                >
-            `,
-            buttons: [
-                'excel',
-            ]
+            dom: 'Blfrtip',
+            buttons: [{
+                extend: 'excel',
+                text: '<i class="fa fa-download"></i> Export',
+                exportOptions: {
+                    // This will exclude the last column (Action)
+                    columns: ':not(:last-child)' // Excludes the last column (Action)
+                }
+            }],
         });
 
         $.fn.dataTable.ext.errMode = function(settings, helpPage, message) {

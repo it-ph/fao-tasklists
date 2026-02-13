@@ -110,6 +110,15 @@ const CHANGEREQUEST = (() => {
                 { data: 'changed_by', name: 'thechangedby.fullname' },
                 { data: 'action', name: 'action', className: 'text-center' },
             ],
+            dom: 'Blfrtip',
+            buttons: [{
+                extend: 'excel',
+                text: '<i class="fa fa-download"></i> Export',
+                exportOptions: {
+                    // This will exclude the last column (Action)
+                    columns: ':not(:last-child)' // Excludes the last column (Action)
+                }
+            }],
         });
 
         $.fn.dataTable.ext.errMode = function(settings, helpPage, message) {

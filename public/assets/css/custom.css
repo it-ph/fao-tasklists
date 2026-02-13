@@ -365,6 +365,35 @@ div.dataTables_wrapper div.dataTables_processing {
     background-color: transparent !important;
 }
 
+
+/* datatables length */
+
+.dataTables_length {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+
+/* datatables filter */
+
+.dataTables_filter {
+    float: right;
+}
+
+
+/* datatables info */
+
+.dataTables_wrapper .dataTables_info {
+    float: left;
+}
+
+
+/* datatables paginate */
+
+.dataTables_wrapper .dataTables_paginate {
+    float: right;
+}
+
 .hide-column {
     display: none;
 }

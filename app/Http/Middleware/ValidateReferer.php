@@ -23,7 +23,8 @@ class ValidateReferer
         // Check if the Referer is from the same domain
         if ($referer && parse_url($referer, PHP_URL_HOST) !== parse_url(config('app.url'), PHP_URL_HOST)) {
             // If the Referer is not from the same domain, redirect to the safe error page
-            return redirect()->route('safe_redirect');
+            // return redirect()->route('safe_redirect');
+            return response()->view('errors.403', [], 403);
         }
 
         // Continue with the request if it's safe
