@@ -40,7 +40,7 @@ Route::get('/', function () {
 
 // SSO
 Route::group(['middleware' => ['web', 'guest']], function(){
-    Route::get('login', [AuthController::class, 'login'])->name('login')->middleware('csp');
+    Route::get('login', [AuthController::class, 'login'])->name('login')->middleware(['csp','security.headers']);
     Route::get('connect', [AuthController::class, 'connect'])->name('connect');
 });
 

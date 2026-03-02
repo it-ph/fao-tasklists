@@ -25,16 +25,19 @@ class CustomPolicies extends Policy
             // ->addDirective(Directive::MEDIA, Keyword::SELF)
             // ->addDirective(Directive::OBJECT, Keyword::SELF)
             ->addDirective(Directive::FONT, Keyword::SELF)
+
+            // Scripts: nonce + strict-dynamic, NO unsafe-inline
             ->addDirective(Directive::SCRIPT, [
                 Keyword::SELF,
-                Keyword::UNSAFE_INLINE,     // safe when nonce is used
                 Keyword::STRICT_DYNAMIC,
-                'https:',                   // allow HTTPS scripts with valid nonce
             ])
+
+            // Styles: keep unsafe-inline for Google Fonts / inline styles
             ->addDirective(Directive::STYLE, [
                 Keyword::SELF,
-                Keyword::UNSAFE_INLINE      // required for Google Fonts and inline styles
+                Keyword::UNSAFE_INLINE
             ])
+
             ->addNonceForDirective(Directive::SCRIPT)
             ->addNonceForDirective(Directive::STYLE);
     }
