@@ -71,8 +71,8 @@
                 </li>
 
                 <li>
-                    <a href="{{ url('task-assignments/?status=all') }}" class="waves-effect" @if(\Request::has('status')) style="color:#fff" @endif>
-                        <i class="bx bx-user-check" @if(\Request::has('status')) style="color:#fff" @endif></i>
+                    <a href="{{ url('task-assignments/?tstatus=all') }}" class="waves-effect" @if(\Request::has('status')) style="color:#fff" @endif>
+                        <i class="bx bx-user-check" @if(\Request::has('tstatus')) style="color:#fff" @endif></i>
                         <span key="t-tasks-list">Task Assignments</span>
                     </a>
                 </li>

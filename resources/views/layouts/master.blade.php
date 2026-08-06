@@ -35,6 +35,7 @@
                 </div>
                 <!-- container-fluid -->
             </div>
+            @include('pages.agent.clock-in-out-modal')
             @include('pages.agent.edit-shift-date-modal')
             <!-- End Page-content -->
             @include('layouts.footer')
@@ -56,6 +57,42 @@
     </script>
 
     @yield('custom-js')
+    <script>
+        $(document).ready(function() {
+            // Global Configuration Sheet
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right", // Applied application-wide
+                "timeOut": "4000",
+                "extendedTimeOut": "1000"
+            };
+
+            // Catch and route all Laravel validation and redirect flash packets
+            // @if(session('success'))
+            //     toastr.success("{{ session('success') }}");
+            // @endif
+
+            // @if(session('error'))
+            //     toastr.error("{{ session('error') }}");
+            // @endif
+
+            // @if(session('info'))
+            //     toastr.info("{{ session('info') }}");
+            // @endif
+
+            // @if(session('warning'))
+            //     toastr.warning("{{ session('warning') }}");
+            // @endif
+
+            // // Dynamic Validation Errors Loop Handler
+            // @if($errors->any())
+            //     @foreach($errors->all() as $error)
+            //         toastr.error("{{ $error }}", "Validation Error");
+            //     @endforeach
+            // @endif
+        });
+    </script>
 
     <script>
         toastr.options = {
@@ -97,6 +134,68 @@
                 toastr.error(error);
             });
         }
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Reusable utility to add leading zeros
+            const pad = num => String(num).padStart(2, '0');
+
+            // 1. LIVE SYSTEM CLOCK
+            const $clock = $('#liveClockDisplay');
+            if ($clock.length) {
+                setInterval(function () {
+                    const now = new Date();
+                    let hours = now.getHours();
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12 || 12; // Converts 0 to 12
+
+                    $clock.text(`${pad(hours)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`);
+                }, 1000);
+            }
+
+            // 2. LIVE DURATION TRACKER (Injected conditionally by Laravel)
+            @if(auth()->user()->todayAttendance?->clock_in && !auth()->user()->todayAttendance?->clock_out)
+                const clockInTime = new Date("{{ auth()->user()->todayAttendance->clock_in->toIso8601String() }}");
+                const $duration = $('#liveDurationDisplay');
+
+                if ($duration.length) {
+                    function calculateDuration() {
+                        const diffMs = new Date() - clockInTime;
+                        if (diffMs <= 0) return;
+
+                        const totalMinutes = Math.floor(diffMs / 1000 / 60);
+                        const hours = Math.floor(totalMinutes / 60);
+                        const minutes = totalMinutes % 60;
+
+                        $duration.text(`${pad(hours)}h ${pad(minutes)}m`);
+                    }
+
+                    setInterval(calculateDuration, 60000); // Update every minute
+                    calculateDuration(); // Run immediately on load
+                }
+            @endif
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Configure Toastr Settings
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-right",
+                "timeOut": "3000" // Disappears in 3 seconds
+            };
+
+            // Trigger Toast from Laravel Session Flash
+            @if(session('success'))
+                toastr.success("{{ session('success') }}");
+            @endif
+
+            @if(session('error'))
+                toastr.error("{{ session('error') }}");
+            @endif
+        });
     </script>
 </body>
 

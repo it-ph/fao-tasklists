@@ -27,8 +27,29 @@
             </div> --}}
 
             <div class="dropdown d-lg-inline-block ms-1">
-                <button type="button" class="btn header-item noti-icon waves-effect" title="Set Shift Date" data-bs-toggle="modal" data-bs-target="#editShiftDate">
-                    @if(auth()->user()->shift_date) <span class=" text-white">SHIFT DATE: {{ date('m/d/Y', strtotime(auth()->user()->shift_date)) }}</span> @endif <i class="bx bx-calendar text-white"></i>
+                <button type="button" class="btn header-item noti-icon waves-effect d-inline-flex align-items-center justify-content-center gap-1" title="Clock-IN / Clock-OUT" data-bs-toggle="modal" data-bs-target="#clockIO">                    
+                    <i class="bx bx-time text-white"></i>
+                    @if(!auth()->user()->todayAttendance || !auth()->user()->todayAttendance->clock_in)
+                        <!-- State 1: User has not punched in yet -->
+                        <span class="text-white align-middle">Not Clocked In Yet</span>
+
+                    @elseif(auth()->user()->todayAttendance->clock_in && !auth()->user()->todayAttendance->clock_out)
+                        <!-- State 2: User is currently working -->
+                        <span class="text-white align-middle">
+                            Clocked In: {{ auth()->user()->todayAttendance->clock_in->format('h:i A') }}
+                        </span>
+
+                    @elseif(auth()->user()->todayAttendance->clock_out)
+                        <!-- State 3: User finished their shift -->
+                        <span class="text-white align-middle">
+                            Clocked Out: {{ auth()->user()->todayAttendance->clock_out->format('h:i A') }}
+                        </span>
+                    @endif
+                </button>
+
+                <button type="button" class="btn header-item noti-icon waves-effect d-inline-flex align-items-center justify-content-center gap-1" title="Set Shift Date" data-bs-toggle="modal" data-bs-target="#editShiftDate">
+                    <i class="bx bx-calendar text-white d-block"></i>
+                    @if(auth()->user()->shift_date) <span class=" text-white">Shift Date: {{ date('m/d/Y', strtotime(auth()->user()->shift_date)) }}</span> @endif
                 </button>
             </div>
 

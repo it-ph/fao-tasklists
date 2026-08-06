@@ -29,6 +29,7 @@ use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\ClientActivityController;
 use App\Http\Controllers\ChangeRequestControllerAPI;
 use App\Http\Controllers\DashboardActivityController;
+use App\Http\Controllers\AttendanceController;
 
 // LOGIN
 Auth::routes(['register' => false]);
@@ -130,9 +131,15 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
         Route::put('task/resume/{taskId}', [TasksController::class, 'resumeTask'])->name('task.resume');
         Route::put('task/stop/{taskId}', [TasksController::class, 'stopTask'])->name('task.stop');
 
+        // Task Lists
         Route::resource('task', TasksController::class);
         Route::get('tasks', [PageController::class, 'showAgentTaskLists'])->name('tasks.index');
         Route::post('tasks/api/{status?}', [TasksControllerAPI::class, 'getAllTasks'])->name('api.get.tasks');
+
+        // Task Assignments
+        Route::resource('task-assignments', TasksController::class);
+        Route::get('task-assignments', [PageController::class, 'showAgentTaskAssignments'])->name('task-assignments.index');
+        Route::post('task-assignments/api/{status?}', [TasksControllerAPI::class, 'getAllTasks'])->name('api.get.task-assignments');
 
         // Client Activity Import / Export
         Route::resource('client-activities', ClientActivityController::class);
@@ -155,6 +162,9 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
 
         // Shift Date Setting
         Route::post('shift-date', [UserController::class, 'updateShiftDate'])->name('shift-date.update');
+
+        // Clock IN / CLOCK OUT
+        Route::post('clock-io/update', [AttendanceController::class, 'updateClockIO'])->name('clock-io.update');
 
         // Dashboard
         Route::group(['prefix' => 'dashboard/report'],

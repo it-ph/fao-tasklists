@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title') Task Lists @endsection
+@section('title') Task Assignments @endsection
 
 @section('css')
     <!-- DataTables -->
@@ -18,8 +18,8 @@
 @section('content')
 
     @component('components.breadcrumb')
-        @slot('li_1') Tasks @endslot
-        @slot('title') Tasks List - @if(\Request::get('status')) <span>{{ ucwords(\Request::get('status')) }} @else ALL @endif</span>@endslot
+        @slot('li_1') Task Assignments @endslot
+        @slot('title') Task Assignments List - @if(\Request::get('status')) <span>{{ ucwords(\Request::get('status')) }} @else ALL @endif</span>@endslot
     @endcomponent
 
     <div class="row">
@@ -39,15 +39,15 @@
                                 <button type="button" class="btn btn-primary btn-sm waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false"><i class="fa fa-filter"></i> Filter <i class="mdi mdi-chevron-down"></i></button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "all"]) }}">All Tasks</a>
-                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "In Progress"]) }}">In Progress</a>
-                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "On Hold"]) }}">On Hold</a>
-                                    <a class="dropdown-item" href="{{ route("tasks.index", ['status' => "Completed"]) }}">Completed</a>
+                                    <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "all"]) }}">All Tasks</a>
+                                    <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "In Progress"]) }}">In Progress</a>
+                                    <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "On Hold"]) }}">On Hold</a>
+                                    <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p id="status" style="display:none">@if(\Request::get('status')) {{ (\Request::get('status')) }} @else all @endif</p>
+                    <p id="status" style="display:none">@if(\Request::get('tstatus')) {{ (\Request::get('tstatus')) }} @else all @endif</p>
                     <p id="permission" class="ihide">{{ auth()->user()->isOperationsManagerOrAdmin() }}</p>
                     <table id="tbl_task" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
@@ -93,7 +93,7 @@
             </div>
         </div> <!-- end col -->
     </div>
-    @include('pages.admin.tasks.edit-modal')
+    @include('pages.admin.task-assignments.edit-modal')
 @endsection
 
 @section('script')

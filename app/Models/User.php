@@ -17,6 +17,12 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $dates = ['two_factor_expires_at','deleted_at','created_at','updated_at'];
 
+    // protected $casts = [
+    //     'shift_date' => 'date',
+    //     'clock_in'   => 'datetime',
+    //     'clock_out'  => 'datetime',
+    // ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,6 +48,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function todayAttendance()
+    {
+        return $this->hasOne(Attendance::class, 'agent_id')
+            ->whereDate('shift_date', today()); // Filters strictly for today's calendar date
+    }
 
     public function scopeAgentPermission($query)
     {

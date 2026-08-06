@@ -101,6 +101,7 @@ class UserController extends GlobalVariableController
                 'shift_date' => $request['shift_date'].' 00:00:00'
             ]
         );
-        return redirect()->back()->with('with_success', "Default Shift Date updated successfully!");
+        
+        return back()->with('success', 'Default Shift Date updated successfully!');
     }
 }

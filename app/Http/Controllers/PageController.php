@@ -114,6 +114,28 @@ class PageController extends GlobalVariableController
         return view('pages.admin.tasks.list',compact('user_client_activities'));
     }
 
+    public function showAgentTaskAssignments(Request $request)
+    {
+        // accountant
+        if(auth()->user()->isAccountant())
+        {
+            return redirect()->route('unauthorized');
+        }
+
+        $status = $request['status'];
+        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
+        {
+            return view('errors.404');
+        }
+
+        $user_client_activities = ClientActivity::query()
+            ->select('id','agent_id','name')
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        return view('pages.admin.task-assignments.list',compact('user_client_activities'));
+    }
+
     // AGENT ACCESS
     public function showAgentTasks(Request $request)
     {
