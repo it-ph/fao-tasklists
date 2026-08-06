@@ -18,6 +18,13 @@
                     </a>
                 </li>
 
+                {{-- <li>
+                    <a href="{{ url('attendance') }}" class="waves-effect">
+                        <i class="fa fa-clock" @if(\Request::routeIs('attendance')) style="color:#fff" @endif></i>
+                        <span key="t-attendance" @if(\Request::routeIs('attendance')) style="color:#fff" @endif>Attendance</span>
+                    </a>
+                </li> --}}
+
                 <li>
                     <a href="{{ url('activities') }}" class="waves-effect">
                         <i class="bx bx-list-ul" @if(\Request::routeIs('activities')) style="color:#fff" @endif></i>
@@ -29,6 +36,13 @@
                     <a href="{{ url('my-tasks/all') }}" class="waves-effect">
                         <i class="bx bx-task" @if(\Request::routeIs('my-tasks.index')) style="color:#fff" @endif></i>
                         <span key="t-tasks" @if(\Request::routeIs('my-tasks.index')) style="color:#fff" @endif>My Tasks</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url('assigned-tasks/all') }}" class="waves-effect">
+                        <i class="bx bx-task" @if(\Request::routeIs('assigned-tasks.index')) style="color:#fff" @endif></i>
+                        <span key="t-tasks" @if(\Request::routeIs('assigned-tasks.index')) style="color:#fff" @endif>Assigned Tasks</span>
                     </a>
                 </li>
 
@@ -56,6 +70,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{ url('task-assignments/?status=all') }}" class="waves-effect" @if(\Request::has('status')) style="color:#fff" @endif>
+                        <i class="bx bx-user-check" @if(\Request::has('status')) style="color:#fff" @endif></i>
+                        <span key="t-tasks-list">Task Assignments</span>
+                    </a>
+                </li>
+
                 {{--REPORTS --}}
                 <li class="menu-title" key="t-menu">Reports</li>
                 <li>
@@ -74,6 +95,28 @@
                         <span key="t-users">Users</span>
                     </a>
                 </li> --}}
+
+                {{-- <li>
+                    <a href="{{ url('activity-tracker') }}" class="waves-effect">
+                        <i class="bx bx-pulse"></i>
+                        <span key="t-users">Activity Tracker</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url('idle-tracking') }}" class="waves-effect">
+                        <i class="bx bxs-hourglass"></i>
+                        <span key="t-users">Idle Tracking</span>
+                    </a>
+                </li> --}}
+
+                <li>
+                    <a href="{{ url('user-status') }}" class="waves-effect">
+                        <i class="fa fa-users fa-sm"></i>
+                        <span key="t-users">User Status</span>
+                    </a>
+                </li>
+
                 <li>
                     <a href="{{ url('users') }}" class="waves-effect">
                         <i class="bx bxs-user-detail"></i>

@@ -34,6 +34,22 @@ class PageController extends GlobalVariableController
     }
 
     /**
+     * Live Users Status
+     */
+    public function showUserStatus(Request $request)
+    {
+        return view('pages.admin.users.status');
+    }
+
+    /**
+     * Idle Tracking
+     */
+    public function showIdleTracking(Request $request)
+    {
+        return view('pages.admin.idle-tracking.index');
+    }
+
+    /**
      * Clusters
      */
     public function showClusters()
@@ -118,6 +134,18 @@ class PageController extends GlobalVariableController
         return view('pages.agent.tasks.list', compact('status','clients','user_client_activities'));
     }
 
+    // AGENT ACCESS
+    public function showAgentAssignedTasks(Request $request)
+    {
+        $status = $request['status'];
+        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
+        {
+            return view('errors.404');
+        }
+
+        return view('pages.agent.tasks-assigned.list', compact('status'));
+    }
+
     /**
      * Task Lists
      */
@@ -142,6 +170,29 @@ class PageController extends GlobalVariableController
             ->select('id','agent_id','name')
             ->orderBy('name', 'ASC')
             ->get();
+
+        return view('pages.admin.tasks.list', compact('status'));
+    }
+
+    /**
+     * Task Assignments
+     */
+    public function AgentAssignedTasks(Request $request)
+    {
+        $status = $request['status'];
+
+        // accountant
+        if(auth()->user()->isAccountant())
+        {
+            return redirect()->route('unauthorized');
+        }
+
+        $status = $request['status'];
+        if(!in_array(strtolower($status),['all','in progress','on hold','completed']))
+        {
+            return view('errors.404');
+        }
+        $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
 
         return view('pages.admin.tasks.list', compact('status'));
     }

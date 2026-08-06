@@ -108,6 +108,22 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
                 Route::post('/has-active-task', [TasksController::class,'hasActiveTask'])->name('has-active-task');
             });
 
+        // Agent Assigned Task: Start / Update / Stop
+        Route::get('/assigned-tasks/{status?}', [PageController::class, 'showAgentAssignedTasks'])->name('assigned-tasks.index');
+        Route::group(['prefix' => 'assigned-task'],
+                function ()
+            {
+                Route::post('api/{status?}', [TasksControllerAPI::class,'getAgentTasks'])->name('api.get.assigned-task');
+                Route::get('/{status?}', [TasksController::class,'agentTask'])->name('assigned-task.index');
+                Route::post('/store', [TasksController::class,'store'])->name('assigned-task.store');
+                Route::get('/show/{id}', [TasksController::class,'show'])->name('assigned-task.show');
+                Route::post('/update/{id}', [TasksController::class,'update'])->name('assigned-task.update');
+                Route::post('/stop/{id}', [TasksController::class,'stopTask'])->name('assigned-task.stop');
+                Route::post('/pause/{id}', [TasksController::class,'pauseTask'])->name('assigned-task.pause');
+                Route::post('/resume/{id}', [TasksController::class,'resumeTask'])->name('assigned-task.resume');
+                Route::post('/has-active-task', [TasksController::class,'hasActiveTask'])->name('has-active-assigned-task');
+            });
+
         Route::put('task/start/{taskId}', [TasksController::class, 'startTask'])->name('task.start');
         Route::put('task/updateStatus/{taskId}', [TasksController::class, 'updateTaskStatus'])->name('task.status.update');
         // Route::put('task/pause/{taskId}', [TasksController::class, 'pauseTask'])->name('task.pause');
@@ -239,6 +255,9 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
                     Route::post('/update/{id}', [UserController::class,'update'])->name('user.update');
                     Route::post('/delete/{id}', [UserController::class,'destroy'])->name('user.delete');
                 });
+
+                Route::get('user-status', [PageController::class, 'showUserStatus'])->name('user.status');
+                // Route::get('idle-tracking', [PageController::class, 'showIdleTracking'])->name('idle-tracking.index');
 
                 Route::resource('dashboard-activities', DashboardActivityController::class);
                 Route::resource('user-clients', UserClientController::class);
