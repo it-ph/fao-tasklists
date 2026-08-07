@@ -258,6 +258,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
                 Route::group(['prefix' => 'user'],
                 function ()
                 {
+                    Route::post('api/live-status', [UserControllerAPI::class,'getLiveUserStatus'])->name('api.get.user.live.status');
                     Route::post('api/all', [UserControllerAPI::class,'getAllUsers'])->name('api.get.users');
                     Route::get('/all', [UserController::class,'index'])->name('user.index');
                     Route::post('/store', [UserController::class,'store'])->name('user.store');
@@ -266,7 +267,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
                     Route::post('/delete/{id}', [UserController::class,'destroy'])->name('user.delete');
                 });
 
-                Route::get('user-status', [PageController::class, 'showUserStatus'])->name('user.status');
+                Route::get('user-live-status', [PageController::class, 'showUserLiveStatus'])->name('users.live.status');
                 // Route::get('idle-tracking', [PageController::class, 'showIdleTracking'])->name('idle-tracking.index');
 
                 Route::resource('dashboard-activities', DashboardActivityController::class);

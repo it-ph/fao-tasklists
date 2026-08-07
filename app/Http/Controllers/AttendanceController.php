@@ -56,7 +56,7 @@ class AttendanceController extends Controller
     /**
      * Automatically set all active tasks and assignments to 'On Hold' and log pauses.
      */
-    public function pauseActiveTasks($userId, $pauseTime)
+    public function pauseActiveTasks($userId, $clockOutTime)
     {
         // 1. Pause regular Tasks
         $activeTasks = Task::where('agent_id', $userId)
@@ -68,7 +68,7 @@ class AttendanceController extends Controller
 
             TaskPause::create([
                 'task_id'    => $task->id,
-                'start'      => $pauseTime,
+                'start'      => $clockOutTime,
                 'end'        => null,
                 'created_by' => $userId,
             ]);

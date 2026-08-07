@@ -67,4 +67,103 @@ class UserControllerAPI extends Controller
                 ->make(true);
         }
     }
+
+    // GET LIVE USER STATUS DATA
+    public function getLiveUserStatus(Request $request)
+    {
+        if ($request->ajax()) {
+            // 1. Core query mapping with structural relationships and today's attendance logs
+            $query = User::with([
+                // 'thecluster:id,name',
+                // 'theclient:id,name',
+                // 'thetl:id,fullname',
+                // Pre-load ONLY the absolute latest single record row from today to resolve accurate live status
+                // 'todaysAttendance' => function ($subQuery) {
+                //     $subQuery->whereDate('shift_date', \Carbon\Carbon::today())
+                //             ->latest('id');
+                // }
+
+                'theattendances' => function ($subQuery) {
+                    $subQuery->where(function($q) {
+                        // Scenario A: Clocked in today
+                        $q->whereDate('shift_date', \Carbon\Carbon::today());
+                    })
+                    ->orWhere(function($q) {
+                        // Scenario B: Night shift (Clocked in yesterday, still working)
+                        $q->whereDate('shift_date', \Carbon\Carbon::yesterday())
+                        ->whereNull('clock_out');
+                    })
+                    ->latest('id');
+                }
+
+            ])
+            ->select('id', 'fullname', 'permission')
+            ->where('permission', '<>', 'superadmin');
+
+            // admin
+            if (auth()->user()->isAdmin()) 
+            {
+                $query = $query;
+            }
+            // operations manager
+            elseif (auth()->user()->isOperationsManager())
+            {
+                $query = $query->OMPermission();
+            }
+            // team leader
+            elseif (auth()->user()->isTeamLeader())
+            {
+                $query = $query->TLPermission();
+            }
+
+            return datatables($query)                
+                ->addColumn('clock_in', function ($user) {
+                    $log = $user->theattendances->first();
+                    return ($log && $log->clock_in) 
+                        ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') 
+                        : '<span class="text-muted">—</span>';
+                })
+                ->addColumn('clock_out', function ($user) {
+                    $log = $user->theattendances->first();
+                    return ($log && $log->clock_out) 
+                        ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') 
+                        : '<span class="text-muted">—</span>';
+                })
+                ->addColumn('live_status', function ($user) {
+                    $log = $user->theattendances->first();
+
+                    if (!$log) {
+                        return '<span class="badge bg-danger rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Absent</span>';
+                    }
+
+                    if ($log->clock_in && !$log->clock_out) {
+                        return '<span class="badge bg-success rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-In</span>';
+                    }
+
+                    return '<span class="badge bg-secondary rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-Out</span>';
+                })
+                ->addColumn('work_status', function ($user) {
+                    $activeTask = \App\Models\Task::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
+                    if ($activeTask) {
+                        return '<span class="text-primary fw-bold">' . $activeTask->id . '</span>';
+                    }
+
+                    $activeAssignment = \App\Models\TaskAssignment::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
+                    if ($activeAssignment) {
+                        return '<span class="text-info fw-bold">TA' . $activeAssignment->id . '</span>';
+                    }
+
+                    return '<span class="text-muted fw-semibold">—</span>';
+                })
+
+                ->rawColumns([
+                    'clock_in',
+                    'clock_out',
+                    'live_status',
+                    'work_status',
+                ])
+                ->escapeColumns([])
+                ->make(true);
+        }
+    }
 }

@@ -49,6 +49,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function theattendances()
+    {
+        return $this->hasMany(Attendance::class, 'agent_id');
+    }
+
     public function todaysAttendance()
     {
         return $this->hasOne(Attendance::class, 'agent_id')
@@ -96,6 +101,11 @@ class User extends Authenticatable
     }
 
     public function thetasks()
+    {
+        return $this->hasMany(Task::class, 'agent_id', 'id');
+    }
+
+    public function thetaskassignments()
     {
         return $this->hasMany(Task::class, 'agent_id', 'id');
     }

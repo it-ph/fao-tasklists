@@ -36,9 +36,9 @@ class PageController extends GlobalVariableController
     /**
      * Live Users Status
      */
-    public function showUserStatus(Request $request)
+    public function showUserLiveStatus(Request $request)
     {
-        return view('pages.admin.users.status');
+        return view('pages.admin.users.live-status');
     }
 
     /**

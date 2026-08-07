@@ -111,9 +111,9 @@
                 </li> --}}
 
                 <li>
-                    <a href="{{ url('user-status') }}" class="waves-effect">
+                    <a href="{{ url('user-live-status') }}" class="waves-effect">
                         <i class="fa fa-users fa-sm"></i>
-                        <span key="t-users">User Status</span>
+                        <span key="t-users">User Live Status</span>
                     </a>
                 </li>
 

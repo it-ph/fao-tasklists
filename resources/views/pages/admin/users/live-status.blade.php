@@ -27,7 +27,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="tbl_user" class="table table-bordered table-striped table-sm nowrap w-100">
+                    <table id="tbl_live_user_status" class="table table-bordered table-striped table-sm nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Employee Name</th>
@@ -35,8 +35,6 @@
                                 <th>Clock Out</th>
                                 <th>Status</th>
                                 <th>Work Status</th>
-                                {{-- <th>Idle</th>
-                                <th>Detection</th> --}}
                             </tr>
                         </thead>
                     </table>
@@ -54,18 +52,10 @@
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/select2/select2.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            // Refresh the page after 10 seconds (10000 milliseconds)
-            setTimeout(function() {
-                location.reload();
-            }, 10000);
-        });
-    </script>
 @endsection
 
 @section('custom-js')
-    <script src="{{asset('scripts/user.js')}}"></script>
+    <script src="{{asset('scripts/user-live-status.js')}}"></script>
 @endsection
 
 

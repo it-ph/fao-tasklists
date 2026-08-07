@@ -58,40 +58,38 @@
 
     @yield('custom-js')
     <script>
-        $(document).ready(function() {
-            // Global Configuration Sheet
-            toastr.options = {
-                "closeButton": true,
-                "progressBar": true,
-                "positionClass": "toast-bottom-right", // Applied application-wide
-                "timeOut": "4000",
-                "extendedTimeOut": "1000"
-            };
+        // Global Configuration Sheet
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right", // Applied application-wide
+            "timeOut": "4000",
+            "extendedTimeOut": "1000"
+        };
 
-            // Catch and route all Laravel validation and redirect flash packets
-            // @if(session('success'))
-            //     toastr.success("{{ session('success') }}");
-            // @endif
+        // Catch and route all Laravel validation and redirect flash packets
+        // @if(session('success'))
+        //     toastr.success("{{ session('success') }}");
+        // @endif
 
-            // @if(session('error'))
-            //     toastr.error("{{ session('error') }}");
-            // @endif
+        // @if(session('error'))
+        //     toastr.error("{{ session('error') }}");
+        // @endif
 
-            // @if(session('info'))
-            //     toastr.info("{{ session('info') }}");
-            // @endif
+        // @if(session('info'))
+        //     toastr.info("{{ session('info') }}");
+        // @endif
 
-            // @if(session('warning'))
-            //     toastr.warning("{{ session('warning') }}");
-            // @endif
+        // @if(session('warning'))
+        //     toastr.warning("{{ session('warning') }}");
+        // @endif
 
-            // // Dynamic Validation Errors Loop Handler
-            // @if($errors->any())
-            //     @foreach($errors->all() as $error)
-            //         toastr.error("{{ $error }}", "Validation Error");
-            //     @endforeach
-            // @endif
-        });
+        // // Dynamic Validation Errors Loop Handler
+        // @if($errors->any())
+        //     @foreach($errors->all() as $error)
+        //         toastr.error("{{ $error }}", "Validation Error");
+        //     @endforeach
+        // @endif
     </script>
 
     <script>
