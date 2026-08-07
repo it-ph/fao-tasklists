@@ -154,8 +154,8 @@
             }
 
             // 2. LIVE DURATION TRACKER (Injected conditionally by Laravel)
-            @if(auth()->user()->todayAttendance?->clock_in && !auth()->user()->todayAttendance?->clock_out)
-                const clockInTime = new Date("{{ auth()->user()->todayAttendance->clock_in->toIso8601String() }}");
+            @if(auth()->user()->todaysAttendance?->clock_in && !auth()->user()->todaysAttendance?->clock_out)
+                const clockInTime = new Date("{{ auth()->user()->todaysAttendance->clock_in->toIso8601String() }}");
                 const $duration = $('#liveDurationDisplay');
 
                 if ($duration.length) {

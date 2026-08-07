@@ -166,6 +166,30 @@ function resume(form) {
     });
 }
 
+function must_clock_in_first() {
+    Swal.fire({
+        title: 'Invalid Action',
+        text: "You must Clock IN before you can create, start or resume a task!",
+        icon: 'error',
+        confirmButtonText: 'Okay!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    });
+}
+
+function shift_already_ended() {
+    Swal.fire({
+        title: 'Invalid Action',
+        text: "Your shift for today has already been ended. You cannot create, start, or resume tasks after clocking out!",
+        icon: 'error',
+        confirmButtonText: 'Okay!',
+        confirmButtonClass: 'btn btn-primary mt-2',
+        buttonsStyling: false,
+        allowOutsideClick: false
+    });
+}
+
 function has_active_task() {
     Swal.fire({
         title: 'Invalid Action',

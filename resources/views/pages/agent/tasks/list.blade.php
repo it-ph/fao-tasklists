@@ -41,9 +41,14 @@
                                 </div>
                             </div>
                             <p id="status" style="display:none">{{ $status }}</p>
+                            <p id="has_clocked_in" style="display:none">{{ auth()->user()->hasClockedInToday() }}</p>
                             <p id="has_active_task" style="display:none">{{ auth()->user()->hasActiveTask() }}</p>
                             <span id="create_button">
-                                @if(auth()->user()->hasActiveTask())
+                                @if(auth()->user()->todaysAttendance && auth()->user()->todaysAttendance->clock_out)
+                                    <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="shift_already_ended()"><i class="fas fa-plus"></i> Create</button>
+                                @elseif(!auth()->user()->hasClockedInToday())
+                                    <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="must_clock_in_first()"><i class="fas fa-plus"></i> Create</button>
+                                @elseif(auth()->user()->hasActiveTask())
                                     <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="has_active_task()"><i class="fas fa-plus"></i> Create</button>
                                 @else
                                     <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#addTaskModal"><i class="fas fa-plus"></i> Create</button>

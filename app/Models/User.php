@@ -49,8 +49,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    public function todayAttendance()
+    public function todaysAttendance()
     {
         return $this->hasOne(Attendance::class, 'agent_id')
             ->whereDate('shift_date', today()); // Filters strictly for today's calendar date
@@ -103,14 +102,28 @@ class User extends Authenticatable
 
     public function hasActiveTask()
     {
-        $hasActiveTask = Task::query()
-            ->where('agent_id', $this->id)
-            ->where('status', 'In Progress')
-            ->count();
+        // $hasActiveTask = Task::query()
+        //     ->where('agent_id', $this->id)
+        //     ->where('status', 'In Progress')
+        //     ->count();
 
-        $hasActiveTask = $hasActiveTask ? true : false;
+        // $hasActiveTask = $hasActiveTask ? true : false;
+        // return $hasActiveTask;
 
-        return $hasActiveTask;
+        // check if user has active task in both My Task and Task Assigned
+        if (Task::where('agent_id', $this->id)->where('status', 'In Progress')->exists()) {
+            return true;
+        }
+
+        return TaskAssignment::where('agent_id', $this->id)->where('status', 'In Progress')->exists();
+    }
+
+    public function hasClockedInToday()
+    {
+        return $this->todaysAttendance()
+            ->whereNotNull('clock_in')
+            ->whereNull('clock_out')
+            ->exists();
     }
 
     public function isStatusActive()

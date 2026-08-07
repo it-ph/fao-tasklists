@@ -19,6 +19,7 @@ class CreateAttendancesTable extends Migration
             $table->date('shift_date')->nullable();
             $table->datetime('clock_in')->nullable();
             $table->datetime('clock_out')->nullable();
+            $table->string('work_minutes')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

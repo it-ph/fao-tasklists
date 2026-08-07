@@ -125,7 +125,21 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task retrieved successfully!');
         try {
-            $result["data"] = auth()->user()->hasActiveTask();
+            $user = auth()->user();
+            $attendance = $user->todaysAttendance;
+
+            // 1. Check if user already clocked in
+            if (!$attendance || !$attendance->clock_in) {
+                $result["data"] = 'not_clocked_in';
+            } 
+            // 2. Check if the user already clocked out
+            elseif ($attendance->clock_out) {
+                $result["data"] = 'clocked_out';
+            } 
+            // 3. Checking if user has an active task
+            else {
+                $result["data"] = $user->hasActiveTask(); // Returns true or false
+            }
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }

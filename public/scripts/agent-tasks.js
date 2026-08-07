@@ -371,8 +371,23 @@ const TASK = (() => {
         }).then(function(response) {
             console.log(response.data)
             if (response.data.status === 'success') {
-                var has_active_task = response.data.data;
-                has_active_task ? TASK.has_active_task() : $('#resumeTaskModal').modal('show');
+                // var has_active_task = response.data.data;
+                // has_active_task ? TASK.has_active_task() : $('#resumeTaskModal').modal('show');
+
+                var check_status = response.data.data;
+                if (check_status === 'not_clocked_in') {
+                    // Blocks action because they haven't clocked in yet
+                    must_clock_in_first();
+                } else if (check_status === 'clocked_out') {
+                    // Blocks action because the shift has already ended
+                    shift_already_ended();
+                } else if (check_status === true) {
+                    // Blocks action because they already have a running task
+                    TASK.has_active_task();
+                } else {
+                    // Safe State: Passed all validations! Open the modal.
+                    $('#resumeTaskModal').modal('show');
+                }
             } else {
                 toastr.error(response.data.message);
             }
