@@ -7,16 +7,13 @@ use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\TaskPause;
 use Illuminate\Http\Request;
-use App\Models\ClientActivity;
 use App\Traits\ResponseTraits;
 use App\Services\TasksServices;
 use App\Http\Requests\UpdateTasksRequest;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 use App\Http\Requests\StopTaskRequest;
 use Facades\App\Http\Helpers\TimeElapsedHelper;
-use Facades\App\Http\Helpers\TaskHelper;
 use App\Http\Controllers\GlobalVariableController;
 
 class TasksController extends GlobalVariableController
@@ -151,7 +148,7 @@ class TasksController extends GlobalVariableController
     public function pauseTask(Request $request, $id)
     {
         $request['status'] = 'On Hold';
-        $result = $this->successResponse("Task has been ".$request['status']." successfully!");
+        $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
             $status = $request['status'];
@@ -179,7 +176,7 @@ class TasksController extends GlobalVariableController
     public function resumeTask(Request $request, $id)
     {
         $request['status'] = 'In Progress';
-        $result = $this->successResponse("Task has been ".$request['status']." successfully!");
+        $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
             $status = $request['status'];
@@ -204,7 +201,7 @@ class TasksController extends GlobalVariableController
 
     public function stopTask(StopTaskRequest $request, $id)
     {
-        $result = $this->successResponse("Task has been ".$request['status']." successfully!");
+        $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
             $status = $request['status'];
