@@ -51,14 +51,16 @@ const TASK = (() => {
                 { data: 'schedule', name: 'schedule', className: 'text-center' },
                 { data: 'thecluster.name', name: 'thecluster.name' },
                 { data: 'theclient.name', name: 'theclient.name' },
-                { data: 'theclientactivity.name', name: 'theclientactivity.name' },
-                { data: 'theclientactivity.function', name: 'theclientactivity.function' },
-                { data: 'description', name: 'description' },
+                { data: 'activity_name', name: 'activity_name' },
+                { data: 'applicable_month', name: 'applicable_month', className: 'text-center' },
+                { data: 'client_function', name: 'client_function', className: 'text-center' },
+                { data: 'eclerx_function', name: 'eclerx_function', className: 'text-center' },
                 { data: 'start_date', name: 'start_date', className: 'text-center' },
                 { data: 'end_date', name: 'end_date', className: 'text-center' },
                 { data: 'date_completed', name: 'date_completed', className: 'text-center' },
                 { data: 'actual_handling_time', name: 'actual_handling_time', className: 'text-center' },
-                { data: 'volume', name: 'volume', className: 'text-center' },
+                { data: 'timelines', name: 'timelines', className: 'text-center' },
+                { data: 'quality', name: 'quality', className: 'text-center' },
                 { data: 'remarks', name: 'remarks' },
             ],
         });
@@ -177,6 +179,127 @@ const TASK = (() => {
             }
         });
     });
+
+    // task template
+    $('#btn_export').on('click', function(e) {
+        e.preventDefault();
+        $('#btn_export').empty();
+        $('#btn_export').append('<i class="fa fa-spinner fa-spin"></i> Exporting...');
+        $('#btn_export').prop("disabled", true);
+        toastr.info('Exporting Template...');
+
+        $.ajax({
+            url: `${APP_URL}/task-assignments/export/template`,
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob' // This is important for file downloads
+            },
+            success: function(data, status, xhr) {
+                var filename = ""; // This needs to be set, or derive it from response headers if needed
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition) {
+                    var matches = /filename="([^"]*)"/.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1];
+                    }
+                }
+
+                var url = window.URL.createObjectURL(data);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename || 'user-upload-template.xlsx'; // Fallback filename
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+
+                $('#btn_export').empty();
+                $('#btn_export').append('<i class="fa fa-download"></i> Export');
+                $('#btn_export').prop("disabled", false);
+                $('#btn_search').prop("disabled", false);
+                $('#btn_reset').prop("disabled", false);
+            },
+            error: function() {
+                toastr.error('Export Failed!');
+                $('#btn_export').empty();
+                $('#btn_export').append('<i class="fa fa-download"></i> Export');
+                $('#btn_export').prop("disabled", false);
+                $('#btn_search').prop("disabled", false);
+                $('#btn_reset').prop("disabled", false);
+            }
+        });
+    });
+
+    // show upload modal
+    this_task.showUploadModal = () => {
+        $('#uploadTaskAssignmentsModal').modal('show');
+        resetButton();
+        let errorList = $('#errorList');
+        errorList.empty();
+        errorList.hide();
+    }
+
+    // task import
+    $('#btn_import').on('click', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData();
+        var fileInput = document.getElementById('import_file');
+        let errorList = $('#errorList');
+        errorList.empty();
+        errorList.hide();
+
+        if (fileInput.files.length === 0) {
+            $('#import_fileError').show();
+            toastr.error('Please select a file to upload.');
+            return;
+        }
+        $('#import_fileError').hide();
+        $('#btn_import').empty();
+        $('#btn_import').append('<i class="fa fa-spinner fa-spin"></i> Uploading...');
+        $('#btn_import').prop("disabled", true);
+        toastr.info('Uploading Data...');
+
+
+        formData.append('import_file', fileInput.files[0]);
+
+        axios({
+                method: 'POST',
+                url: `${APP_URL}/task-assignments/import`,
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+                if (response.data.status === 'success') {
+                    $('#uploadTaskAssignmentsModal').modal('hide');
+                    toastr.success(response.data.message);
+                    TASK.load();
+                } else if (response.data.status === 'warning') {
+                    toastr.error(response.data.message);
+                    errorList.show();
+                    Object.entries(response.data.error).forEach(([key, value]) => {
+                        let li = $('<li></li>').text(value);
+                        errorList.append(li);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+                toastr.error(error);
+            })
+            .finally(() => {
+                resetButton();
+            });
+    });
+
+    function resetButton() {
+        $('#import_fileError').hide();
+        $('#btn_import').html('<i class="fa fa-save"></i> Upload');
+        $('#btn_import').prop("disabled", false);
+        $('#import_file').val('');
+    }
 
     return this_task;
 })()

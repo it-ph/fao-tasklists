@@ -45,8 +45,8 @@
                                     <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
-                            <a href="{{ url('task-assignments-upload-template') }}" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
-                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadTaskAssignmentsModal"><i class="fas fa-upload"></i> Upload</button>
+                            <button type="button" id="btn_export" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fas fa-download"></i> Template</button>
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" onclick="TASK.showUploadModal()"><i class="fas fa-upload"></i> Upload</button>
                         </div>
                     </div>
                     <p id="status" style="display:none">@if(\Request::get('tstatus')) {{ (\Request::get('tstatus')) }} @else all @endif</p>
@@ -95,5 +95,5 @@
 @endsection
 
 @section('custom-js')
-    {{-- <script src="{{asset('scripts/all-tasks.js')}}"></script> --}}
+    <script src="{{asset('scripts/all-task-assignments.js')}}"></script>
 @endsection

@@ -140,8 +140,8 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
         Route::resource('task-assignments', TasksController::class);
         Route::get('task-assignments', [PageController::class, 'showAgentTaskAssignments'])->name('task-assignments.index');
         Route::post('task-assignments/api/{status?}', [TasksControllerAPI::class, 'getAllTasks'])->name('api.get.task-assignments');
-        Route::get('task-assignments-upload-template', [ExportController::class, 'uploadTaskAssignmentsTemplate'])->name('upload.task-assignments.template');
-        Route::post('task-assignments-import', [ImportController::class, 'importTaskAssignments'])->name('task-assignments-import')->middleware('validate.referer');
+        Route::get('task-assignments/export/template', [ExportController::class, 'uploadTaskAssignmentsTemplate'])->name('task-assignments.export.template');
+        Route::post('task-assignments/import', [ImportController::class, 'importTaskAssignments'])->name('task-assignments.import')->middleware('validate.referer');
 
         // Client Activity Import / Export
         Route::resource('client-activities', ClientActivityController::class);
