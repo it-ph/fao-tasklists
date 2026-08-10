@@ -29,18 +29,6 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="volume" class="col-form-label custom-label"><strong>VOLUME:<span class="important">*</span></strong></label>
-                                    <input type="number" class="form-control" name="volume" id="volume_stop" placeholder="Enter Volume">
-                                    <label id="volume_stopError" class="error"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-2">
-                                <div class="form-group">
                                     <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:<span class="important">(optional)</span></strong></label>
                                     <textarea class="form-control" name="remarks" id="remarks_stop" placeholder="Enter remarks here."></textarea>
                                 </div>

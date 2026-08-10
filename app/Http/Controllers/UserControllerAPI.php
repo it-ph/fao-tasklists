@@ -152,7 +152,7 @@ class UserControllerAPI extends Controller
 
                     $activeAssignment = TaskAssignment::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
                     if ($activeAssignment) {
-                        return '<span class="text-info fw-bold">TA' . $activeAssignment->id . '</span>';
+                        return '<span class="text-success fw-bold">TA' . $activeAssignment->id . '</span>';
                     }
 
                     return '<span class="text-muted fw-semibold">—</span>';

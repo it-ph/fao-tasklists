@@ -58,37 +58,21 @@
                                 <th>Status</th>
                                 <th>Action</th>
                                 <th>Employee Name</th>
-                                <th>Shift Date</th>
-                                <th>Date Received</th>
+                                <th>Schedule</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Activity</th>
-                                <th>Function</th>
-                                <th>Description</th>
+                                <th>Activity Name</th>
+                                <th>Applicable Month</th>
+                                <th>Client Function</th>
+                                <th>Eclerx Function</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Date Completed</th>
                                 <th>Actual Handling Time</th>
-                                <th>Volume</th>
+                                <th>Timeliness</th>
+                                <th>Quality</th>
                                 <th>Remarks</th>
                             </tr>
-                            {{-- <tr>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                            </tr> --}}
                         </thead>
                     </table>
                 </div>
@@ -97,9 +81,10 @@
     </div>
     {{-- @include('pages.agent.tasks.add-modal') --}}
     {{-- @include('pages.agent.tasks.edit-modal') --}}
-    @include('pages.agent.tasks.stop-modal')
-    @include('pages.agent.tasks.pause-modal')
-    @include('pages.agent.tasks.resume-modal')
+    @include('pages.agent.tasks-assigned.start-modal')
+    @include('pages.agent.tasks-assigned.stop-modal')
+    @include('pages.agent.tasks-assigned.pause-modal')
+    @include('pages.agent.tasks-assigned.resume-modal')
 @endsection
 
 @section('script')
@@ -114,5 +99,5 @@
 @endsection
 
 @section('custom-js')
-    <script src="{{asset('scripts/agent-tasks.js')}}"></script>
+    <script src="{{asset('scripts/agent-task-assignments.js')}}"></script>
 @endsection

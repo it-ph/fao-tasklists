@@ -2,11 +2,11 @@
     <thead>
     <tr>
         <th style="width: 200px; text-align: center; background-color: #002060; color: white">email_address</th>
-        <th style="width: 150px; text-align: center; background-color: #002060; color: white">activity_name</th>
+        <th style="width: 250px; text-align: center; background-color: #002060; color: white">activity_name</th>
         <th style="width: 150px; text-align: center; background-color: #002060; color: white">applicable_month</th>
         <th style="width: 200px; text-align: center; background-color: #002060; color: white">client_function</th>
         <th style="width: 200px; text-align: center; background-color: #002060; color: white">eclerx_function</th>
-        <th style="width: 300px; text-align: center; background-color: #002060; color: white">schedule</th>
+        <th style="width: 150px; text-align: center; background-color: #002060; color: white">schedule</th>
     </tr>
     </thead>
     <tbody>

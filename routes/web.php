@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\TasksController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ImportController;
@@ -16,7 +15,9 @@ use App\Http\Controllers\ClusterController;
 use App\Http\Controllers\TaskLogController;
 use App\Http\Controllers\UserControllerAPI;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TasksController;
 use App\Http\Controllers\TasksControllerAPI;
+use App\Http\Controllers\TaskAssignmentsController;
 use App\Http\Controllers\TaskAssignmentsControllerAPI;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClientControllerAPI;
@@ -104,8 +105,8 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
                 Route::post('/store', [TasksController::class,'store'])->name('my-task.store');
                 Route::get('/show/{id}', [TasksController::class,'show'])->name('my-task.show');
                 Route::post('/update/{id}', [TasksController::class,'update'])->name('my-task.update');
-                Route::post('/stop/{id}', [TasksController::class,'stopTask'])->name('my-task.stop');
                 Route::post('/pause/{id}', [TasksController::class,'pauseTask'])->name('my-task.pause');
+                Route::post('/stop/{id}', [TasksController::class,'stopTask'])->name('my-task.stop');
                 Route::post('/resume/{id}', [TasksController::class,'resumeTask'])->name('my-task.resume');
                 Route::post('/has-active-task', [TasksController::class,'hasActiveTask'])->name('has-active-task');
             });
@@ -115,14 +116,14 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
         Route::group(['prefix' => 'assigned-task'],
                 function ()
             {
-                Route::post('api/{status?}', [TasksControllerAPI::class,'getAgentTasks'])->name('api.get.assigned-task');
-                Route::get('/{status?}', [TasksController::class,'agentTask'])->name('assigned-task.index');
-                Route::post('/store', [TasksController::class,'store'])->name('assigned-task.store');
-                Route::get('/show/{id}', [TasksController::class,'show'])->name('assigned-task.show');
-                Route::post('/update/{id}', [TasksController::class,'update'])->name('assigned-task.update');
-                Route::post('/stop/{id}', [TasksController::class,'stopTask'])->name('assigned-task.stop');
-                Route::post('/pause/{id}', [TasksController::class,'pauseTask'])->name('assigned-task.pause');
-                Route::post('/resume/{id}', [TasksController::class,'resumeTask'])->name('assigned-task.resume');
+                Route::post('api/{status?}', [TaskAssignmentsControllerAPI::class,'getAgentTasks'])->name('api.get.assigned-task');
+                Route::get('/{status?}', [TaskAssignmentsController::class,'agentTask'])->name('assigned-task.index');
+                Route::get('/show/{id}', [TaskAssignmentsController::class,'show'])->name('assigned-task.show');
+                Route::post('/update/{id}', [TaskAssignmentsController::class,'update'])->name('assigned-task.update');
+                Route::post('/start/{id}', [TaskAssignmentsController::class,'startTask'])->name('assigned-task.start');
+                Route::post('/pause/{id}', [TaskAssignmentsController::class,'pauseTask'])->name('assigned-task.pause');
+                Route::post('/stop/{id}', [TaskAssignmentsController::class,'stopTask'])->name('assigned-task.stop');
+                Route::post('/resume/{id}', [TaskAssignmentsController::class,'resumeTask'])->name('assigned-task.resume');
                 Route::post('/has-active-task', [TasksController::class,'hasActiveTask'])->name('has-active-assigned-task');
             });
 

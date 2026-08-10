@@ -91,7 +91,7 @@ const TASK = (() => {
         $('#btn_update').empty();
         $('#btn_update').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
         $('#btn_update').prop("disabled", true);
-        axios(`${APP_URL}/my-task/show/${id}`).then(function(response) {
+        axios(`${APP_URL}/assigned-task/show/${id}`).then(function(response) {
             _task_id = id;
             const tzone = "Asia/Manila";
             var shift_date = moment(response.data.data.shift_date).tz(tzone).format('YYYY-MM-DD');
@@ -153,7 +153,7 @@ const TASK = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: `${APP_URL}/my-task/update/${id}`,
+                    url: `${APP_URL}/assigned-task/update/${id}`,
                     data: formdata
                 }).then(function(response) {
                     console.log(response.data.status)
