@@ -36,30 +36,40 @@ const TASK = (() => {
             processing: true,
             serverSide: true,
             ajax: {
-                url: `${APP_URL}/tasks/api/` + filter_status,
+                url: `${APP_URL}/task-assignments/api/` + filter_status,
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
             },
-            columns: [
-                { data: 'id', name: 'id', className: 'text-center' },
+            columns: [{
+                    data: 'id',
+                    name: 'id', // Must be 'id' so backend knows which column to search
+                    className: 'text-center',
+                    render: function(data, type, row) {
+                        return 'TA' + data;
+                    }
+                },
                 { data: 'status', name: 'status', className: 'text-center' },
                 // ...(isAdmin ? [{ data: 'action', name: 'action', className: 'text-center' }] : []),
                 { data: 'action', name: 'action', className: 'text-center' },
                 { data: 'agent_id', name: 'theagent.fullname' },
                 { data: 'schedule', name: 'schedule', className: 'text-center' },
                 { data: 'thecluster.name', name: 'thecluster.name' },
-                { data: 'theclient.name', name: 'theclient.name' },
+                {
+                    data: 'theclient.name',
+                    name: 'theclient.name',
+                    defaultContent: '-'
+                },
                 { data: 'activity_name', name: 'activity_name' },
                 { data: 'applicable_month', name: 'applicable_month', className: 'text-center' },
-                { data: 'client_function', name: 'client_function', className: 'text-center' },
+                { data: 'client_function', name: 'client_function', className: 'text-center', defaultContent: '-' },
                 { data: 'eclerx_function', name: 'eclerx_function', className: 'text-center' },
                 { data: 'start_date', name: 'start_date', className: 'text-center' },
                 { data: 'end_date', name: 'end_date', className: 'text-center' },
                 { data: 'date_completed', name: 'date_completed', className: 'text-center' },
                 { data: 'actual_handling_time', name: 'actual_handling_time', className: 'text-center' },
-                { data: 'timelines', name: 'timelines', className: 'text-center' },
+                { data: 'timeliness', name: 'timeliness', defaultContent: '-', className: 'text-center' },
                 { data: 'quality', name: 'quality', className: 'text-center' },
                 { data: 'remarks', name: 'remarks' },
             ],

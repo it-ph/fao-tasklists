@@ -17,6 +17,7 @@ use App\Http\Controllers\TaskLogController;
 use App\Http\Controllers\UserControllerAPI;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksControllerAPI;
+use App\Http\Controllers\TaskAssignmentsControllerAPI;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClientControllerAPI;
 use App\Http\Controllers\DashboardController;
@@ -139,7 +140,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
         // Task Assignments
         Route::resource('task-assignments', TasksController::class);
         Route::get('task-assignments', [PageController::class, 'showAgentTaskAssignments'])->name('task-assignments.index');
-        Route::post('task-assignments/api/{status?}', [TasksControllerAPI::class, 'getAllTasks'])->name('api.get.task-assignments');
+        Route::post('task-assignments/api/{status?}', [TaskAssignmentsControllerAPI::class, 'getAllTasks'])->name('api.get.task-assignments');
         Route::get('task-assignments/export/template', [ExportController::class, 'uploadTaskAssignmentsTemplate'])->name('task-assignments.export.template');
         Route::post('task-assignments/import', [ImportController::class, 'importTaskAssignments'])->name('task-assignments.import')->middleware('validate.referer');
 
