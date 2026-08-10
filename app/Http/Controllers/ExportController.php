@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Exports\TasksReportExport;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\UploadTasksTemplateExport;
+use App\Exports\UploadTaskAssignmentExport;
 use App\Exports\UploadClientActivityTemplateExport;
 use App\Exports\UploadDashboardActivityTemplateExport;
 
@@ -106,9 +106,9 @@ class ExportController extends Controller
         return $tasks;
     }
 
-    public function uploadTasksTemplate()
+    public function uploadTaskAssignmentsTemplate()
     {
-        return Excel::download(new UploadTasksTemplateExport, 'FAO-tasklists-upload-template.xlsx');
+        return Excel::download(new UploadTaskAssignmentExport, 'FAO-tasklists-upload-task-assignments-template.xlsx');
     }
 
     public function uploadClientActivityTemplate()

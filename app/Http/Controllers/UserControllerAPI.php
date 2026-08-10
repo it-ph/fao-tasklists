@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Task;
+use App\Models\TaskAssignment;
 use Illuminate\Http\Request;
 
 class UserControllerAPI extends Controller
@@ -101,7 +103,7 @@ class UserControllerAPI extends Controller
             ->where('permission', '<>', 'superadmin');
 
             // admin
-            if (auth()->user()->isAdmin()) 
+            if (auth()->user()->isAdmin())
             {
                 $query = $query;
             }
@@ -116,17 +118,17 @@ class UserControllerAPI extends Controller
                 $query = $query->TLPermission();
             }
 
-            return datatables($query)                
+            return datatables($query)
                 ->addColumn('clock_in', function ($user) {
                     $log = $user->theattendances->first();
-                    return ($log && $log->clock_in) 
-                        ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') 
+                    return ($log && $log->clock_in)
+                        ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A')
                         : '<span class="text-muted">—</span>';
                 })
                 ->addColumn('clock_out', function ($user) {
                     $log = $user->theattendances->first();
-                    return ($log && $log->clock_out) 
-                        ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') 
+                    return ($log && $log->clock_out)
+                        ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A')
                         : '<span class="text-muted">—</span>';
                 })
                 ->addColumn('live_status', function ($user) {
@@ -143,12 +145,12 @@ class UserControllerAPI extends Controller
                     return '<span class="badge bg-secondary rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-Out</span>';
                 })
                 ->addColumn('work_status', function ($user) {
-                    $activeTask = \App\Models\Task::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
+                    $activeTask = Task::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
                     if ($activeTask) {
                         return '<span class="text-primary fw-bold">' . $activeTask->id . '</span>';
                     }
 
-                    $activeAssignment = \App\Models\TaskAssignment::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
+                    $activeAssignment = TaskAssignment::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
                     if ($activeAssignment) {
                         return '<span class="text-info fw-bold">TA' . $activeAssignment->id . '</span>';
                     }

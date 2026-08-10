@@ -20,7 +20,7 @@ class CreateTaskAssignmentsTable extends Migration
             $table->integer('client_id');
             $table->longText('activity_name');
             $table->date('applicable_month');
-            $table->longText('client_functions')->nullable();
+            $table->longText('client_function')->nullable();
             $table->string('eclerx_function'); // Procure to Pay (P2P), O2C, R2R, Personiv Admin, Client Admin
             $table->date('schedule')->nullable();
             $table->string('status')->default('Not Started'); // Not Started, In Progress, On-Hold, Completed
@@ -29,7 +29,7 @@ class CreateTaskAssignmentsTable extends Migration
             $table->string('actual_handling_time')->nullable(); // 00:00:00:00
             $table->string('aht_in_minutes')->default(0);
             $table->string('timeliness')->nullable(); // Green / Red
-            $table->string('quality')->nullable(); // Green / Red
+            $table->string('quality')->default("Green"); // Green / Red; default Green
             $table->longText('remarks')->nullable();
             $table->integer('created_by');
             $table->softDeletes();

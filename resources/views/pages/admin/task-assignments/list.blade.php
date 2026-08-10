@@ -45,6 +45,8 @@
                                     <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "Completed"]) }}">Completed</a>
                                 </div>
                             </div>
+                            <a href="{{ url('task-assignments-upload-template') }}" class="btn btn-primary btn-sm waves-effect waves-light"><i class="fas fa-download"></i> Template</a>
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#uploadTaskAssignmentsModal"><i class="fas fa-upload"></i> Upload</button>
                         </div>
                     </div>
                     <p id="status" style="display:none">@if(\Request::get('tstatus')) {{ (\Request::get('tstatus')) }} @else all @endif</p>
@@ -54,39 +56,23 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Status</th>
-                                {{-- @if(auth()->user()->isOperationsManagerOrAdmin())<th>Action</th>@endif --}}
                                 <th>Action</th>
                                 <th>Employee Name</th>
-                                <th>Shift Date</th>
-                                <th>Date Received</th>
+                                <th>Schedule</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
-                                <th>Client Activity</th>
-                                <th>Function</th>
-                                <th>Description</th>
+                                <th>Activity Name</th>
+                                <th>Applicable Month</th>
+                                <th>Client Function</th>
+                                <th>Eclerx Function</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Date Completed</th>
                                 <th>Actual Handling Time</th>
-                                <th>Volume</th>
+                                <th>Timeliness</th>
+                                <th>Quality</th>
                                 <th>Remarks</th>
                             </tr>
-                            {{-- <tr>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></>
-                            </tr> --}}
                         </thead>
                     </table>
                 </div>
@@ -94,6 +80,7 @@
         </div> <!-- end col -->
     </div>
     @include('pages.admin.task-assignments.edit-modal')
+    @include('pages.admin.task-assignments.upload-modal')
 @endsection
 
 @section('script')
@@ -108,5 +95,5 @@
 @endsection
 
 @section('custom-js')
-    <script src="{{asset('scripts/all-tasks.js')}}"></script>
+    {{-- <script src="{{asset('scripts/all-tasks.js')}}"></script> --}}
 @endsection
