@@ -297,7 +297,20 @@ const TASK = (() => {
             })
             .catch(error => {
                 console.error('An error occurred:', error);
-                toastr.error(error);
+                
+                // If Laravel's automatic validation (mimes:xlsx) fails before hitting our try/catch
+                if (error.response && error.response.data && error.response.data.errors) {
+                    toastr.error('File validation failed.');
+                    errorList.show();
+                    Object.values(error.response.data.errors).forEach(errArray => {
+                        errArray.forEach(errMessage => {
+                            let li = $('<li></li>').text(errMessage);
+                            errorList.append(li);
+                        });
+                    });
+                } else {
+                    toastr.error('An unexpected file system error occurred.');
+                }
             })
             .finally(() => {
                 resetButton();

@@ -21,7 +21,7 @@ class ImportController extends Controller
         $path = $request->file('import_file')->getRealPath();
         $import = new TaskAssignmentsImport;
 
-        // 1. Open Database Transaction State Lock
+         // 1. Open Database Transaction State Lock
         DB::beginTransaction();
 
         try {
@@ -50,15 +50,25 @@ class ImportController extends Controller
                 'message' => 'Task Assignments uploaded successfully!'
             ]);
 
-        } catch (\Exception $e) {
-            // 4. Safe fallback catch block for unexpected system exceptions
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
             DB::rollBack();
             
+            // Catch missing headers or invalid template schemas
             return response()->json([
-                'status' => 'error',
-                'message' => 'An unexpected error occurred during import processing.',
-                'error' => [$e->getMessage()]
-            ], 500);
+                'status' => 'warning',
+                'message' => 'Invalid template format. Please ensure all required header columns match the official template layout.',
+                'error' => ['Missing or misaligned column headers detected.']
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // Handles non-excel formats (CSV, PDF, TXT) that crash the excel package reader
+            return response()->json([
+                'status' => 'warning',
+                'message' => 'Invalid file type or format. Please upload a valid, uncorrupted Excel (.xlsx) file.',
+                'error' => ['The system cannot read this file extension or internal content format.']
+            ]);
         }
     }
 

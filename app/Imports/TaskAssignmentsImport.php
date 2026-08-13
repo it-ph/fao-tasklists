@@ -73,13 +73,13 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
                 'activity_name'      => $row['activity_name'],
                 'applicable_month'   => $applicable_month,
                 'eclerx_function'    => $row['eclerx_function'],
+                'status'             => 'Not Started',
             ],
             [
                 'client_id'          => $user->client_id ?? 0,
                 'client_function'    => $row['client_function'] ?? null,
                 'schedule'           => $schedule,
                 'created_by'         => Auth::id(),
-                'status'             => 'Not Started',
                 'quality'            => 'Green'
             ]
         );
