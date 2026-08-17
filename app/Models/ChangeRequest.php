@@ -52,7 +52,7 @@ class ChangeRequest extends Model
 
     public function thetask()
     {
-        return $this->belonsTo(Task::class, 'task_id')->withTrashed();
+        return $this->belongsTo(Task::class, 'task_id')->withTrashed();
     }
 
     public function thecluster()

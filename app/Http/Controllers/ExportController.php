@@ -10,7 +10,6 @@ use App\Models\Task;
 use App\Models\TaskAssignment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportController extends Controller
@@ -64,7 +63,8 @@ class ExportController extends Controller
             ];
             
             $dateColumn = 'schedule';
-        } else 
+        } 
+        else 
         {
             $query = Task::query();
             $relations = [
