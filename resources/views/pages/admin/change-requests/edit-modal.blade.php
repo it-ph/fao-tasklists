@@ -11,16 +11,22 @@
                     @csrf
                     <div class="form-group">
                         <input type="hidden" id="cr_update_close">
-                        <label for="name" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
+                        <label for="task_id" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="task_id" id="task_id_edit" style="width:100%;">
-                            <option value="" selected disabled>-- Select Task ID -- </option>
-                            @foreach ($tasks as $task)
-                            @if($task)
-                            <option {{ old('task_id')==$task->id ? "selected" : "" }}
-                                value="{{ $task->id }}">{{ ucwords($task->id) }}
-                            </option>
-                            @endif
-                            @endforeach
+                            <option value="" selected disabled>-- Select Target Reference --</option>                    
+                            <optgroup label="My Tasks">
+                                @foreach ($tasks as $task)
+                                    <!-- Value attribute holds the pure number string key -->
+                                    <option value="{{ $task->id }}">{{ $task->id }}</option>
+                                @endforeach
+                            </optgroup>
+
+                            <optgroup label="Assigned Tasks">
+                                @foreach ($task_assignments as $assignment)
+                                    <!-- Value attribute holds the TA + number key tracking string -->
+                                    <option value="TA{{ $assignment->id }}">TA{{ $assignment->id }}</option>
+                                @endforeach
+                            </optgroup>
                         </select>
                         <label id="task_id_editError" class="error"></label>
                     </div>

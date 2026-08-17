@@ -44,12 +44,6 @@ class ChangeRequestControllerAPI extends Controller
                 }
 
             return datatables($change_requests)
-                ->editColumn('task_id', function ($value) {
-                    if ($value->task_type === 'task_assignments') {
-                        return 'TA' . $value->task_id;
-                    }
-                    return $value->task_id;
-                })
                 ->editColumn('created_at', (function($value){
                     return $value->created_at ? date('d-M-y h:i:s a', strtotime($value->created_at)) : '';
                 }))
@@ -60,14 +54,33 @@ class ChangeRequestControllerAPI extends Controller
                     return $value->closed_at ? date('d-M-y h:i:s a', strtotime($value->closed_at)) : '';
                 }))
                 ->editColumn('status', (function($value){
-                    $statusClass = ($value->status === 'Open') ? 'text-danger' : 'text-primary';
-                    return '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
+                    $statusClass = '';
+                    switch ($value->status) {
+                        case 'Open':
+                            $statusClass = 'text-danger';
+                            break;
+                        case 'Closed':
+                            $statusClass = 'text-primary';
+                            break;
+                        default:
+                            break;
+                    }
+
+                    $status = '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
+                    return $status;
                 }))
                 ->addColumn('action', (function($value){
                     $action = auth()->user()->id == $value->created_by
                         ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Change Request" onclick=CHANGEREQUEST.edit(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>'
                         : '';
                     switch ($value->status) {
+                        // case 'Open':
+                        //     $action .= ' <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>
+                        //         <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Mark as Closed" onclick=CHANGEREQUEST.close(' . $value->id . ') id="btn-close-' . $value->id . '"><i class="fas fa-check"></i></button>';
+                        //     break;
+                        // case 'Closed':
+                        //     $action .= '<button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>';
+                        //     break;
                         case 'Open':
                             $action .= auth()->user()->isOperationsManagerOrAdmin() || auth()->user()->isTeamLeaderOrAdmin()
                             ? ' <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>

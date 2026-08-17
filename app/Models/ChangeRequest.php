@@ -23,11 +23,13 @@ class ChangeRequest extends Model
     public function scopeTLPermission($query)
     {
         $user = auth()->user();
-        return $query->whereHas('thepermission', function ($q) use ($user){
-                $q->where('tl_id',$user->id);
+        return $query->where(function ($subQuery) use ($user) {
+            $subQuery->whereHas('thepermission', function ($q) use ($user) {
+                $q->where('tl_id', $user->id);
             })
-            ->where('cluster_id',$user->cluster_id)
-            ->orwhere('created_by',$user->id);
+            ->where('cluster_id', $user->cluster_id)
+            ->orWhere('created_by', $user->id); // Safe because it is grouped inside this closure
+        });
     }
 
     public function scopeAccountantPermission($query)
@@ -53,6 +55,11 @@ class ChangeRequest extends Model
     public function thetask()
     {
         return $this->belongsTo(Task::class, 'task_id')->withTrashed();
+    }
+
+    public function thetaskassignment()
+    {
+        return $this->belongsTo(TaskAssignment::class, 'task_id')->withTrashed();
     }
 
     public function thecluster()

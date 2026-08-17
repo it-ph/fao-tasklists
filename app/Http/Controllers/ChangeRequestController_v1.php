@@ -19,27 +19,11 @@ class ChangeRequestController extends Controller
 
     public function store(StoreUpdateChangeRequest $request)
     {
-        $result = $this->successResponse('Change Request created successfully!');
+        $result = $this->successResponse('Cluster created successfully!');
         try {
-            $rawTarget = trim($request->input('task_id'));
-            
-            // Evaluates format directly: checks if string values begin with 'TA'
-            if (substr($rawTarget, 0, 2) === 'TA') {
-                $realId = substr($rawTarget, 2); // Drops 'TA' prefix out to extract database ID
-                $taskType = 'task_assignments';
-            } else {
-                $realId = $rawTarget; // Value is an explicit raw traditional index mapping 
-                $taskType = 'task';
-            }
-
-            ChangeRequest::create([
-                'created_by' => auth()->user()->id,
-                'cluster_id' => auth()->user()->cluster_id,
-                'task_id' => $realId,
-                'task_type' => $taskType,
-                'remarks' => $request->input('remarks'),
-                'status' => 'Open'
-            ]);
+            $request['created_by'] = auth()->user()->id;
+            $request['cluster_id'] = auth()->user()->cluster_id;
+            ChangeRequest::create($request->all());
         } catch (\Throwable $th)
         {
             $result = $this->errorResponse($th);
@@ -52,17 +36,9 @@ class ChangeRequestController extends Controller
     {
         $result = $this->successResponse('Change Request retrieved successfully!');
         try {
-            $cr = ChangeRequest::findOrFail($id);
-            
-            // Sync Fix: Packs data back matching dropdown keys exactly (e.g., 15 vs TA4)
-            // This ensures Select2 picks up and marks selection updates accurately
-            $compositeValue = ($cr->task_type === 'task_assignments') ? 'TA' . $cr->task_id : $cr->task_id;
-            
-            $result["data"] = [
-                'id' => $cr->id,
-                'task_id' => $compositeValue,
-                'remarks' => $cr->remarks
-            ];
+            $result["data"] = $this->model::query()
+                ->where('id', $id)
+                ->first();
         } catch (\Throwable $th) {
             return $this->errorResponse($th);
         }
@@ -70,25 +46,12 @@ class ChangeRequestController extends Controller
         return $this->returnResponse($result);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreUpdateChangeRequest $request, $id)
     {
         $result = $this->successResponse('Change Request updated successfully!');
         try {
-            $rawTarget = trim($request->input('task_id'));
-            
-            if (substr($rawTarget, 0, 2) === 'TA') {
-                $realId = substr($rawTarget, 2);
-                $taskType = 'task_assignments';
-            } else {
-                $realId = $rawTarget;
-                $taskType = 'task';
-            }
+            $this->model->findOrfail($id)->update($request->all());
 
-            ChangeRequest::findOrFail($id)->update([
-                'task_id' => $realId,
-                'task_type' => $taskType,
-                'remarks' => $request->input('remarks')
-            ]);
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
         }

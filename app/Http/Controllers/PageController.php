@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TaskAssignment;
 use App\Models\Client;
-use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Models\ClientActivity;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\GlobalVariableController;
 
 class PageController extends GlobalVariableController
@@ -62,33 +61,75 @@ class PageController extends GlobalVariableController
      */
     public function showChangeRequests()
     {
-        $tasks = Task::query()
+        // $tasks = Task::query()
+        //     ->select('id')
+        //     ->where('status','Completed')
+        //     ->where('end_date', '>=', now()->subMonth());
+
+        //     // Get user permission
+        //     $userPermission = auth()->user()->permission;
+
+        //     // Filter tasks based on user permission
+        //     switch ($userPermission) {
+        //         case 'superadmin':
+        //         case 'admin':
+        //             $tasks = $tasks->get();
+        //             break;
+        //         case 'operations manager':
+        //             $tasks = $tasks->OMPermission()->get();
+        //             break;
+        //         case 'team leader':
+        //             $tasks = $tasks->TLPermission()->get();
+        //             break;
+        //         case 'accountant':
+        //             $tasks = $tasks->AccountantPermission()->get();
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        // return view('pages.admin.change-requests.list',compact('tasks'));
+
+        $tasksQuery = Task::query()
             ->select('id')
-            ->where('status','Completed')
+            ->where('status', 'Completed')
             ->where('end_date', '>=', now()->subMonth());
 
-            // Get user permission
-            $userPermission = auth()->user()->permission;
+        $assignmentsQuery = TaskAssignment::query()
+            ->select('id') 
+            ->where('status', 'Completed')
+            ->where('end_date', '>=', now()->subMonth());
 
-            // Filter tasks based on user permission
-            switch ($userPermission) {
-                case 'superadmin':
-                case 'admin':
-                    $tasks = $tasks->get();
-                    break;
-                case 'operations manager':
-                    $tasks = $tasks->OMPermission()->get();
-                    break;
-                case 'team leader':
-                    $tasks = $tasks->TLPermission()->get();
-                    break;
-                case 'accountant':
-                    $tasks = $tasks->AccountantPermission()->get();
-                    break;
-                default:
-                    break;
-            }
-        return view('pages.admin.change-requests.list',compact('tasks'));
+        $userPermission = auth()->user()->permission;
+
+        switch ($userPermission) {
+            case 'superadmin':
+            case 'admin':
+                $tasks = $tasksQuery->get();
+                $task_assignments = $assignmentsQuery->get();
+                break;
+                
+            case 'operations manager':
+                $tasks = $tasksQuery->OMPermission()->get();
+                $task_assignments = $assignmentsQuery->OMPermission()->get();
+                break;
+                
+            case 'team leader':
+                $tasks = $tasksQuery->TLPermission()->get();
+                $task_assignments = $assignmentsQuery->TLPermission()->get();
+                break;
+                
+            case 'accountant':
+                $tasks = $tasksQuery->AccountantPermission()->get();
+                $task_assignments = $assignmentsQuery->AccountantPermission()->get();
+                break;
+                
+            default:
+                $tasks = collect();
+                $task_assignments = collect();
+                break;
+        }
+
+        return view('pages.admin.change-requests.list', compact('tasks', 'task_assignments'));
     }
 
     // ADMIN, TL, & OM ACCESS
