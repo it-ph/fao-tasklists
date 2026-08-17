@@ -22,7 +22,7 @@
         @foreach ($tasks as $task)
             <tr>
                 <td style="vertical-align: top; border: 1px solid #000000;">
-                    @isset($task->theagent) {{ $task->theagent->fullname }} {{ $task->theagent->last_name }} @endisset
+                    @isset($task->theagent) {{ $task->theagent->fullname }} @endisset
                 </td>
                 <td style="vertical-align: top; text-align:center; border: 1px solid #000000;">{{ date('m/d/Y', strtotime($task->shift_date)) }}</td>
                 <td style="vertical-align: top; text-align:center; border: 1px solid #000000;">{{ date('m/d/Y', strtotime($task->date_received)) }}</td>
