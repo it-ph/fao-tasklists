@@ -131,15 +131,7 @@ class TaskAssignmentsControllerAPI extends Controller
                     }
                     return $actual_handling_time;
                 }))
-                ->editColumn('timeliness', function($value) {
-                    // $statusClass = '';
-                    // switch ($value->timeliness) {
-                    //     case 'Green': $statusClass = 'text-success'; break;
-                    //     case 'Red':   $statusClass = 'text-danger'; break;
-                    //     default: break;
-                    // }
-                    // return !empty(trim($value->timeliness)) ? '<span class="' . $statusClass . '"><strong>' . e($value->timeliness) . '</strong></span>' : '-';
-                    
+                ->editColumn('timeliness', function($value) { 
                     $status = $value->timeliness;
                     if (empty($status)) {
                         $scheduleStr = substr($value->schedule, 0, 10);
@@ -190,9 +182,9 @@ class TaskAssignmentsControllerAPI extends Controller
                             $allowed_daterange = AllowedEditingDate::first();
                             $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
                             $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
-                            $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                            $schedule = date('Y-m-d H:i:s', strtotime($value->schedule));
 
-                            $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
+                            $is_allowed_to_edit = ($schedule >= $date_from && $schedule <= $date_to) ? 1 : 0;
                             $action = $is_allowed_to_edit ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>' : '-';
                             break;
                         default:
@@ -345,15 +337,7 @@ class TaskAssignmentsControllerAPI extends Controller
                     }
                     return $actual_handling_time;
                 }))
-                ->editColumn('timeliness', function($value) {
-                    // $statusClass = '';
-                    // switch ($value->timeliness) {
-                    //     case 'Green': $statusClass = 'text-success'; break;
-                    //     case 'Red':   $statusClass = 'text-danger'; break;
-                    //     default: break;
-                    // }
-                    // return !empty(trim($value->timeliness)) ? '<span class="' . $statusClass . '"><strong>' . e($value->timeliness) . '</strong></span>' : '-';
-                    
+                ->editColumn('timeliness', function($value) { 
                     $status = $value->timeliness;
                     if (empty($status)) {
                         $scheduleStr = substr($value->schedule, 0, 10);
@@ -391,9 +375,9 @@ class TaskAssignmentsControllerAPI extends Controller
                         $allowed_daterange = AllowedEditingDate::first();
                         $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
                         $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
-                        $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                        $schedule = date('Y-m-d H:i:s', strtotime($value->schedule));
 
-                        $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
+                        $is_allowed_to_edit = ($schedule >= $date_from && $schedule <= $date_to) ? 1 : 0;
                         $action = $is_allowed_to_edit ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>' : '-';
                     }
                     return $action;

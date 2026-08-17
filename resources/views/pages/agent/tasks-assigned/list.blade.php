@@ -80,7 +80,7 @@
         </div> <!-- end col -->
     </div>
     {{-- @include('pages.agent.tasks.add-modal') --}}
-    {{-- @include('pages.agent.tasks.edit-modal') --}}
+    @include('pages.agent.tasks-assigned.edit-modal')
     @include('pages.agent.tasks-assigned.start-modal')
     @include('pages.agent.tasks-assigned.stop-modal')
     @include('pages.agent.tasks-assigned.pause-modal')

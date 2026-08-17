@@ -25,18 +25,18 @@
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" id="shift_date_edit">
-                                    <label id="shift_date_editError" class="error" for="name"></label>
+                                    <label for="schedule" class="col-form-label custom-label"><strong>SCHEDULE:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="date" name="schedule" id="schedule_edit">
+                                    <label id="schedule_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="date_received" id="date_received_edit">
-                                    <label id="date_received_editError" class="error" for="name"></label>
+                                    <label for="applicable_month" class="col-form-label custom-label"><strong>APPLICABLE MONTH:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="month" name="applicable_month" id="applicable_month_edit">
+                                    <label id="applicable_month_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
@@ -76,33 +76,40 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="client_activity_id" class="col-form-label custom-label"><strong>ACTIVITY:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="client_activity_id" id="client_activity_id_edit" style="width:100%;">
-                                        <option value="" selected disabled>-- Select Activity -- </option>
-                                        @foreach ($user_client_activities as $user_client_activity)
-                                                @if($user_client_activity)
-                                                    <option {{ old('client_activity_id') == $user_client_activity->id ? "selected" : "" }}
-                                                        value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }}
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                    </select>
+                                    <label for="activity_name" class="col-form-label custom-label"><strong>Activity Name:<span class="important">*</span></strong></label>
+                                    <textarea class="form-control" name="activity_name" id="activity_name_edit" placeholder="Type the activity name here"></textarea>
+                                    <label id="activity_name_editError" class="error" for="name"></label>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
-                                    <textarea class="form-control" name="description" id="description_edit" placeholder="Type the description here"></textarea>
-                                    <label id="description_editError" class="error" for="name"></label>
+                                    <label for="client_function" class="col-form-label custom-label"><strong>CLIENT FUNCTION:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="text" name="client_function" id="client_function_edit">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="eclerx_function" class="col-form-label custom-label"><strong>ECLERX FUNCTION:<span class="important">*</span></strong></label>
+                                    <select name="eclerx_function" class="form-control" id="eclerx_function_edit">
+                                    <option value="">-- Select Eclerx Function --</option>
+                                    <option value="Procure to Pay (P2P)">Procure to Pay (P2P)</option>
+                                    <option value="Order to Cash (O2C)">Order to Cash (O2C)</option>
+                                    <option value="Record to Report (R2R)">Record to Report (R2R)</option>
+                                    <option value="Client Admin">Client Admin</option>
+                                    <option value="Personiv Admin">Personiv Admin</option>
+                                </select>
                                 </div>
                             </div>
                         </div>
@@ -146,11 +153,27 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="volume" class="col-form-label custom-label"><strong>VOLUME:</span></strong></label>
-                                    <input type="number" class="form-control" name="volume" id="volume_edit" readonly>
+                                    <label for="timeliness" class="col-form-label custom-label"><strong>TIMELINESS:<span class="important">*</span></strong></label>
+                                    <select class="form-control select2" name="timeliness" id="timeliness_edit" style="width:100%;" disabled>
+                                        <option value="" selected disabled>-- Select Timeliness -- </option>
+                                        <option value="Green">Green</option>
+                                        <option value="Red">Red</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="Quality" class="col-form-label custom-label"><strong>Quality:<span class="important">*</span></strong></label>
+                                    <select class="form-control select2" name="quality" id="quality_edit" style="width:100%;">
+                                        <option value="" selected disabled>-- Select Quality -- </option>
+                                        <option value="Green">Green</option>
+                                        <option value="Red">Red</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

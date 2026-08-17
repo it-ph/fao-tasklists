@@ -31,10 +31,9 @@ class UpdateTaskAssignmentRequest extends FormRequest
             // 'cluster_id' => ['required'],
             // 'client_id' => ['required'],
             // 'agent_id' => ['required'],
-            'shift_date' => ['required'],
-            'date_received' => ['required'],
-            'client_activity_id' => ['required'],
-            'description' => ['required'],
+            'schedule' => ['required'],
+            'applicable_month' => ['required'],
+            'activity_name' => ['required'],
         ];
     }
 
@@ -44,10 +43,9 @@ class UpdateTaskAssignmentRequest extends FormRequest
             // 'cluster_id.required' => 'Cluster Name is required.',
             // 'client_id.required' => 'Client Name is required.',
             // 'agent_id.required' => 'Employee Name is required.',
-            'shift_date.required' => 'Shift Date is required.',
-            'date_received.required' => 'Date Received is required.',
-            'client_activity_id.required' => 'Client Activity is required.',
-            'description.required' => 'Description is required.',
+            'schedule.required' => 'Schedule is required.',
+            'applicable_month.required' => 'Applicable Month is required.',
+            'activity_name.required' => 'Activity Name is required.',
         ];
     }
 

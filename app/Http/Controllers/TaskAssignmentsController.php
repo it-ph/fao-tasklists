@@ -33,7 +33,6 @@ class TaskAssignmentsController extends GlobalVariableController
                     'theagent:id,fullname',
                     'thecluster:id,name',
                     'theclient:id,name',
-                    'theclientactivity:id,name'
                 ])
                 ->where('id', $id)
                 ->first();

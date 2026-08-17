@@ -85,7 +85,10 @@ const TASK = (() => {
         $('#editTaskForm')[0].reset();
         $("#cluster_id_edit").val(null).trigger("change");
         $("#client_id_edit").val(null).trigger("change");
-        $("#client_activity_id_edit").val(null).trigger("change");
+        $('#activity_name_edit').text('');
+        $("#timeliness_edit").val(null).trigger("change");
+        $("#quality_edit").val(null).trigger("change");
+        $('#remarks_edit').text('');
         $('.error').hide();
         $('.error').text('');
         $('#btn_update').empty();
@@ -94,27 +97,29 @@ const TASK = (() => {
         axios(`${APP_URL}/assigned-task/show/${id}`).then(function(response) {
             _task_id = id;
             const tzone = "Asia/Manila";
-            var shift_date = moment(response.data.data.shift_date).tz(tzone).format('YYYY-MM-DD');
-            var date_received = moment(response.data.data.date_received).tz(tzone).format('YYYY-MM-DD');
+            var schedule = moment(response.data.data.schedule).tz(tzone).format('YYYY-MM-DD');
+            var applicable_month = moment(response.data.data.applicable_month).tz(tzone).format('YYYY-MM');
             var start_date = moment(response.data.data.start_date).tz(tzone).format('YYYY-MM-DDTHH:mm');
             var end_date = response.data.data.end_date ? moment(response.data.data.end_date).tz(tzone).format('YYYY-MM-DDTHH:mm') : '';
-            var allow_volume = response.data.data.status == 'Completed' ? false : true;
+            var allow_quality = response.data.data.status == 'Completed' ? false : true;
             var allow_remarks = response.data.data.status == 'Completed' ? false : true;
 
             $('#agent_id').val(response.data.data.agent_id);
             $('#employee_name').val(response.data.data.theagent.fullname);
-            $('#shift_date_edit').val(shift_date);
-            $('#date_received_edit').val(date_received);
+            $('#schedule_edit').val(schedule);
+            $('#applicable_month_edit').val(applicable_month);
             $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
             $("#client_id_edit").val(response.data.data.client_id).trigger("change");
-            $("#client_activity_id_edit").val(response.data.data.client_activity_id).trigger("change");
-            $('#description_edit').text(response.data.data.description);
+            $('#activity_name_edit').text(response.data.data.activity_name);
+            $('#client_function_edit').val(response.data.data.client_function);
+            $("#eclerx_function_edit").val(response.data.data.eclerx_function).trigger("change");
             $('#status_edit').val(response.data.data.status);
             $('#start_date_edit').val(start_date);
             $('#end_date_edit').val(end_date);
             $('#actual_handling_time_edit').val(response.data.data.actual_handling_time);
-            $('#volume_edit').attr('readonly', allow_volume);
-            $('#volume_edit').val(response.data.data.volume);
+            $('#timeliness_edit').val(response.data.data.timeliness).trigger("change");
+            $('#quality_edit').attr('readonly', allow_quality);
+            $('#quality_edit').val(response.data.data.quality).trigger("change");
             $('#remarks_edit').attr('readonly', allow_remarks);
             $('#remarks_edit').text(response.data.data.remarks);
             $('#btn_update').empty();
@@ -163,9 +168,11 @@ const TASK = (() => {
                         $("#tbl_task_info").hide();
                         $("#tbl_task_paginate").hide();
                         $('#editTaskForm')[0].reset();
-                        $("#client_activity_id_edit").val(null).trigger("change");
-                        $('#description_edit').text('');
-                        $('#volume_edit').attr('readonly', true);
+                        $('#activity_name_edit').text('');
+                        $("#timeliness_edit").val(null).trigger("change");
+                        $("#quality_edit").val(null).trigger("change");
+                        $('#quality').attr('readonly', true);
+                        $('#remarks_edit').text('');
                         $('#remarks_edit').attr('readonly', true);
                         TASK.load();
                         $('.error').hide();
@@ -297,7 +304,7 @@ const TASK = (() => {
             })
             .catch(error => {
                 console.error('An error occurred:', error);
-                
+
                 // If Laravel's automatic validation (mimes:xlsx) fails before hitting our try/catch
                 if (error.response && error.response.data && error.response.data.errors) {
                     toastr.error('File validation failed.');
