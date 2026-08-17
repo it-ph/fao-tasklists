@@ -12,16 +12,17 @@ class TasksReportExport implements FromView, WithEvents, WithTitle
 {
     use RegistersEventListeners;
 
-    private $tasks;
+    private $tasks, $task_type;
 
-    public function __construct($tasks)
+    public function __construct($tasks, $task_type)
     {
         $this->tasks = $tasks;
+        $this->task_type = $task_type;
     }
 
     public function view(): View
     {
-        return view('pages.admin.reports.exports.tasks_report',[
+        return view("pages.admin.reports.exports.{$this->task_type}_report",[
             'tasks' => $this->tasks,
         ]);
     }
@@ -31,6 +32,6 @@ class TasksReportExport implements FromView, WithEvents, WithTitle
      */
     public function title(): string
     {
-        return $sheetname = 'TASKS_REPORT';
+        return $sheetname = strtoupper($this->task_type).'_REPORT';
     }
 }

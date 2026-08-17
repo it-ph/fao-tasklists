@@ -99,9 +99,6 @@ class TaskAssignmentsControllerAPI extends Controller
                 ->editColumn('applicable_month', (function($value){
                     return $value->applicable_month ? date("F Y",strtotime($value->applicable_month)) : '';
                 }))
-                ->editColumn('date_received', (function($value){
-                    return $value->date_received ? date("Y-m-d",strtotime($value->date_received)) : '';
-                }))
                 ->editColumn('start_date', (function($value){
                     return $value->start_date ? date("Y-m-d h:i:s a",strtotime($value->start_date)) : '-';
                 }))
@@ -135,13 +132,31 @@ class TaskAssignmentsControllerAPI extends Controller
                     return $actual_handling_time;
                 }))
                 ->editColumn('timeliness', function($value) {
-                    $statusClass = '';
-                    switch ($value->timeliness) {
-                        case 'Green': $statusClass = 'text-success'; break;
-                        case 'Red':   $statusClass = 'text-danger'; break;
-                        default: break;
+                    // $statusClass = '';
+                    // switch ($value->timeliness) {
+                    //     case 'Green': $statusClass = 'text-success'; break;
+                    //     case 'Red':   $statusClass = 'text-danger'; break;
+                    //     default: break;
+                    // }
+                    // return !empty(trim($value->timeliness)) ? '<span class="' . $statusClass . '"><strong>' . e($value->timeliness) . '</strong></span>' : '-';
+                    
+                    $status = $value->timeliness;
+                    if (empty($status)) {
+                        $scheduleStr = substr($value->schedule, 0, 10);
+
+                        if ($value->end_date) {
+                            // Task is completed: compare completion date to schedule
+                            $endDateStr = substr($value->end_date, 0, 10);
+                            $status = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
+                        } else {
+                            // Task is still running: compare current server date to schedule
+                            $currentDateStr = date('Y-m-d');
+                            $status = ($currentDateStr > $scheduleStr) ? 'Red' : 'Green';
+                        }
                     }
-                    return !empty(trim($value->timeliness)) ? '<span class="' . $statusClass . '"><strong>' . e($value->timeliness) . '</strong></span>' : '-';
+
+                    $statusClass = ($status === 'Red') ? 'text-danger' : 'text-success';
+                    return '<span class="' . $statusClass . '"><strong>' . e($status) . '</strong></span>';
                 })
                 ->editColumn('quality', function($value) {
                     $statusClass = '';
@@ -298,9 +313,6 @@ class TaskAssignmentsControllerAPI extends Controller
                 ->editColumn('applicable_month', (function($value){
                     return $value->applicable_month ? date("F Y",strtotime($value->applicable_month)) : '';
                 }))
-                ->editColumn('date_received', (function($value){
-                    return $value->date_received ? date("Y-m-d",strtotime($value->date_received)) : '';
-                }))
                 ->editColumn('start_date', (function($value){
                     return $value->start_date ? date("Y-m-d h:i:s a",strtotime($value->start_date)) : '-';
                 }))
@@ -334,13 +346,31 @@ class TaskAssignmentsControllerAPI extends Controller
                     return $actual_handling_time;
                 }))
                 ->editColumn('timeliness', function($value) {
-                    $statusClass = '';
-                    switch ($value->timeliness) {
-                        case 'Green': $statusClass = 'text-success'; break;
-                        case 'Red':   $statusClass = 'text-danger'; break;
-                        default: break;
+                    // $statusClass = '';
+                    // switch ($value->timeliness) {
+                    //     case 'Green': $statusClass = 'text-success'; break;
+                    //     case 'Red':   $statusClass = 'text-danger'; break;
+                    //     default: break;
+                    // }
+                    // return !empty(trim($value->timeliness)) ? '<span class="' . $statusClass . '"><strong>' . e($value->timeliness) . '</strong></span>' : '-';
+                    
+                    $status = $value->timeliness;
+                    if (empty($status)) {
+                        $scheduleStr = substr($value->schedule, 0, 10);
+
+                        if ($value->end_date) {
+                            // Task is completed: compare completion date to schedule
+                            $endDateStr = substr($value->end_date, 0, 10);
+                            $status = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
+                        } else {
+                            // Task is still running: compare current server date to schedule
+                            $currentDateStr = date('Y-m-d');
+                            $status = ($currentDateStr > $scheduleStr) ? 'Red' : 'Green';
+                        }
                     }
-                    return !empty(trim($value->timeliness)) ? '<span class="' . $statusClass . '"><strong>' . e($value->timeliness) . '</strong></span>' : '-';
+
+                    $statusClass = ($status === 'Red') ? 'text-danger' : 'text-success';
+                    return '<span class="' . $statusClass . '"><strong>' . e($status) . '</strong></span>';
                 })
                 ->editColumn('quality', function($value) {
                     $statusClass = '';

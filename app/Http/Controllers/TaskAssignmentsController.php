@@ -162,11 +162,16 @@ class TaskAssignmentsController extends GlobalVariableController
             $actual_handling_time = TimeElapsedHelper::convertTime($working_hours);
             $aht_in_minutes = number_format(($working_hours * 60),2);
 
+            $scheduleStr = substr($task->schedule, 0, 10);
+            $endDateStr = substr($task->end_date, 0, 10);
+            $timeliness = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
+
             $task->update([
                 'status' => $status,
                 'end_date' => $now,
                 'actual_handling_time' => $actual_handling_time,
                 'aht_in_minutes' => $aht_in_minutes,
+                'timeliness' => $timeliness,
                 'remarks' => $remarks
             ]);
 

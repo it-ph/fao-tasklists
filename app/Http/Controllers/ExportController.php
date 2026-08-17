@@ -35,6 +35,7 @@ class ExportController extends Controller
 
         $date_from =  Carbon::parse($request['date_from'])->format('Y-m-d');
         $date_to =  Carbon::parse($request['date_to'])->format('Y-m-d');
+        $task_type = $request['task_type'];
 
         $tasks = Task::query()
             ->with([
@@ -78,13 +79,13 @@ class ExportController extends Controller
         // set filename based on date filter
         if($date_from == $date_to )
         {
-            $filename = "TASKLISTS_REPORT_". $date_from .".xlsx";
+            $filename = strtoupper($task_type)."LIST_REPORT_". $date_from .".xlsx";
         }else
         {
-            $filename = "TASKLISTS_REPORT_". $date_from .'_to_'.$date_to.".xlsx";
+            $filename = strtoupper($task_type)."LIST_REPORT_". $date_from .'_to_'.$date_to.".xlsx";
         }
 
-        return Excel::download(new TasksReportExport($tasks), $filename);
+        return Excel::download(new TasksReportExport($tasks, $task_type), $filename);
     }
 
     // get data based on filters

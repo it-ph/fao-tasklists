@@ -31,8 +31,15 @@
                         <div class="row">
 
                             @if(auth()->user()->isAccountant())
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->format('m-d-Y')}} - {{date('m-d-Y')}}">
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-control select2" name="task_type" id="task_type" required>
+                                        <option value="" selected disabled>-- Select Task Type --</option>
+                                        <option value="tasks">My Tasks</option>
+                                        <option value="task_assignments">Assigned Tasks</option>
+                                    </select>
                                 </div>
                             @else
                                 <input type="hidden" name="cluster_id" id="cluster_id" class="form-control" value="{{ auth()->user()->cluster_id }}">
@@ -41,13 +48,20 @@
                                     <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->subDays(7)->format('m-d-Y')}} - {{date('m-d-Y')}}">
                                 </div>
                                 <div class="col-md-3 mb-2">
+                                    <select class="form-control select2" name="task_type" id="task_type" required>
+                                        <option value="" selected disabled>-- Select Task Type --</option>
+                                        <option value="tasks">Task Lists</option>
+                                        <option value="task_assignments">Task Assignments</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-2">
                                     <select class="form-control select2" name="filter_by" id="filter_by">
                                         <option value="All" selected>All</option>
                                         <option value="Client">Client</option>
                                         <option value="Accountant">Accountant</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-2">
+                                <div class="col-md-3 mb-2">
                                     <select class="form-control select2" name="filtered_to[]" id="filtered_to" style="width:100%;" required>
                                         <option value="All" selected>All</option>
                                     </select>
