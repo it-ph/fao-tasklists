@@ -28,7 +28,7 @@ class ChangeRequest extends Model
                 $q->where('tl_id', $user->id);
             })
             ->where('cluster_id', $user->cluster_id)
-            ->orWhere('created_by', $user->id); // Safe because it is grouped inside this closure
+            ->orWhere('created_by', $user->id);
         });
     }
 
