@@ -17,7 +17,10 @@
             <td colspan="4" style="color: red; font-weight: bold"> Note: email_address, activity_name, applicable_month, eclerx_function, and schedule are required.</td>
         </tr>
         <tr>
-            <td colspan="4" style="color: red; font-weight: bold"> Note: applicable_month and schedule format: mm-yyyy</td>
+            <td colspan="4" style="color: red; font-weight: bold"> Note: applicable_month: mm-yyyy</td>
+        </tr>
+        <tr>
+            <td colspan="4" style="color: red; font-weight: bold"> Note: schedule format: yyyy-mm-dd</td>
         </tr>
     </tbody>
 </table>

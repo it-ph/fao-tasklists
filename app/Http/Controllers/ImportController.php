@@ -15,16 +15,32 @@ class ImportController extends Controller
         $request->validate([
             'import_file' => 'required|file|mimes:xlsx',
         ], [
-            'import_file.required' => 'File to upload is required.'
+            'import_file.required' => 'File to upload is required.',
+            'import_file.mimes' => 'File to upload must be a valid excel file.',
         ]);
 
         $path = $request->file('import_file')->getRealPath();
         $import = new TaskAssignmentsImport;
 
-         // 1. Open Database Transaction State Lock
+        // 1. Open Database Transaction State Lock
         DB::beginTransaction();
 
         try {
+            // --- ADDED: SAFE COOLDOWN GUARD FOR RANDOM EXCEL FILES ---
+            $headingImport = (new \Maatwebsite\Excel\HeadingRowImport)->toArray($path);
+            $uploadedHeaders = $headingImport[0][0] ?? [];
+            $requiredHeaders = ['email_address', 'activity_name', 'applicable_month', 'client_function', 'eclerx_function', 'schedule'];
+
+            if ($uploadedHeaders !== $requiredHeaders) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => 'warning',
+                    'message' => 'Invalid template format. Please ensure all required header columns match the official template layout.',
+                    'error' => ['The uploaded file layout does not match the official template structure.']
+                ]);
+            }
+            // --- END OF SAFE COOLDOWN GUARD ---
+
             Excel::import($import, $path);
             
             $errors = $import->getErrors();
@@ -38,7 +54,7 @@ class ImportController extends Controller
                 return response()->json([
                     'status' => 'warning',
                     'message' => 'Import failed due to validation errors.',
-                    'error' => array_values($errorsArray) // array_values clears non-sequential array index offsets caused by array_unique
+                    'error' => array_values($errorsArray) // clears non-sequential index offsets caused by array_unique
                 ]);
             }
 
@@ -48,16 +64,6 @@ class ImportController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Task Assignments uploaded successfully!'
-            ]);
-
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            DB::rollBack();
-            
-            // Catch missing headers or invalid template schemas
-            return response()->json([
-                'status' => 'warning',
-                'message' => 'Invalid template format. Please ensure all required header columns match the official template layout.',
-                'error' => ['Missing or misaligned column headers detected.']
             ]);
 
         } catch (\Exception $e) {

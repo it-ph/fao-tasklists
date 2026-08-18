@@ -6,12 +6,14 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\TaskAssignment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
-
-class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,SkipsEmptyRows
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Validators\Failure;
+class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,SkipsEmptyRows, SkipsOnFailure
 {
     private $has_error = array();
     private $row_number = 1; // Assuming row 1 is the header. Data processing begins at row 2.
@@ -72,13 +74,13 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
                 'cluster_id'         => $user->cluster_id,
                 'activity_name'      => $row['activity_name'],
                 'applicable_month'   => $applicable_month,
+                'schedule'           => $schedule,
                 'eclerx_function'    => $row['eclerx_function'],
                 'status'             => 'Not Started',
             ],
             [
                 'client_id'          => $user->client_id ?? 0,
                 'client_function'    => $row['client_function'] ?? null,
-                'schedule'           => $schedule,
                 'created_by'         => Auth::id(),
                 'quality'            => 'Green'
             ]
@@ -92,14 +94,37 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
 
     public function rules(): array
     {
-        // Removed *. to map directly to headings processed line-by-line
+        $allowedFunctions = [
+            'Procure to Pay (P2P)',
+            'Order to Cash (O2C)',
+            'Record to Report (R2R)',
+            'Personiv Admin',
+            'Client Admin'
+        ];
+
         return [
             'email_address'    => ['required'],
             'activity_name'    => ['required'],
             'applicable_month' => ['required'],
-            'eclerx_function'  => ['required'],
+            'eclerx_function'  => ['required', Rule::in($allowedFunctions)],
             'schedule'         => ['required'],
         ];
+    }
+
+    /**
+     * Intercepts required field validation errors natively.
+     */
+    public function onFailure(Failure ...$failures)
+    {
+        foreach ($failures as $failure) {
+            // $failure->row() gives the exact, real Excel row number (e.g., 3)
+            foreach ($failure->errors() as $error) {
+                array_push($this->has_error, "Row " . $failure->row() . ": " . $error);
+            }
+            
+            // Keep your manual tracking counter synced up with where the file reader is
+            $this->row_number = $failure->row();
+        }
     }
 
     private function transformDate($value)
@@ -109,6 +134,11 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
         }
 
         $value = trim($value);
+        
+        // Check if value matches YYYY-MM-DD format directly first
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+            return $value;
+        }
 
         if (is_numeric($value)) {
             return \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value))->format('Y-m-d');

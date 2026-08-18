@@ -224,7 +224,7 @@ const TASK = (() => {
                 var url = window.URL.createObjectURL(data);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = filename || 'user-upload-template.xlsx'; // Fallback filename
+                a.download = filename || 'task-assignments-upload-template.xlsx'; // Fallback filename
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
