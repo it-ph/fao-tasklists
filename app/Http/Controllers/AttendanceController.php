@@ -90,4 +90,49 @@ class AttendanceController extends Controller
                 ]);
             }
     }
+
+    public function removeClockOut(Request $request, $id)
+    {
+        try {
+            // 1. Fetch the targeted user's attendance record for the current active shift
+            // It searches using the passed dynamic Employee ID ($id) and targets today's record
+            $attendance = Attendance::where('agent_id', $id)
+                ->where('shift_date', Carbon::today()->toDateString())
+                ->first();
+
+            if (!$attendance) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'No shift attendance record found for this employee today.'
+                ]);
+            }
+
+            // 2. Fail-safe protection check: ensure they actually have a clock out to clear
+            if (!$attendance->clock_out) {
+                return response()->json([
+                    'status'  => 'warning',
+                    'message' => 'This employee is already active or hasn\'t clocked out yet.'
+                ]);
+            }
+
+            // 3. Wipe out the data properties to cleanly revert back to an open shift
+            $attendance->update([
+                'clock_out'    => null,
+                'work_minutes' => 0,
+            ]);
+
+            // 4. Successful Response payload execution
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Clock-out timestamp removed successfully. The employee can now continue working!'
+            ]);
+
+        } catch (\Exception $e) {
+            // Error safety catch response wrap block
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Something went wrong on the server: ' . $e->getMessage()
+            ]);
+        }
+    }
 }

@@ -35,6 +35,7 @@
                                 <th>Clock Out</th>
                                 <th>Status</th>
                                 <th>Work Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -42,6 +43,8 @@
             </div>
         </div> <!-- end col -->
     </div>
+
+    @include('pages.admin.users.remove-clock-out-modal')
 @endsection
 
 @section('script')

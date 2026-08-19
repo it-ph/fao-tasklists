@@ -272,6 +272,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
                 });
 
                 Route::get('user-live-status', [PageController::class, 'showUserLiveStatus'])->name('users.live.status');
+                Route::post('user-remove-clock-out/{id}', [AttendanceController::class,'removeClockOut'])->name('user.remove.clock.out');
                 // Route::get('idle-tracking', [PageController::class, 'showIdleTracking'])->name('idle-tracking.index');
 
                 Route::resource('dashboard-activities', DashboardActivityController::class);

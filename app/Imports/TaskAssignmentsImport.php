@@ -57,7 +57,7 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
         try {
             $applicable_month = $this->transformDate($row['applicable_month']);
             $schedule = !empty($row['schedule']) ? $this->transformDate($row['schedule']) : null;
-            
+
             if (!$applicable_month) {
                 array_push($this->has_error, "Row " . $this->row_number . ": 'applicable_month' is invalid or improperly formatted.");
                 return null;
@@ -121,7 +121,7 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
             foreach ($failure->errors() as $error) {
                 array_push($this->has_error, "Row " . $failure->row() . ": " . $error);
             }
-            
+
             // Keep your manual tracking counter synced up with where the file reader is
             $this->row_number = $failure->row();
         }
@@ -134,7 +134,7 @@ class TaskAssignmentsImport implements ToModel, WithHeadingRow,WithValidation,Sk
         }
 
         $value = trim($value);
-        
+
         // Check if value matches YYYY-MM-DD format directly first
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
             return $value;

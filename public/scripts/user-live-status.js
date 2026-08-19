@@ -1,7 +1,7 @@
 $(document).ready(function() {
     LIVE_STATUS.load();
 
-    // SILENT AUTO-REFRESH ENGINE: Re-queries database fields every 10 seconds 
+    // SILENT AUTO-REFRESH ENGINE: Re-queries database fields every 10 seconds
     // without resetting your scroll position or triggering annoying browser reloads!
     setInterval(function() {
         if ($.fn.DataTable.isDataTable('#tbl_live_user_status')) {
@@ -53,7 +53,8 @@ const LIVE_STATUS = (() => {
                 { data: 'clock_in', name: 'theattendances.clock_in', className: 'text-center' },
                 { data: 'clock_out', name: 'theattendances.clock_out', className: 'text-center' },
                 { data: 'live_status', name: 'live_status', className: 'text-center', searchable: false },
-                { data: 'work_status', name: 'work_status', className: 'text-center', searchable: false }
+                { data: 'work_status', name: 'work_status', className: 'text-center', searchable: false },
+                { data: 'action', name: 'action', className: 'text-center' },
             ],
             dom: 'Blfrtip',
             buttons: [{
@@ -76,5 +77,66 @@ const LIVE_STATUS = (() => {
         console.log("Viewing user logs for ID: " + _user_id);
     }
 
+    // show delete clock out
+    this_live_status.removeCO = (id) => {
+        $('#removeCOModal').modal('show');
+        _user_id = id
+    }
+
+    $('#removeCOForm').on('submit', function(e) {
+        e.preventDefault();
+
+        let id = LIVE_STATUS.getTrackedUserId();
+        var formdata = new FormData(this);
+
+        $('.error').hide();
+        $('.error').text('');
+        $('#btn_allow').empty();
+        $('#btn_allow').append('<i class="fa fa-spinner fa-spin"></i> Processing...');
+        $('#btn_allow').prop("disabled", true);
+
+        axios({
+            method: 'post',
+            url: `${APP_URL}/user-remove-clock-out/${id}`,
+            data: formdata
+        }).then(function(response) {
+            if (response.data.status === 'success') {
+                $('#removeCOForm')[0].reset();
+                $('#removeCOModal').modal('hide');
+
+                if ($.fn.DataTable.isDataTable('#tbl_live_user_status')) {
+                    $('#tbl_live_user_status').DataTable().ajax.reload(null, false);
+                }
+
+                toastr.success(response.data.message);
+            } else if (response.data.status === 'warning') {
+                if (response.data.error) {
+                    Object.keys(response.data.error).forEach((key) => {
+                        $(`#${[key]}_removeCOError`).show();
+                        $(`#${[key]}_removeCOError`).text(response.data.error[key][0]);
+                    });
+                } else {
+                    toastr.warning(response.data.message);
+                }
+            } else {
+                toastr.error(response.data.message);
+            }
+
+            // Reset elements back to operational state
+            $('#btn_allow').empty();
+            $('#btn_allow').append('<i class="fa fa-check"></i> Yes, Allow!');
+            $('#btn_allow').prop("disabled", false);
+        }).catch(error => {
+            toastr.error('Server execution error: ' + error);
+            $('#btn_allow').empty();
+            $('#btn_allow').append('<i class="fa fa-check"></i> Yes, Allow!');
+            $('#btn_allow').prop("disabled", false);
+        });
+    });
+
+
+    this_live_status.getTrackedUserId = () => {
+        return _user_id;
+    }
     return this_live_status;
 })();

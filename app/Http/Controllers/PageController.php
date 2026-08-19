@@ -92,12 +92,12 @@ class PageController extends GlobalVariableController
         $tasksQuery = Task::query()
             ->select('id')
             ->where('status', 'Completed')
-            ->where('end_date', '>=', now()->subMonth());
+            ->where('end_date', '>=', now()->subWeeks(2));
 
         $assignmentsQuery = TaskAssignment::query()
             ->select('id') 
             ->where('status', 'Completed')
-            ->where('end_date', '>=', now()->subMonth());
+            ->where('end_date', '>=', now()->subWeeks(2));
 
         $userPermission = auth()->user()->permission;
 

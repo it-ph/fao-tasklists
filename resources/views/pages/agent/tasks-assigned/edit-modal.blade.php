@@ -26,7 +26,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="schedule" class="col-form-label custom-label"><strong>SCHEDULE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="schedule" id="schedule_edit">
+                                    <input class="form-control" type="date" name="schedule" id="schedule_edit" disabled>
                                     <label id="schedule_editError" class="error" for="name"></label>
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="applicable_month" class="col-form-label custom-label"><strong>APPLICABLE MONTH:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="month" name="applicable_month" id="applicable_month_edit">
+                                    <input class="form-control" type="month" name="applicable_month" id="applicable_month_edit" disabled>
                                     <label id="applicable_month_editError" class="error" for="name"></label>
                                 </div>
                             </div>

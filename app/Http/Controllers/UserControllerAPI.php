@@ -119,20 +119,20 @@ class UserControllerAPI extends Controller
             }
 
             return datatables($query)
-                ->addColumn('clock_in', function ($user) {
-                    $log = $user->theattendances->first();
+                ->addColumn('clock_in', function ($value) {
+                    $log = $value->theattendances->first();
                     return ($log && $log->clock_in)
                         ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A')
                         : '<span class="text-muted">—</span>';
                 })
-                ->addColumn('clock_out', function ($user) {
-                    $log = $user->theattendances->first();
+                ->addColumn('clock_out', function ($value) {
+                    $log = $value->theattendances->first();
                     return ($log && $log->clock_out)
                         ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A')
                         : '<span class="text-muted">—</span>';
                 })
-                ->addColumn('live_status', function ($user) {
-                    $log = $user->theattendances->first();
+                ->addColumn('live_status', function ($value) {
+                    $log = $value->theattendances->first();
 
                     if (!$log) {
                         return '<span class="badge bg-danger rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Absent</span>';
@@ -144,25 +144,27 @@ class UserControllerAPI extends Controller
 
                     return '<span class="badge bg-secondary rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-Out</span>';
                 })
-                ->addColumn('work_status', function ($user) {
-                    $activeTask = Task::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
+                ->addColumn('work_status', function ($value) {
+                    $activeTask = Task::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
                     if ($activeTask) {
                         return '<span class="text-primary fw-bold">' . $activeTask->id . '</span>';
                     }
 
-                    $activeAssignment = TaskAssignment::where('agent_id', $user->id)->where('status', 'In Progress')->first(['id']);
+                    $activeAssignment = TaskAssignment::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
                     if ($activeAssignment) {
                         return '<span class="text-success fw-bold">TA' . $activeAssignment->id . '</span>';
                     }
 
                     return '<span class="text-muted fw-semibold">—</span>';
                 })
+                ->addColumn('action', (function($value){
+                    $log = $value->theattendances->first();
+                    $action = $log && $log->clock_out ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Remove Clock-Out" onclick=LIVE_STATUS.removeCO(' . $value->id . ') id="btn-undo-'. $value->id.'"><i class="fas fa-undo"></i></button>' : '-';
 
+                    return $action;
+                }))
                 ->rawColumns([
-                    'clock_in',
-                    'clock_out',
-                    'live_status',
-                    'work_status',
+                    'action',
                 ])
                 ->escapeColumns([])
                 ->make(true);
