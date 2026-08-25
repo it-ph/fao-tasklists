@@ -16,13 +16,24 @@ class DashboardActivityImport implements ToModel, WithHeadingRow,WithValidation,
 {
     private $has_error = array();
     private $row_number = 1;
+    private $clusterCache = array(); // OPTIMIZATION: In-memory cache for cluster lookups during import
+
     public function model(array $row)
     {
         $ctr_error = 0;
         array_push($this->has_error, "Something went wrong, Please check all entries that you have encoded.");
 
         $user_cluster = Auth::user()->thepermisssion->cluster_id;
-        $cluster = Cluster::where('name', $row['cluster_name'])->select('id','name')->first();
+
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $cluster = Cluster::where('name', $row['cluster_name'])->select('id','name')->first();
+
+        // [OPTIMIZED]: In-memory cached lookup
+        $clusterName = $row['cluster_name'];
+        if (!array_key_exists($clusterName, $this->clusterCache)) {
+            $this->clusterCache[$clusterName] = Cluster::where('name', $clusterName)->select('id','name')->first();
+        }
+        $cluster = $this->clusterCache[$clusterName];
 
         $this->row_number += 1;
         if($cluster)

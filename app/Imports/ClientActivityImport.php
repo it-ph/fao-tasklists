@@ -17,11 +17,22 @@ class ClientActivityImport implements ToModel, WithHeadingRow,WithValidation,Ski
 {
     private $has_error = array();
     private $row_number = 1;
+    private $userCache = array(); // OPTIMIZATION: In-memory cache for user lookups during import
+
     public function model(array $row)
     {
         $ctr_error = 0;
         array_push($this->has_error, "Something went wrong, Please check all entries that you have encoded.");
-        $user = User::where('email', $row['email_address'])->select('id')->first();
+
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $user = User::where('email', $row['email_address'])->select('id')->first();
+
+        // [OPTIMIZED]: In-memory cached lookup
+        $email = $row['email_address'];
+        if (!array_key_exists($email, $this->userCache)) {
+            $this->userCache[$email] = User::where('email', $email)->select('id')->first();
+        }
+        $user = $this->userCache[$email];
 
         // check if haspermission
 

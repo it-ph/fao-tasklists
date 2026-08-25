@@ -227,12 +227,12 @@ class PageController extends GlobalVariableController
         {
             return view('errors.404');
         }
-        $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
-
-        $user_client_activities = ClientActivity::query()
-            ->select('id','agent_id','name')
-            ->orderBy('name', 'ASC')
-            ->get();
+        // [OPTIMIZED]: Commented out unused DB queries that are not passed to view
+        // $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
+        // $user_client_activities = ClientActivity::query()
+        //     ->select('id','agent_id','name')
+        //     ->orderBy('name', 'ASC')
+        //     ->get();
 
         return view('pages.admin.tasks.list', compact('status'));
     }
@@ -255,7 +255,8 @@ class PageController extends GlobalVariableController
         {
             return view('errors.404');
         }
-        $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
+        // [OPTIMIZED]: Commented out unused DB query that is not passed to view
+        // $clients = auth()->user()->isAdmin() ? $clients = Client::with('thecluster') : Client::with('thecluster')->cluster()->get();
 
         return view('pages.admin.tasks.list', compact('status'));
     }

@@ -166,42 +166,78 @@ class User extends Authenticatable
     // accountant
     public function isAccountant(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $permission = 'accountant';
+        // $hasPermission = User::query()->whereIn('permission', [$permission])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return $this->permission === 'accountant';
     }
 
     // admin
     public function isAdmin(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $permission = 'admin';
+        // $hasPermission = User::query()->whereIn('permission', ['superadmin', $permission])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return in_array($this->permission, ['superadmin', 'admin']);
     }
 
     // Team Leader
     public function isTeamLeader(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $permission = 'team leader';
+        // $hasPermission = User::query()->whereIn('permission', ['superadmin', $permission])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return in_array($this->permission, ['superadmin', 'team leader']);
     }
 
     // Operations Manager
     public function isOperationsManager(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $permission = 'operations manager';
+        // $hasPermission = User::query()->whereIn('permission', ['superadmin', $permission])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return in_array($this->permission, ['superadmin', 'operations manager']);
     }
 
     // admin or team leader
     public function isTeamLeaderOrAdmin(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $permission = 'team leader';
+        // $hasPermission = User::query()->whereIn('permission', ['superadmin', 'admin', $permission])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return in_array($this->permission, ['superadmin', 'admin', 'team leader']);
     }
 
     // admin or operations manager
     public function isOperationsManagerOrAdmin(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $permission = 'operations manager';
+        // $hasPermission = User::query()->whereIn('permission', ['superadmin', 'admin', $permission])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return in_array($this->permission, ['superadmin', 'admin', 'operations manager']);
     }
 
     // admin, team leader or operations manager
     public function isTLOMOrAdmin(): bool
     {
+        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+        // $tl = 'team leader';
+        // $om = 'operations manager';
+        // $hasPermission = User::query()->whereIn('permission', ['superadmin', 'admin', $tl, $om])->where('id', $this->id)->first();
+        // return $hasPermission ? true : false;
+
         return in_array($this->permission, ['superadmin', 'admin', 'team leader', 'operations manager']);
     }
 

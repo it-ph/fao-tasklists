@@ -55,7 +55,8 @@ class DashboardServices
         $agents = User::where('cluster_id', $cluster_id)
             ->with([
                 'theclient:id,name',
-                'thetasks'
+                // [OPTIMIZED]: Commented out un-filtered 'thetasks' to prevent loading tens of thousands of tasks into memory
+                // 'thetasks'
             ])
             ->select('id','client_id','fullname')
             ->where('permission','<>','superadmin')

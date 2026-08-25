@@ -146,6 +146,18 @@ class UserControllerAPI extends Controller
                     return '<span class="badge bg-secondary rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-Out</span>';
                 })
                 ->addColumn('work_status', function ($value) {
+                    // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+                    // $activeTask = Task::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
+                    // if ($activeTask) {
+                    //     return '<span class="text-primary fw-bold">' . $activeTask->id . '</span>';
+                    // }
+                    // $activeAssignment = TaskAssignment::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
+                    // if ($activeAssignment) {
+                    //     return '<span class="text-success fw-bold">TA' . $activeAssignment->id . '</span>';
+                    // }
+                    // return '<span class="text-muted fw-semibold">—</span>';
+
+                    // [OPTIMIZED]: Uses eager-loaded relations (zero extra queries)
                     if ($value->theactivetask) {
                         return '<span class="text-primary fw-bold">' . $value->theactivetask->id . '</span>';
                     }

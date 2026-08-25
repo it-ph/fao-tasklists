@@ -47,6 +47,11 @@ class TasksControllerAPI extends Controller
                 $tasks = $tasks->where('status', $status);
             }
 
+            // OPTIMIZATION: Pre-fetch allowed editing date once instead of querying per completed row
+            $allowed_daterange = AllowedEditingDate::first();
+            $date_from = $allowed_daterange ? date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from)) : null;
+            $date_to = $allowed_daterange ? date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to)) : null;
+
             return datatables($tasks)
                 ->editColumn('status', (function($value){
                     $statusClass = '';
@@ -107,7 +112,7 @@ class TasksControllerAPI extends Controller
                 ->addColumn('date_completed', (function($value){
                     return $value->status == "On Hold" ? '-' : ($value->end_date ? date("Y-m-d", strtotime($value->end_date)) : '-');
                 }))
-                ->addColumn('action', (function($value){
+                ->addColumn('action', (function($value) use ($date_from, $date_to){
                     $action = '';
                     switch ($value->status) {
                         case 'In Progress':
@@ -120,12 +125,16 @@ class TasksControllerAPI extends Controller
                                 <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick=TASK.show_resume(' . $value->id . ') id="btn-resume-'. $value->id.'"><i class="fas fa-play"></i></button>';
                             break;
                         case 'Completed':
-                            $allowed_daterange = AllowedEditingDate::first();
-                            $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
-                            $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
-                            $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                            // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+                            // $allowed_daterange = AllowedEditingDate::first();
+                            // $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
+                            // $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
+                            // $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                            // $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
 
-                            $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
+                            // [OPTIMIZED]: Uses pre-fetched $date_from & $date_to
+                            $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                            $is_allowed_to_edit = ($date_from && $date_to && $shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
                             $action = $is_allowed_to_edit ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>' : '-';
                             break;
                         default:
@@ -183,6 +192,11 @@ class TasksControllerAPI extends Controller
                 $tasks = $tasks->where('status', $status);
             }
 
+            // OPTIMIZATION: Pre-fetch allowed editing date once instead of querying per completed row
+            $allowed_daterange = AllowedEditingDate::first();
+            $date_from = $allowed_daterange ? date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from)) : null;
+            $date_to = $allowed_daterange ? date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to)) : null;
+
             return datatables($tasks)
                 ->editColumn('status', (function($value){
                     $statusClass = '';
@@ -243,16 +257,20 @@ class TasksControllerAPI extends Controller
                 ->addColumn('date_completed', (function($value){
                     return $value->status == "On Hold" ? '-' : ($value->end_date ? date("Y-m-d", strtotime($value->end_date)) : '-');
                 }))
-                ->addColumn('action', (function($value){
+                ->addColumn('action', (function($value) use ($date_from, $date_to){
                     $action = '-';
                     if($value->status == 'Completed')
                     {
-                        $allowed_daterange = AllowedEditingDate::first();
-                        $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
-                        $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
-                        $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                        // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+                        // $allowed_daterange = AllowedEditingDate::first();
+                        // $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
+                        // $date_to = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_to));
+                        // $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                        // $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
 
-                        $is_allowed_to_edit = ($shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
+                        // [OPTIMIZED]: Uses pre-fetched $date_from & $date_to
+                        $shift_date = date('Y-m-d H:i:s', strtotime($value->shift_date));
+                        $is_allowed_to_edit = ($date_from && $date_to && $shift_date >= $date_from && $shift_date <= $date_to) ? 1 : 0;
                         $action = $is_allowed_to_edit ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>' : '-';
                     }
                     return $action;

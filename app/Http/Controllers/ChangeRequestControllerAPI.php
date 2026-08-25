@@ -43,6 +43,11 @@ class ChangeRequestControllerAPI extends Controller
                         break;
                 }
 
+            // OPTIMIZATION: Pre-calculate current user ID and permission check once outside row loop
+            $currentUser = auth()->user();
+            $currentUserId = $currentUser->id;
+            $canManage = $currentUser->isOperationsManagerOrAdmin() || $currentUser->isTeamLeaderOrAdmin();
+
             return datatables($change_requests)
                 ->editColumn('task_id', function ($value) {
                     if ($value->task_type === 'task_assignments') {
@@ -63,13 +68,32 @@ class ChangeRequestControllerAPI extends Controller
                     $statusClass = ($value->status === 'Open') ? 'text-danger' : 'text-primary';
                     return '<span class="' . $statusClass . '"><strong>' . $value->status . '</strong></span>';
                 }))
-                ->addColumn('action', (function($value){
-                    $action = auth()->user()->id == $value->created_by
+                ->addColumn('action', (function($value) use ($currentUserId, $canManage){
+                    // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
+                    // $action = auth()->user()->id == $value->created_by
+                    //     ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Change Request" onclick=CHANGEREQUEST.edit(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>'
+                    //     : '';
+                    // switch ($value->status) {
+                    //     case 'Open':
+                    //         $action .= auth()->user()->isOperationsManagerOrAdmin() || auth()->user()->isTeamLeaderOrAdmin()
+                    //         ? ' <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>
+                    //             <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Mark as Closed" onclick=CHANGEREQUEST.close('.$value->id.') id="btn-close-'.$value->id.'"><i class="fas fa-check"></i></button>'
+                    //         : '';
+                    //         break;
+                    //     case 'Closed':
+                    //         $action = '-';
+                    //         break;
+                    //     default:
+                    //         break;
+                    // }
+
+                    // [OPTIMIZED]: Pre-evaluated variables used
+                    $action = $currentUserId == $value->created_by
                         ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Change Request" onclick=CHANGEREQUEST.edit(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>'
                         : '';
                     switch ($value->status) {
                         case 'Open':
-                            $action .= auth()->user()->isOperationsManagerOrAdmin() || auth()->user()->isTeamLeaderOrAdmin()
+                            $action .= $canManage
                             ? ' <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="View Change Request" onclick=CHANGEREQUEST.show(' . $value->id . ') id="btn-view-' . $value->id . '"><i class="fas fa-eye"></i></button>
                                 <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Mark as Closed" onclick=CHANGEREQUEST.close('.$value->id.') id="btn-close-'.$value->id.'"><i class="fas fa-check"></i></button>'
                             : '';
