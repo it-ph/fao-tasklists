@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Task;
-use App\Models\TaskAssignment;
 use Illuminate\Http\Request;
 
 class UserControllerAPI extends Controller
@@ -98,6 +96,9 @@ class UserControllerAPI extends Controller
                     ->latest('id');
                 }
 
+            ])->with([
+                'theactivetask:id,agent_id',
+                'theactiveassignment:id,agent_id',
             ])
             ->select('id', 'fullname', 'permission')
             ->where('permission', '<>', 'superadmin');
@@ -145,16 +146,12 @@ class UserControllerAPI extends Controller
                     return '<span class="badge bg-secondary rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-Out</span>';
                 })
                 ->addColumn('work_status', function ($value) {
-                    $activeTask = Task::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
-                    if ($activeTask) {
-                        return '<span class="text-primary fw-bold">' . $activeTask->id . '</span>';
+                    if ($value->theactivetask) {
+                        return '<span class="text-primary fw-bold">' . $value->theactivetask->id . '</span>';
                     }
-
-                    $activeAssignment = TaskAssignment::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
-                    if ($activeAssignment) {
-                        return '<span class="text-success fw-bold">TA' . $activeAssignment->id . '</span>';
+                    if ($value->theactiveassignment) {
+                        return '<span class="text-success fw-bold">TA' . $value->theactiveassignment->id . '</span>';
                     }
-
                     return '<span class="text-muted fw-semibold">—</span>';
                 })
                 ->addColumn('action', (function($value){

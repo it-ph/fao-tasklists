@@ -40,6 +40,7 @@
                                     aria-expanded="false"><i class="fa fa-filter"></i> Filter <i class="mdi mdi-chevron-down"></i></button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "all"]) }}">All Tasks</a>
+                                    <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "Not Started"]) }}">Not Started</a>
                                     <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "In Progress"]) }}">In Progress</a>
                                     <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "On Hold"]) }}">On Hold</a>
                                     <a class="dropdown-item" href="{{ route("task-assignments.index", ['tstatus' => "Completed"]) }}">Completed</a>

@@ -35,6 +35,7 @@
                                     aria-expanded="false"><i class="fa fa-filter"></i> Filter <i class="mdi mdi-chevron-down"></i></button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{ url('my-tasks/all') }}">All Tasks</a>
+                                    <a class="dropdown-item" href="{{ url('my-tasks/Not Started') }}">Not Started</a>
                                     <a class="dropdown-item" href="{{ url('my-tasks/In Progress') }}">In Progress</a>
                                     <a class="dropdown-item" href="{{ url('my-tasks/On Hold') }}">On Hold</a>
                                     <a class="dropdown-item" href="{{ url('my-tasks/Completed') }}">Completed</a>
