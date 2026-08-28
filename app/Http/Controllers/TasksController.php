@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Task;
+use App\Models\TaskAssignment;
 use App\Models\TaskPause;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTraits;
@@ -14,6 +15,7 @@ use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StopTaskRequest;
 use Facades\App\Http\Helpers\TimeElapsedHelper;
+use Facades\App\Http\Helpers\TaskHelper;
 use App\Http\Controllers\GlobalVariableController;
 
 class TasksController extends GlobalVariableController
@@ -61,6 +63,11 @@ class TasksController extends GlobalVariableController
     {
         $result = $this->successResponse('Task created successfully!');
         try {
+            $hasActiveTask = TaskHelper::hasInProgressTask();
+            if ($hasActiveTask) {
+                throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
+            }
+
             $request['created_by'] = Auth::user()->id;
             $request['start_date'] = Carbon::now();
             $this->model->create($request->all());
@@ -128,11 +135,11 @@ class TasksController extends GlobalVariableController
             // 1. Check if user already clocked in
             if (!$attendance || !$attendance->clock_in) {
                 $result["data"] = 'not_clocked_in';
-            } 
+            }
             // 2. Check if the user already clocked out
             elseif ($attendance->clock_out) {
                 $result["data"] = 'clocked_out';
-            } 
+            }
             // 3. Checking if user has an active task
             else {
                 $result["data"] = $user->hasActiveTask(); // Returns true or false
@@ -178,6 +185,11 @@ class TasksController extends GlobalVariableController
         $request['status'] = 'In Progress';
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
+            $hasActiveTask = TaskHelper::hasInProgressTask();
+            if ($hasActiveTask) {
+                throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
+            }
+            
             $task = $this->model->findOrfail($id);
             $status = $request['status'];
             $now = Carbon::now();
@@ -204,6 +216,12 @@ class TasksController extends GlobalVariableController
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
+
+            $isCompleted = $task->status === 'Completed';
+            if ($isCompleted) {
+                throw new \Exception("This task has already been completed.");
+            }
+
             $status = $request['status'];
             $now = Carbon::now();
             $volume = $request['volume'];

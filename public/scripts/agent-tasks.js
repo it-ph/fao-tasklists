@@ -383,7 +383,7 @@ const TASK = (() => {
                     shift_already_ended();
                 } else if (check_status === true) {
                     // Blocks action because they already have a running task
-                    TASK.has_active_task();
+                    has_active_task();
                 } else {
                     // Safe State: Passed all validations! Open the modal.
                     $('#resumeTaskModal').modal('show');
@@ -450,7 +450,7 @@ const TASK = (() => {
     this_task.has_active_task = () => {
         Swal.fire({
             title: 'Invalid Action',
-            text: "Please On Hold or Complete your current task before creating a new one!",
+            text: "Please On Hold or Complete your current task before you can create, start or resume another task!",
             icon: 'error',
             confirmButtonText: 'Okay!',
             confirmButtonClass: 'btn btn-primary mt-2',

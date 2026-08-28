@@ -193,7 +193,7 @@ function shift_already_ended() {
 function has_active_task() {
     Swal.fire({
         title: 'Invalid Action',
-        text: "Please On Hold or Complete your current task before creating a new one!",
+        text: "Please On Hold or Complete your current task before you can create, start or resume another task!",
         icon: 'error',
         confirmButtonText: 'Okay!',
         confirmButtonClass: 'btn btn-primary mt-2',

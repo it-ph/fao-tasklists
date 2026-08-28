@@ -11,6 +11,7 @@ use App\Traits\ResponseTraits;
 use App\Http\Requests\UpdateTaskAssignmentRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StopTaskAssignmentRequest;
+use Facades\App\Http\Helpers\TaskHelper;
 use Facades\App\Http\Helpers\TimeElapsedHelper;
 use App\Http\Controllers\GlobalVariableController;
 
@@ -119,6 +120,11 @@ class TaskAssignmentsController extends GlobalVariableController
         $request['status'] = 'In Progress';
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
+            $hasActiveTask = TaskHelper::hasInProgressTask();
+            if ($hasActiveTask) {
+                throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
+            }
+
             $task = $this->model->findOrfail($id);
             $status = $request['status'];
             $now = Carbon::now();
@@ -145,6 +151,12 @@ class TaskAssignmentsController extends GlobalVariableController
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
+
+            $isCompleted = $task->status === 'Completed';
+            if ($isCompleted) {
+                throw new \Exception("This task has already been completed.");
+            }
+
             $status = $request['status'];
             $now = Carbon::now();
             $remarks = $request['remarks'];

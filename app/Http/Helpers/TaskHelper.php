@@ -3,6 +3,8 @@
 namespace App\Http\Helpers;
 
 use Carbon\Carbon;
+use App\Models\Task;
+use App\Models\TaskAssignment;
 
 class TaskHelper {
     public function getActualHandlingTime($task)
@@ -71,5 +73,13 @@ class TaskHelper {
         );
 
         return $values;
+    }
+
+    public function hasInProgressTask()
+    {
+        $hasInProgressTask = Task::where('status', 'In Progress')->exists();
+        $hasInProgressAssignment = TaskAssignment::where('status', 'In Progress')->exists();
+
+        return $hasInProgressTask || $hasInProgressAssignment;
     }
 }
