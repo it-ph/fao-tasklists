@@ -158,6 +158,10 @@ class TasksController extends GlobalVariableController
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
+            $isOnHold = $task->status === 'On Hold';
+            if ($isOnHold) {
+                throw new \Exception("This task is already On Hold.");
+            }
             $status = $request['status'];
 
             $task->update([
@@ -185,12 +189,18 @@ class TasksController extends GlobalVariableController
         $request['status'] = 'In Progress';
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
+            $task = $this->model->findOrfail($id);
+            
+            $isInProgress = $task->status === 'In Progress';
+            if ($isInProgress) {
+                throw new \Exception("This task is already In Progress.");
+            }
+
             $hasActiveTask = TaskHelper::hasInProgressTask();
             if ($hasActiveTask) {
                 throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
             }
-            
-            $task = $this->model->findOrfail($id);
+
             $status = $request['status'];
             $now = Carbon::now();
 
