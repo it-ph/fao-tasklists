@@ -26,98 +26,81 @@ class ExportController extends Controller
             'daterange' => 'required',
             'date_from' => 'required',
             'date_to' => 'required',
+            'task_type' => 'required',
 
         ],
         [   'daterange.required'=>'Date Range is Required!',
             'date_from.required'=>'Date From is Required!',
-            'date_to.required' => 'Date To is Required!'
+            'date_to.required' => 'Date To is Required!',
+            'task_type.required' => 'Task Type is Required!'
         ]);
 
         $date_from =  Carbon::parse($request['date_from'])->format('Y-m-d');
         $date_to =  Carbon::parse($request['date_to'])->format('Y-m-d');
         $task_type = $request['task_type'];
 
-        // $tasks = Task::query()
-        //     ->with([
-        //         'thecluster:id,name',
-        //         'theclient:id,name',
-        //         'theagent:id,fullname',
-        //         'theclientactivity:id,name,function'
-        //     ])
-        //     ->whereRaw(
-        //         "shift_date >= ? AND shift_date <= ?",
-        //         [
-        //             $date_from." 00:00:00",
-        //             $date_to." 23:59:59"
-        //         ]
-        //     )
-        //     ->orderBy('start_date','DESC');
+        $tasks = null;
+        $task_assignments = null;
 
-        if ($task_type === 'task_assignments') 
-        {
-            $query = TaskAssignment::query();
-            $relations = [
+        // Helper function to apply date ranges, ordering, permissions, and custom filtering
+        $fetchReportData = function($query, $dateColumn) use ($request, $date_from, $date_to) {
+            $tasksQuery = $query
+                ->whereRaw("$dateColumn >= ? AND $dateColumn <= ?", [
+                    $date_from . ' 00:00:00', 
+                    $date_to . ' 23:59:59'
+                ])
+                ->orderBy('start_date', 'DESC');
+
+            if (auth()->user()->isAdmin()) {
+                return $this->getFilteredData($request['filter_by'] ?? 'All', $request['filtered_to'] ?? [], $tasksQuery);
+            } elseif (auth()->user()->isOperationsManager()) {
+                $tasksQuery = $tasksQuery->OMPermission();
+                return $this->getFilteredData($request['filter_by'] ?? 'All', $request['filtered_to'] ?? [], $tasksQuery);
+            } elseif (auth()->user()->isTeamLeader()) {
+                $tasksQuery = $tasksQuery->TLPermission();
+                return $this->getFilteredData($request['filter_by'] ?? 'All', $request['filtered_to'] ?? [], $tasksQuery);
+            } elseif (auth()->user()->isAccountant()) {
+                return $tasksQuery->AccountantPermission()->get();
+            }
+            
+            return $tasksQuery->get();
+        };
+
+        // 1. Fetch from TaskAssignment model if 'all' or 'task_assignments' is selected
+        if ($task_type === 'all' || $task_type === 'task_assignments') {
+            $query = TaskAssignment::query()->with([
                 'thecluster:id,name', 
                 'theclient:id,name', 
                 'theagent:id,fullname'
-            ];
-            
-            $dateColumn = 'schedule';
-        } 
-        else 
-        {
-            $query = Task::query();
-            $relations = [
+            ]);
+            $task_assignments = $fetchReportData($query, 'schedule');
+        }
+
+        // 2. Fetch from Task model if 'all' or 'tasks' is selected
+        if ($task_type === 'all' || $task_type === 'tasks') {
+            $query = Task::query()->with([
                 'thecluster:id,name', 
                 'theclient:id,name', 
                 'theagent:id,fullname', 
                 'theclientactivity:id,name,function'
-            ];
-            
-            $dateColumn = 'shift_date';
+            ]);
+            $tasks = $fetchReportData($query, 'shift_date');
         }
 
-        $tasks = $query
-            ->with($relations)
-            ->whereRaw("$dateColumn >= ? AND $dateColumn <= ?", [
-                $date_from . ' 00:00:00', 
-                $date_to . ' 23:59:59'
-            ])
-            ->orderBy('start_date', 'DESC');
-
-        // admin
-        if(auth()->user()->isAdmin())
-        {
-            $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
-        }
-        // operations manager
-        elseif(auth()->user()->isOperationsManager())
-        {
-            $tasks = $tasks->OMPermission();
-            $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
-        }
-        // team leader
-        elseif(auth()->user()->isTeamLeader())
-        {
-            $tasks = $tasks->TLPermission();
-            $tasks = $this->getFilteredData($request['filter_by'],$request['filtered_to'],$tasks);
-        }
-        // accountant
-        elseif(auth()->user()->isAccountant())
-        {
-            $tasks = $tasks->AccountantPermission()->get();
+        // Set filename based on date filter and selected task type
+        if ($task_type === 'all') {
+            $prefix = "ALL_TASKS_REPORT";
+        } else {
+            $prefix = strtoupper($task_type) . "LIST_REPORT";
         }
 
-        // set filename based on date filter
-        if($date_from == $date_to )
-        {
-            $filename = strtoupper($task_type)."LIST_REPORT_". $date_from .".xlsx";
-        }else
-        {
-            $filename = strtoupper($task_type)."LIST_REPORT_". $date_from .'_to_'.$date_to.".xlsx";
+        if ($date_from == $date_to) {
+            $filename = "{$prefix}_" . $date_from . ".xlsx";
+        } else {
+            $filename = "{$prefix}_" . $date_from . '_to_' . $date_to . ".xlsx";
         }
 
-        return Excel::download(new TasksReportExport($tasks, $task_type), $filename);
+        return Excel::download(new TasksReportExport($tasks, $task_assignments, $task_type), $filename);
     }
 
     // get data based on filters

@@ -36,7 +36,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <select class="form-control select2" name="task_type" id="task_type" required>
-                                        <option value="" selected disabled>-- Select Task Type --</option>
+                                        <option value="all" selected>All</option>
                                         <option value="tasks">My Tasks</option>
                                         <option value="task_assignments">Assigned Tasks</option>
                                     </select>
@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="col-md-3 mb-2">
                                     <select class="form-control select2" name="task_type" id="task_type" required>
-                                        <option value="" selected disabled>-- Select Task Type --</option>
+                                        <option value="all" selected>All</option>
                                         <option value="tasks">Task Lists</option>
                                         <option value="task_assignments">Task Assignments</option>
                                     </select>
