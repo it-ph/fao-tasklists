@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label for="task_id" class="col-form-label custom-label"><strong>TASK ID:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="task_id" id="task_id" style="width:100%;">
-                            <option value="" selected disabled>-- Select Target Reference --</option>
+                            <option value="" selected disabled>-- Select Task --</option>
                             <optgroup label="My Tasks">
                                 @foreach ($tasks as $task)
                                     <!-- Value attribute holds the pure number string key -->

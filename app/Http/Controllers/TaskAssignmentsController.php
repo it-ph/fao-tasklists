@@ -71,7 +71,7 @@ class TaskAssignmentsController extends GlobalVariableController
         $result = $this->successResponse("Task status updated to: <br><strong>" . $request['status'] . "</strong>");
         try {
             $task = $this->model->findOrfail($id);
-            
+
             $isInProgress = $task->status === 'In Progress';
             if ($isInProgress) {
                 throw new \Exception("This task is already In Progress.");
@@ -196,7 +196,7 @@ class TaskAssignmentsController extends GlobalVariableController
             $aht_in_minutes = number_format(($working_hours * 60),2);
 
             $scheduleStr = substr($task->schedule, 0, 10);
-            $endDateStr = substr($task->end_date, 0, 10);
+            $endDateStr = substr($end_at, 0, 10);
             $timeliness = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
 
             $task->update([
