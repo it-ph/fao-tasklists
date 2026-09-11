@@ -48,7 +48,7 @@
                                     <input class="form-control input-daterange-datepicker" type="text" name="daterange" value="{{\Carbon\Carbon::now()->subDays(7)->format('m-d-Y')}} - {{date('m-d-Y')}}">
                                 </div>
                                 <div class="col-md-3 mb-2">
-                                    <select class="form-control select2" name="task_type" id="task_type" required>
+                                    <select class="form-control select2" name="task_type" id="tas   k_type" required>
                                         <option value="all" selected>All</option>
                                         <option value="tasks">Task Lists</option>
                                         <option value="task_assignments">Task Assignments</option>

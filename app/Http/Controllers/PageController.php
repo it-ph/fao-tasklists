@@ -164,7 +164,7 @@ class PageController extends GlobalVariableController
         }
 
         $status = $request['status'];
-        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
+        if(!in_array(strtolower($status),['','all','not started','in progress','on hold','completed']))
         {
             return view('errors.404');
         }
@@ -201,7 +201,7 @@ class PageController extends GlobalVariableController
     public function showAgentAssignedTasks(Request $request)
     {
         $status = $request['status'];
-        if(!in_array(strtolower($status),['','all','in progress','on hold','completed']))
+        if(!in_array(strtolower($status),['','all','not started','in progress','on hold','completed']))
         {
             return view('errors.404');
         }

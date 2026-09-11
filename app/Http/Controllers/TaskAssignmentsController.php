@@ -77,7 +77,8 @@ class TaskAssignmentsController extends GlobalVariableController
                 throw new \Exception("This task is already In Progress.");
             }
 
-            $hasActiveTask = TaskHelper::hasInProgressTask();
+            $agent_id = auth()->user()->id;
+            $hasActiveTask = TaskHelper::hasInProgressTask($agent_id);
             if ($hasActiveTask) {
                 throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
             }
@@ -143,7 +144,8 @@ class TaskAssignmentsController extends GlobalVariableController
                 throw new \Exception("This task is already In Progress.");
             }
 
-            $hasActiveTask = TaskHelper::hasInProgressTask();
+            $agent_id = auth()->user()->id;
+            $hasActiveTask = TaskHelper::hasInProgressTask($agent_id);
             if ($hasActiveTask) {
                 throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
             }

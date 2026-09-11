@@ -75,10 +75,12 @@ class TaskHelper {
         return $values;
     }
 
-    public function hasInProgressTask()
+    public function hasInProgressTask($agent_id)
     {
-        $hasInProgressTask = Task::where('status', 'In Progress')->exists();
-        $hasInProgressAssignment = TaskAssignment::where('status', 'In Progress')->exists();
+        $hasInProgressTask = Task::query()
+            ->where('status', 'In Progress')->where('agent_id', $agent_id)->exists();
+        $hasInProgressAssignment = TaskAssignment::query()
+            ->where('status', 'In Progress')->where('agent_id', $agent_id)->exists();
 
         return $hasInProgressTask || $hasInProgressAssignment;
     }
