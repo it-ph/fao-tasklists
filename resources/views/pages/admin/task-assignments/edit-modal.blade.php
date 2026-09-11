@@ -14,8 +14,17 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="agent_id" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="hidden" name="agent_id" id="agent_id">
-                                    <input class="form-control" type="text" disabled id="employee_name">
+                                    {{-- <input class="form-control" type="hidden" name="agent_id" id="agent_id">
+                                    <input class="form-control" type="text" disabled id="employee_name"> --}}
+
+                                    <select class="form-control select2" name="agent_id" id='agent_id' style="width:100%;">
+                                        <option value="" selected disabled>-- Select an Employee -- </option>
+                                            @foreach ($permissions as $permission )
+                                                @if($permission)
+                                                    <option value="{{ $permission->id }}">{{ ucwords($permission->fullname) }}</option>
+                                                @endif
+                                            @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -184,7 +193,7 @@
                             <div class="mb-2">
                                 <div class="form-group">
                                     <label for="remarks" class="col-form-label custom-label"><strong>REMARKS:</span></strong></label>
-                                    <textarea class="form-control" name="remarks" id="remarks_edit" readonly></textarea>
+                                    <textarea class="form-control" name="remarks" id="remarks_edit"></textarea>
                                 </div>
                             </div>
                         </div>

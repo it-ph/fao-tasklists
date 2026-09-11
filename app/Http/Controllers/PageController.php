@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Task;
 use App\Models\TaskAssignment;
 use App\Models\Client;
@@ -174,7 +175,29 @@ class PageController extends GlobalVariableController
             ->orderBy('name', 'ASC')
             ->get();
 
-        return view('pages.admin.task-assignments.list',compact('user_client_activities'));
+        $permissions = User::query()
+            ->select('id','fullname','cluster_id','client_id','tl_id','om_id','permission','status')
+            ->where('permission','<>','superadmin')
+            ->where('status','active')
+            ->orderBy('fullname');
+
+            // admin
+            if(auth()->user()->isAdmin())
+            {
+                $permissions = $permissions->get();
+            }
+            // operations manager
+            elseif(auth()->user()->isOperationsManager())
+            {
+                $permissions = $permissions->OMPermission()->get();
+            }
+            // team leader
+            elseif(auth()->user()->isTeamLeader())
+            {
+                $permissions = $permissions->TLPermission()->get();
+            }
+
+        return view('pages.admin.task-assignments.list',compact('user_client_activities','permissions'));
     }
 
     // AGENT ACCESS

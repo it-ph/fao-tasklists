@@ -83,6 +83,7 @@ const TASK = (() => {
     this_task.show = (id) => {
         $('#editTaskModal').modal('show');
         $('#editTaskForm')[0].reset();
+        $("#agent_id").val(null).trigger("change");
         $("#cluster_id_edit").val(null).trigger("change");
         $("#client_id_edit").val(null).trigger("change");
         $('#activity_name_edit').text('');
@@ -101,11 +102,14 @@ const TASK = (() => {
             var applicable_month = moment(response.data.data.applicable_month).tz(tzone).format('YYYY-MM');
             var start_date = moment(response.data.data.start_date).tz(tzone).format('YYYY-MM-DDTHH:mm');
             var end_date = response.data.data.end_date ? moment(response.data.data.end_date).tz(tzone).format('YYYY-MM-DDTHH:mm') : '';
+            var allow_transfer = response.data.data.status != 'Completed' ? false : true;
             var allow_quality = response.data.data.status == 'Completed' ? false : true;
-            var allow_remarks = response.data.data.status == 'Completed' ? false : true;
+            var allow_timestamps = response.data.data.status == 'Completed' ? false : true;
 
-            $('#agent_id').val(response.data.data.agent_id);
-            $('#employee_name').val(response.data.data.theagent.fullname);
+            // $('#agent_id').val(response.data.data.agent_id);
+            // $('#employee_name').val(response.data.data.theagent.fullname);
+            $('#agent_id').val(response.data.data.agent_id).trigger("change");
+            $('#agent_id').attr('disabled', allow_transfer);
             $('#schedule_edit').val(schedule);
             $('#applicable_month_edit').val(applicable_month);
             $("#cluster_id_edit").val(response.data.data.cluster_id).trigger("change");
@@ -115,12 +119,14 @@ const TASK = (() => {
             $("#eclerx_function_edit").val(response.data.data.eclerx_function).trigger("change");
             $('#status_edit').val(response.data.data.status);
             $('#start_date_edit').val(start_date);
+            $('#start_date_edit').attr('readonly', allow_timestamps);
             $('#end_date_edit').val(end_date);
+            $('#end_date_edit').attr('readonly', allow_timestamps);
             $('#actual_handling_time_edit').val(response.data.data.actual_handling_time);
+            $('#actual_handling_time_edit').attr('readonly', allow_timestamps);
             $('#timeliness_edit').val(response.data.data.timeliness).trigger("change");
             $('#quality_edit').attr('readonly', allow_quality);
             $('#quality_edit').val(response.data.data.quality).trigger("change");
-            $('#remarks_edit').attr('readonly', allow_remarks);
             $('#remarks_edit').text(response.data.data.remarks);
             $('#btn_update').empty();
             $('#btn_update').append('<i class="fa fa-save"></i> Update');

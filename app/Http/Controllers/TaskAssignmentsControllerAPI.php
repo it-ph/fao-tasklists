@@ -50,12 +50,12 @@ class TaskAssignmentsControllerAPI extends Controller
                         $query->where('task_assignments.id', 'like', "%{$keyword}%");
                     }
                 })
-                
+
                 // 2. Custom Flexible Search for Schedule Column
                 ->filterColumn('schedule', function($query, $keyword) {
                     $keyword = trim($keyword);
                     $parsedDate = $this->parseFlexibleDateSearch($keyword);
-                    
+
                     if ($parsedDate) {
                         $query->whereDate('schedule', '=', $parsedDate);
                     } else {
@@ -68,7 +68,7 @@ class TaskAssignmentsControllerAPI extends Controller
                 ->filterColumn('applicable_month', function($query, $keyword) {
                     $keyword = trim($keyword);
                     $parsedDate = $this->parseFlexibleDateSearch($keyword);
-                    
+
                     if ($parsedDate) {
                         $query->whereDate('applicable_month', '=', $parsedDate);
                     } else {
@@ -136,19 +136,23 @@ class TaskAssignmentsControllerAPI extends Controller
                     }
                     return $actual_handling_time;
                 }))
-                ->editColumn('timeliness', function($value) { 
+                ->editColumn('timeliness', function($value) {
                     $status = $value->timeliness;
                     if (empty($status)) {
-                        $scheduleStr = substr($value->schedule, 0, 10);
+                        // Get the base schedule date (YYYY-MM-DD); removed time
+                        $schedule = substr($value->schedule, 0, 10);
+
+                        // Set the deadline: 12:00 PM of the next day
+                        $deadline = strtotime($schedule . ' +1 day 12:00:00');                        
 
                         if ($value->end_date) {
-                            // Task is completed: compare completion date to schedule
-                            $endDateStr = substr($value->end_date, 0, 10);
-                            $status = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
+                            // Task completed: compare completion date to schedule
+                            $end_date = strtotime($value->end_date);
+                            $status = ($end_date > $deadline) ? 'Red' : 'Green';
                         } else {
                             // Task is still running: compare current server date to schedule
-                            $currentDateStr = date('Y-m-d');
-                            $status = ($currentDateStr > $scheduleStr) ? 'Red' : 'Green';
+                            $current_timestamp = time();
+                            $status = ($current_timestamp > $deadline) ? 'Red' : 'Green';
                         }
                     }
 
@@ -265,12 +269,12 @@ class TaskAssignmentsControllerAPI extends Controller
                         $query->where('task_assignments.id', 'like', "%{$keyword}%");
                     }
                 })
-                
+
                 // 2. Custom Flexible Search for Schedule Column
                 ->filterColumn('schedule', function($query, $keyword) {
                     $keyword = trim($keyword);
                     $parsedDate = $this->parseFlexibleDateSearch($keyword);
-                    
+
                     if ($parsedDate) {
                         $query->whereDate('schedule', '=', $parsedDate);
                     } else {
@@ -283,7 +287,7 @@ class TaskAssignmentsControllerAPI extends Controller
                 ->filterColumn('applicable_month', function($query, $keyword) {
                     $keyword = trim($keyword);
                     $parsedDate = $this->parseFlexibleDateSearch($keyword);
-                    
+
                     if ($parsedDate) {
                         $query->whereDate('applicable_month', '=', $parsedDate);
                     } else {
@@ -351,19 +355,23 @@ class TaskAssignmentsControllerAPI extends Controller
                     }
                     return $actual_handling_time;
                 }))
-                ->editColumn('timeliness', function($value) { 
+                ->editColumn('timeliness', function($value) {
                     $status = $value->timeliness;
                     if (empty($status)) {
-                        $scheduleStr = substr($value->schedule, 0, 10);
+                        // Get the base schedule date (YYYY-MM-DD); removed time
+                        $schedule = substr($value->schedule, 0, 10);
+
+                        // Set the deadline: 12:00 PM of the next day
+                        $deadline = strtotime($schedule . ' +1 day 12:00:00');                        
 
                         if ($value->end_date) {
-                            // Task is completed: compare completion date to schedule
-                            $endDateStr = substr($value->end_date, 0, 10);
-                            $status = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
+                            // Task completed: compare completion date to schedule
+                            $end_date = strtotime($value->end_date);
+                            $status = ($end_date > $deadline) ? 'Red' : 'Green';
                         } else {
                             // Task is still running: compare current server date to schedule
-                            $currentDateStr = date('Y-m-d');
-                            $status = ($currentDateStr > $scheduleStr) ? 'Red' : 'Green';
+                            $current_timestamp = time();
+                            $status = ($current_timestamp > $deadline) ? 'Red' : 'Green';
                         }
                     }
 
@@ -384,8 +392,8 @@ class TaskAssignmentsControllerAPI extends Controller
                 }))
                 ->addColumn('action', (function($value) use ($date_from, $date_to){
                     $action = '-';
-                    if($value->status == 'Completed')
-                    {
+                    // if($value->status == 'Completed')
+                    // {
                         // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
                         // $allowed_daterange = AllowedEditingDate::first();
                         // $date_from = date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from));
@@ -397,7 +405,7 @@ class TaskAssignmentsControllerAPI extends Controller
                         $schedule = date('Y-m-d H:i:s', strtotime($value->schedule));
                         $is_allowed_to_edit = ($date_from && $date_to && $schedule >= $date_from && $schedule <= $date_to) ? 1 : 0;
                         $action = $is_allowed_to_edit ? '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show('.$value->id.')><i class="fas fa-pencil-alt"></i></button>' : '-';
-                    }
+                    // }
                     return $action;
                 }))
                 ->rawColumns(
@@ -450,7 +458,7 @@ class TaskAssignmentsControllerAPI extends Controller
                 $normalizedKeyword = str_replace('/', '-', $keyword);
                 return Carbon::createFromFormat('m-d-Y', $normalizedKeyword)->format('Y-m-d');
             }
-            
+
             // Handles full text layout forms like "Sep 23, 2026" safely
             return Carbon::parse($keyword)->format('Y-m-d');
         } catch (\Exception $e) {
