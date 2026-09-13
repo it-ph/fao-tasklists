@@ -197,9 +197,10 @@ class TaskAssignmentsController extends GlobalVariableController
             $actual_handling_time = TimeElapsedHelper::convertTime($working_hours);
             $aht_in_minutes = number_format(($working_hours * 60),2);
 
-            $scheduleStr = substr($task->schedule, 0, 10);
-            $endDateStr = substr($end_at, 0, 10);
-            $timeliness = ($endDateStr > $scheduleStr) ? 'Red' : 'Green';
+            $schedule = substr($task->schedule, 0, 10);
+            // Set the deadline: 12:00 PM of the next day
+            $deadline = strtotime($schedule . ' +1 day 12:00:00');
+            $timeliness = (strtotime($end_at) > $deadline) ? 'Red' : 'Green';
 
             $task->update([
                 'status' => $status,
