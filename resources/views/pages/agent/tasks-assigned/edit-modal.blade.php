@@ -89,7 +89,7 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="activity_name" class="col-form-label custom-label"><strong>Activity Name:<span class="important">*</span></strong></label>
+                                    <label for="activity_name" class="col-form-label custom-label"><strong>ACTIVITY NAME:<span class="important">*</span></strong></label>
                                     <textarea class="form-control" name="activity_name" id="activity_name_edit" placeholder="Type the activity name here"></textarea>
                                     <label id="activity_name_editError" class="error" for="name"></label>
                                 </div>
@@ -101,7 +101,7 @@
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="client_function" class="col-form-label custom-label"><strong>CLIENT FUNCTION:<span class="important">*</span></strong></label>
+                                    <label for="client_function" class="col-form-label custom-label"><strong>CLIENT FUNCTION:</strong></label>
                                     <input class="form-control" type="text" name="client_function" id="client_function_edit">
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 <div class="form-group">
                                     <label for="eclerx_function" class="col-form-label custom-label"><strong>ECLERX FUNCTION:<span class="important">*</span></strong></label>
                                     <select name="eclerx_function" class="form-control" id="eclerx_function_edit">
-                                    <option value="">-- Select Eclerx Function --</option>
+                                    <option value="" disabled>-- Select Eclerx Function --</option>
                                     <option value="Procure to Pay (P2P)">Procure to Pay (P2P)</option>
                                     <option value="Order to Cash (O2C)">Order to Cash (O2C)</option>
                                     <option value="Record to Report (R2R)">Record to Report (R2R)</option>

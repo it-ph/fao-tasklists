@@ -77,23 +77,6 @@
                                 <th>Volume</th>
                                 <th>Remarks</th>
                             </tr>
-                            {{-- <tr>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                                <th><input type="text" class="form-control"/></th>
-                            </tr> --}}
                         </thead>
                     </table>
                 </div>

@@ -72,28 +72,10 @@ class UserControllerAPI extends Controller
     public function getLiveUserStatus(Request $request)
     {
         if ($request->ajax()) {
-            // 1. Core query mapping with structural relationships and today's attendance logs
             $query = User::with([
-                // 'thecluster:id,name',
-                // 'theclient:id,name',
-                // 'thetl:id,fullname',
-                // Pre-load ONLY the absolute latest single record row from today to resolve accurate live status
-                // 'todaysAttendance' => function ($subQuery) {
-                //     $subQuery->whereDate('shift_date', \Carbon\Carbon::today())
-                //             ->latest('id');
-                // }
-
+                // Fetch ONLY the single most recent attendance record.
                 'theattendances' => function ($subQuery) {
-                    $subQuery->where(function($q) {
-                        // Scenario A: Clocked in today
-                        $q->whereDate('shift_date', \Carbon\Carbon::today());
-                    })
-                    ->orWhere(function($q) {
-                        // Scenario B: Night shift (Clocked in yesterday, still working)
-                        $q->whereDate('shift_date', \Carbon\Carbon::yesterday())
-                        ->whereNull('clock_out');
-                    })
-                    ->latest('id');
+                    $subQuery->latest('id');
                 }
 
             ])->with([
@@ -146,18 +128,6 @@ class UserControllerAPI extends Controller
                     return '<span class="badge bg-secondary rounded-pill px-2.5 py-1.5 text-uppercase fw-bold">Clocked-Out</span>';
                 })
                 ->addColumn('work_status', function ($value) {
-                    // [ORIGINAL UNOPTIMIZED CODE COMMENTED FOR REFERENCE]:
-                    // $activeTask = Task::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
-                    // if ($activeTask) {
-                    //     return '<span class="text-primary fw-bold">' . $activeTask->id . '</span>';
-                    // }
-                    // $activeAssignment = TaskAssignment::where('agent_id', $value->id)->where('status', 'In Progress')->first(['id']);
-                    // if ($activeAssignment) {
-                    //     return '<span class="text-success fw-bold">TA' . $activeAssignment->id . '</span>';
-                    // }
-                    // return '<span class="text-muted fw-semibold">—</span>';
-
-                    // [OPTIMIZED]: Uses eager-loaded relations (zero extra queries)
                     if ($value->theactivetask) {
                         return '<span class="text-primary fw-bold">' . $value->theactivetask->id . '</span>';
                     }

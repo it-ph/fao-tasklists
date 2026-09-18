@@ -29,20 +29,27 @@
             <div class="dropdown d-lg-inline-block ms-1">
                 <button type="button" class="btn header-item noti-icon waves-effect d-inline-flex align-items-center justify-content-center gap-1" title="Clock IN / Clock OUT" data-bs-toggle="modal" data-bs-target="#clockIO">                    
                     <i class="bx bx-time text-white"></i>
-                    @if(!auth()->user()->todaysAttendance || !auth()->user()->todaysAttendance->clock_in)
-                        <!-- State 1: User has not punched in yet -->
+
+                    @php
+                        $attendance = auth()->user()->todaysAttendance;
+                        // Check if the clock out happened more than 12 hours ago
+                        $isPast12Hours = $attendance && $attendance->clock_out && $attendance->clock_out->lessThan(now()->subHours(12));
+                    @endphp
+
+                    @if(!$attendance || !$attendance->clock_in || $isPast12Hours)
+                        <!-- State 1: No record, no clock-in, OR clock-out was > 12 hours ago (Allow Clock In) -->
                         <span class="text-white align-middle">Not Clocked In Yet</span>
 
-                    @elseif(auth()->user()->todaysAttendance->clock_in && !auth()->user()->todaysAttendance->clock_out)
+                    @elseif($attendance->clock_in && !$attendance->clock_out)
                         <!-- State 2: User is currently working -->
                         <span class="text-white align-middle">
-                            Clocked In: {{ auth()->user()->todaysAttendance->clock_in->format('h:i A') }}
+                            Clocked In: {{ $attendance->clock_in->format('h:i A') }}
                         </span>
 
-                    @elseif(auth()->user()->todaysAttendance->clock_out)
-                        <!-- State 3: User finished their shift -->
+                    @elseif($attendance->clock_out)
+                        <!-- State 3: User finished shift within the last 12 hours (Locked Out / Shift Done) -->
                         <span class="text-white align-middle">
-                            Clocked Out: {{ auth()->user()->todaysAttendance->clock_out->format('h:i A') }}
+                            Clocked Out: {{ $attendance->clock_out->format('h:i A') }}
                         </span>
                     @endif
                 </button>

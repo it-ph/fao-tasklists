@@ -25,18 +25,18 @@
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="shift_date" class="col-form-label custom-label"><strong>SHIFT DATE:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="shift_date" @if(auth()->user()->shift_date) value="{{ date('Y-m-d', strtotime(auth()->user()->shift_date)) }}" @endif>
-                                    <label id="shift_dateError" class="error" style="display:none"></label>
+                                    <label for="schedule" class="col-form-label custom-label"><strong>SCHEDULE:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="date" name="schedule" @if(auth()->user()->schedule) value="{{ date('Y-m-d', strtotime(auth()->user()->schedule)) }}" @endif>
+                                    <label id="scheduleError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="date_received" class="col-form-label custom-label"><strong>DATE RECEIVED:<span class="important">*</span></strong></label>
-                                    <input class="form-control" type="date" name="date_received" id="date_received" value="{{ old('date_received') }}">
-                                    <label id="date_receivedError" class="error" style="display:none"></label>
+                                    <label for="applicable_month" class="col-form-label custom-label"><strong>APPLICABLE MONTH:<span class="important">*</span></strong></label>
+                                    <input class="form-control" type="month" name="applicable_month" id="applicable_month" value="{{ old('applicable_month') }}">
+                                    <label id="applicable_monthError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
@@ -77,11 +77,10 @@
                                             <option value="" selected disabled>-- Select Client -- </option>
                                                 @foreach ($clients as $client )
                                                     @if($client)
-                                                        <option value="{{ $client->id }}">{{ ucwords($client->name) }} </option>
+                                                        <option value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
                                                     @endif
                                                 @endforeach
                                         </select>
-                                        <label id="client_idError" class="error" style="display:none"></label>
                                     @endif
                                 </div>
                             </div>
@@ -92,28 +91,36 @@
                         <div class="col-md-12">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="client_activity_id" class="col-form-label custom-label"><strong>ACTIVITY:<span class="important">*</span></strong></label>
-                                    <select class="form-control select2" name="client_activity_id" id="client_activity_id" style="width:100%;">
-                                        <option value="" selected disabled>-- Select Activity -- </option>
-                                            @foreach ($user_client_activities as $user_client_activity)
-                                                @if($user_client_activity)
-                                                    <option value="{{ $user_client_activity->id }}">{{ ucwords($user_client_activity->name) }} </option>
-                                                @endif
-                                            @endforeach
-                                    </select>
-                                    <label id="client_activity_idError" class="error" style="display:none"></label>
+                                    <label for="activity_name" class="col-form-label custom-label"><strong>ACTIVITY NAME:<span class="important">*</span></strong></label>
+                                    <textarea class="form-control" name="activity_name" id="activity_name" placeholder="Type the activity name here">{{ old('activity_name') }}</textarea>
+                                    <label id="activity_nameError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="description" class="col-form-label custom-label"><strong>DESCRIPTION:<span class="important">*</span></strong></label>
-                                    <textarea class="form-control" name="description" id="description" placeholder="Type the description here">{{ old('description') }}</textarea>
-                                    <label id="descriptionError" class="error" style="display:none"></label>
+                                    <label for="client_function" class="col-form-label custom-label"><strong>CLIENT FUNCTION:</strong></label>
+                                    <input class="form-control" type="text" name="client_function" id="client_function">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="eclerx_function" class="col-form-label custom-label"><strong>ECLERX FUNCTION:<span class="important">*</span></strong></label>
+                                    <select name="eclerx_function" class="form-control" id="eclerx_function">
+                                    <option value="" selected disabled>-- Select Eclerx Function --</option>
+                                    <option value="Procure to Pay (P2P)">Procure to Pay (P2P)</option>
+                                    <option value="Order to Cash (O2C)">Order to Cash (O2C)</option>
+                                    <option value="Record to Report (R2R)">Record to Report (R2R)</option>
+                                    <option value="Client Admin">Client Admin</option>
+                                    <option value="Personiv Admin">Personiv Admin</option>
+                                </select>
+                                <label id="eclerx_functionError" class="error" style="display:none"></label>
                                 </div>
                             </div>
                         </div>
@@ -161,11 +168,27 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-2">
                                 <div class="form-group">
-                                    <label for="volume" class="col-form-label custom-label"><strong>VOLUME:</span></strong></label>
-                                    <input type="text" class="form-control" name="volume" placeholder="Volume" readonly>
+                                    <label for="timeliness" class="col-form-label custom-label"><strong>TIMELINESS:<span class="important">*</span></strong></label>
+                                    <select class="form-control select2" name="timeliness" id="timeliness" style="width:100%;" disabled>
+                                        <option value="" selected disabled>-- Select Timeliness -- </option>
+                                        <option value="Green">Green</option>
+                                        <option value="Red">Red</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-2">
+                                <div class="form-group">
+                                    <label for="Quality" class="col-form-label custom-label"><strong>Quality:<span class="important">*</span></strong></label>
+                                    <select class="form-control select2" name="quality" id="quality" style="width:100%;" disabled>
+                                        {{-- <option value="" selected disabled>-- Select Quality -- </option> --}}
+                                        <option value="Green" selected>Green</option>
+                                        <option value="Red">Red</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

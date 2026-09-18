@@ -16,14 +16,17 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
         
-        // Fetch today's record
+        // Fetch the latest record (using the updated latestOfMany relationship)
         $attendance = $user->todaysAttendance;
 
-        // STATE 1: User hasn't clocked in yet today
-        if (!$attendance) {
+        // Check if the old clock out happened more than 12 hours ago
+        $isPast12Hours = $attendance && $attendance->clock_out && Carbon::parse($attendance->clock_out)->lessThan(Carbon::now()->subHours(12));
+
+        // STATE 1: User hasn't clocked in yet OR their previous clock-out was more than 12 hours ago
+        if (!$attendance || $isPast12Hours) {
             Attendance::create([
                 'agent_id'   => $user->id,
-                'shift_date' => Carbon::today()->toDateString(),
+                'shift_date' => Carbon::today()->toDateString(), // Keeps track of the start date of this new shift
                 'clock_in'   => Carbon::now(),
             ]);
             return back()->with('success', 'You have successfully clocked in! Have a great shift.');
@@ -38,20 +41,21 @@ class AttendanceController extends Controller
             $totalSeconds = $clockInTime->diffInSeconds($clockOutTime);
             $work_minutes = number_format(($totalSeconds / 60), 2);
 
-            // 2. AUTOMATIC TASK PAUSE LOGIC: 
+            // 2. AUTOMATIC TASK PAUSE LOGIC
             $this->pauseActiveTasks($user->id, $clockOutTime);
 
             // 3. Process the clock out
             $attendance->update([
-                'clock_out'      => $clockOutTime,
+                'clock_out'    => $clockOutTime,
                 'work_minutes' => $work_minutes,
             ]);
             return back()->with('success', 'You have successfully clocked out!.');
         }
 
-        // STATE 3: Guard condition if they try to double-click a finished shift
-        return back()->with('error', 'Your shift for today has already been completed.');
+        // STATE 3: Guard condition if they try to click a shift completed within the 12-hour window
+        return back()->with('error', 'Your shift has already been completed. Please wait until 12 hours have passed to clock in again.');
     }
+
 
     /**
      * Automatically set all active tasks and assignments to 'On Hold' and log pauses.

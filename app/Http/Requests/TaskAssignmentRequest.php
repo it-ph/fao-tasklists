@@ -3,11 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Traits\ResponseTraits;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class TaskAssignmentRequest extends FormRequest
 {
     use ResponseTraits;
     /**
@@ -28,23 +28,20 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'fullname' => ['required'],
-            'email' => ['required','unique:users,email'],
-            'cluster_id' => ['required'],
-            'client_id' => ['required'],
-            'permission' => ['required'],
+            'schedule' => ['required'],
+            'applicable_month' => ['required'],
+            'activity_name' => ['required'],
+            'eclerx_function' => ['required'],
         ];
     }
 
     public function messages()
     {
         return [
-            'fullname.required' => 'Employee Name is required.',
-            'email.required' => 'Email Address is required.',
-            'email.unique' => 'Email Address is already exists.',
-            'cluster_id.required' => 'Cluster is required.',
-            'client_id.required' => 'Client is required.',
-            'permission.required' => 'Permission is required.',
+            'schedule.required' => 'Schedule is required.',
+            'applicable_month.required' => 'Applicable Month is required.',
+            'activity_name.required' => 'Activity Name is required.',
+            'eclerx_function.required' => 'Eclerx Function is required.',
         ];
     }
 

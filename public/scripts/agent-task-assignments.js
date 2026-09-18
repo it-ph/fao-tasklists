@@ -159,7 +159,7 @@ const TASK = (() => {
             const tzone = "Asia/Manila";
             var schedule = moment(response.data.data.schedule).tz(tzone).format('YYYY-MM-DD');
             var applicable_month = moment(response.data.data.applicable_month).tz(tzone).format('YYYY-MM');
-            var start_date = moment(response.data.data.start_date).tz(tzone).format('MM/DD/YYYY hh:mm:ss a');
+            var start_date = response.data.data.start_date ? moment(response.data.data.start_date).tz(tzone).format('MM/DD/YYYY hh:mm:ss a') : '';
             var end_date = response.data.data.end_date ? moment(response.data.data.end_date).tz(tzone).format('MM/DD/YYYY hh:mm:ss a') : '';
             var allow_remarks = response.data.data.status == 'Completed' ? false : true;
 
@@ -557,6 +557,57 @@ const TASK = (() => {
             toastr.error(error);
         });
     });
+
+    // delete assigned task
+    this_task.destroy = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: "#00599D",
+            cancelButtonColor: "#F46A6A",
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#btn-delete-' + id).empty();
+                $('#btn-delete-' + id).append('<i class="fa fa-spinner fa-spin"></i>');
+                $('#btn-delete-' + id).prop("disabled", true);
+                // Send a POST request
+                axios({
+                    method: 'post',
+                    url: `${APP_URL}/task-assignments/delete/${id}`,
+                }).then(function(response) {
+                    console.log(response.data.status)
+                    if (response.data.status === 'success') {
+                        $('#loader').show();
+                        $("#tbl_task > tbody").empty();
+                        $("#tbl_task_info").hide();
+                        $("#tbl_task_paginate").hide();
+                        refreshChangeRequestCount();
+                        TASK.load();
+                        $('.error').hide();
+                        $('.error').text('');
+                        toastr.success(response.data.message);
+                    } else if (response.data.status === 'warning') {
+                        Object.keys(response.data.error).forEach((key) => {
+                            $(`#${[key]}_editError`).show();
+                            $(`#${[key]}_editError`).text(response.data.error[key][0]);
+                        });
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                    $('#btn-delete-' + id).empty();
+                    $('#btn-delete-' + id).append('<i class="fa fa-times"></i>');
+                    $('#btn-delete-' + id).prop("disabled", false);
+                }).catch(error => {
+                    toastr.error(error);
+                });
+            }
+        });
+    }
 
     this_task.has_active_task = () => {
         Swal.fire({

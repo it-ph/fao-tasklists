@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:</strong></label>
+                        <label for="client_id" class="col-form-label custom-label"><strong>CLIENT:<span class="important">*</span></strong></label>
                         <select class="form-control select2" name="client_id" id="client_id_edit" style="width:100%;">
                             <option value="">-- Select Client -- </option>
                                 @foreach ($clients as $client )
@@ -48,6 +48,7 @@
                                     @endif
                                 @endforeach
                         </select>
+                        <label id="client_id_editError" class="error"></label>
                     </div>
 
                     <div class="form-group">

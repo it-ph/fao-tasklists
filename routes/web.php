@@ -118,6 +118,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
             {
                 Route::post('api/{status?}', [TaskAssignmentsControllerAPI::class,'getAgentTasks'])->name('api.get.assigned-task');
                 Route::get('/{status?}', [TaskAssignmentsController::class,'agentTask'])->name('assigned-task.index');
+                Route::post('/store', [TaskAssignmentsController::class,'store'])->name('assigned-task.store');
                 Route::get('/show/{id}', [TaskAssignmentsController::class,'show'])->name('assigned-task.show');
                 Route::post('/update/{id}', [TaskAssignmentsController::class,'update'])->name('assigned-task.update');
                 Route::post('/start/{id}', [TaskAssignmentsController::class,'startTask'])->name('assigned-task.start');
@@ -139,6 +140,7 @@ Route::group(['middleware' => ['prevent.back.history']],function () {
         Route::post('tasks/api/{status?}', [TasksControllerAPI::class, 'getAllTasks'])->name('api.get.tasks');
 
         // Task Assignments
+        Route::post('task-assignments/delete/{id}', [TaskAssignmentsController::class, 'destroy']);
         Route::resource('task-assignments', TasksController::class);
         Route::get('task-assignments', [PageController::class, 'showAgentTaskAssignments'])->name('task-assignments.index');
         Route::post('task-assignments/api/{status?}', [TaskAssignmentsControllerAPI::class, 'getAllTasks'])->name('api.get.task-assignments');

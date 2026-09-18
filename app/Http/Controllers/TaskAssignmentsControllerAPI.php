@@ -143,7 +143,7 @@ class TaskAssignmentsControllerAPI extends Controller
                         $schedule = substr($value->schedule, 0, 10);
 
                         // Set the deadline: 12:00 PM of the next day
-                        $deadline = strtotime($schedule . ' +1 day 12:00:00');                        
+                        $deadline = strtotime($schedule . ' +1 day 12:00:00');
 
                         if ($value->end_date) {
                             // Task completed: compare completion date to schedule
@@ -176,13 +176,14 @@ class TaskAssignmentsControllerAPI extends Controller
                     switch ($value->status) {
                         case 'Not Started':
                             $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>
-                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Start Task" onclick=TASK.show_start(' . $value->id . ') id="btn-start-'. $value->id.'"><i class="fas fa-play"></i></button>';
+                                <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" title="Start Task" onclick=TASK.show_start(' . $value->id . ') id="btn-start-'. $value->id.'"><i class="fas fa-play"></i></button>
+                                <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Delete Task" onclick=TASK.destroy(' . $value->id . ') id="btn-delete-'. $value->id.'"><i class="fas fa-times"></i></button>';
                             break;
                         case 'In Progress':
                             $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>
                                 <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="Pause Task: On Hold" onclick=TASK.show_pause(' . $value->id . ')><i class="fas fa-pause"></i></button>
                                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: Complete" onclick=TASK.show_stop(' . $value->id . ')><i class="fas fa-stop"></i></button>';
-                            break;
+                            break;  
                         case 'On Hold':
                             $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>
                                 <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick=TASK.show_resume(' . $value->id . ') id="btn-resume-'. $value->id.'"><i class="fas fa-play"></i></button>';
@@ -362,7 +363,7 @@ class TaskAssignmentsControllerAPI extends Controller
                         $schedule = substr($value->schedule, 0, 10);
 
                         // Set the deadline: 12:00 PM of the next day
-                        $deadline = strtotime($schedule . ' +1 day 12:00:00');                        
+                        $deadline = strtotime($schedule . ' +1 day 12:00:00');
 
                         if ($value->end_date) {
                             // Task completed: compare completion date to schedule

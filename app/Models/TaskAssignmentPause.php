@@ -11,13 +11,13 @@ class TaskAssignmentPause extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $table = 'task_pauses';
+    protected $table = 'task_assignments_pauses';
     protected $guarded = [];
     protected $dates = ['start','end','create_at','updated_at','deleted_at'];
 
     public function thetask()
     {
-        return $this->belongsTo(Task::class,'task_id')->withTrashed();
+        return $this->belongsTo(TaskAssignment::class,'task_id')->withTrashed();
     }
 
     public function thecreatedby()

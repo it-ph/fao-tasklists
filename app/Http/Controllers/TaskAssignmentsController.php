@@ -8,6 +8,7 @@ use App\Models\TaskAssignment;
 use App\Models\TaskAssignmentPause;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTraits;
+use App\Http\Requests\TaskAssignmentRequest;
 use App\Http\Requests\UpdateTaskAssignmentRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StopTaskAssignmentRequest;
@@ -23,6 +24,28 @@ class TaskAssignmentsController extends GlobalVariableController
     {
         parent::__construct();
         $this->model = new TaskAssignment();
+    }
+
+    public function store(TaskAssignmentRequest $request)
+    {
+        $result = $this->successResponse('Task created successfully!');
+        try {
+            $agent_id = auth()->user()->id;
+            $hasActiveTask = TaskHelper::hasInProgressTask($agent_id);
+            if ($hasActiveTask) {
+                throw new \Exception("Please On Hold or Complete your current task before you can create, start or resume another task!");
+            }
+
+            $request['created_by'] = Auth::user()->id;
+            $request['start_date'] = Carbon::now();
+            $request['status'] = 'In Progress';
+            $this->model->create($request->all());
+
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 
     public function show($id)
@@ -240,5 +263,20 @@ class TaskAssignmentsController extends GlobalVariableController
         {
             return [];
         }
+    }
+
+    // Delete Task
+    public function destroy($id)
+    {
+        $result = $this->successResponse('Task deleted successfully!');
+        try {
+            $task = $this->model->findOrFail($id);
+            TaskAssignmentPause::where('task_id', $task->id)->delete();
+            $task->delete();
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+
+        return $this->returnResponse($result);
     }
 }

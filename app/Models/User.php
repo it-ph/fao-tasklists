@@ -56,8 +56,11 @@ class User extends Authenticatable
 
     public function todaysAttendance()
     {
+        // return $this->hasOne(Attendance::class, 'agent_id')
+        //     ->whereDate('shift_date', today()); // Filters strictly for today's calendar date
+        // Fetches the most recent attendance record, regardless of calendar date
         return $this->hasOne(Attendance::class, 'agent_id')
-            ->whereDate('shift_date', today()); // Filters strictly for today's calendar date
+            ->latestOfMany(); 
     }
 
     public function scopeAgentPermission($query)

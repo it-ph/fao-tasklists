@@ -31,6 +31,7 @@ class UpdateUserRequest extends FormRequest
             'fullname' => ['required'],
             'email' => ['required'],
             'cluster_id' => ['required'],
+            'client_id' => ['required'],
             'permission' => ['required'],
         ];
     }
@@ -41,6 +42,7 @@ class UpdateUserRequest extends FormRequest
             'fullname.required' => 'Employee Name is required.',
             'email.required' => 'Email Address is required.',
             'cluster_id.required' => 'Cluster is required.',
+            'client_id.required' => 'Client is required.',
             'permission.required' => 'Permission is required.',
         ];
     }
