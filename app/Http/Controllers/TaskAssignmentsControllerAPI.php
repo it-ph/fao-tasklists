@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use DateTime;
 use Carbon\Carbon;
 use App\Models\TaskAssignment;
-use App\Models\TaskPause;
+use App\Models\TaskAssignmentPause;
 use Illuminate\Http\Request;
 use App\Models\AllowedEditingDate;
 use Facades\App\Http\Helpers\TimeElapsedHelper;
@@ -183,7 +183,7 @@ class TaskAssignmentsControllerAPI extends Controller
                             $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>
                                 <button type="button" class="btn btn-info btn-sm waves-effect waves-light" title="Pause Task: On Hold" onclick=TASK.show_pause(' . $value->id . ')><i class="fas fa-pause"></i></button>
                                 <button type="button" class="btn btn-danger btn-sm waves-effect waves-light" title="Stop Task: Complete" onclick=TASK.show_stop(' . $value->id . ')><i class="fas fa-stop"></i></button>';
-                            break;  
+                            break;
                         case 'On Hold':
                             $action = '<button type="button" class="btn btn-warning btn-sm waves-effect waves-light" title="Edit Task" onclick=TASK.show(' . $value->id . ')><i class="fas fa-pencil-alt"></i></button>
                                 <button type="button" class="btn btn-success btn-sm waves-effect waves-light" title="Resume Task" onclick=TASK.show_resume(' . $value->id . ') id="btn-resume-'. $value->id.'"><i class="fas fa-play"></i></button>';
@@ -420,7 +420,7 @@ class TaskAssignmentsControllerAPI extends Controller
 
     // get task pauses
     public function getTaskPauses($task_id) {
-        $pauses = TaskPause::query()
+        $pauses = TaskAssignmentPause::query()
             ->select('id','task_id','start','end')
             ->where('task_id', $task_id)
             ->get();

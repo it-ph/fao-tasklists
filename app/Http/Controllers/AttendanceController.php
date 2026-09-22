@@ -87,7 +87,7 @@ class AttendanceController extends Controller
                 $taskAssignment->update(['status' => 'On Hold']);
 
                 TaskAssignmentPause::create([
-                    'task_id'    => $taskAssignment->id, // Note: Verify if this should save to a separate field like assigned_task_id depending on your table architecture
+                    'task_id'    => $taskAssignment->id,
                     'start'      => $clockOutTime,
                     'end'        => null,
                     'created_by' => $userId,
@@ -100,7 +100,7 @@ class AttendanceController extends Controller
         try {
             $attendance = Attendance::where('agent_id', $id)
                 ->whereNotNull('clock_out')
-                ->orderBy('clock_out', 'desc') // Sorts by the most recent timestamp directly
+                ->orderBy('clock_out', 'desc')
                 ->first();
 
             if (!$attendance) {
