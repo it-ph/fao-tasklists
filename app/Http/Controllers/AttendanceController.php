@@ -98,6 +98,39 @@ class AttendanceController extends Controller
     public function removeClockOut(Request $request, $id)
     {
         try {
+            $attendance = Attendance::where('agent_id', $id)
+                ->whereNotNull('clock_out')
+                ->orderBy('clock_out', 'desc') // Sorts by the most recent timestamp directly
+                ->first();
+
+            if (!$attendance) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No clock-out history found for this employee.'
+                ]);
+            }
+
+            $attendance->update([
+                'clock_out' => null,
+                'work_minutes' => 0,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Clock-out timestamp removed successfully. The employee can now continue working!'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong on the server: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function removeClockOutOLD(Request $request, $id)
+    {
+        try {
             // 1. Fetch the targeted user's attendance record for the current active shift
             // It searches using the passed dynamic Employee ID ($id) and targets today's record
             $attendance = Attendance::where('agent_id', $id)

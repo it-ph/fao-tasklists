@@ -105,8 +105,8 @@ class UserControllerAPI extends Controller
                 ->addColumn('clock_in', function ($value) {
                     $log = $value->theattendances->first();
                     return ($log && $log->clock_in)
-                        ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A')
-                        : '<span class="text-muted">—</span>';
+                            ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A')
+                            : '<span class="text-muted">—</span>';
                 })
                 ->addColumn('clock_out', function ($value) {
                     $log = $value->theattendances->first();
