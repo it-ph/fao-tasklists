@@ -60,6 +60,7 @@
                                 <th>Action</th>
                                 <th>Employee Name</th>
                                 <th>Schedule</th>
+                                <th>Timeliness</th>
                                 <th>Cluster</th>
                                 <th>Client</th>
                                 <th>Activity Name</th>
@@ -70,7 +71,6 @@
                                 <th>End Date</th>
                                 <th>Date Completed</th>
                                 <th>Actual Handling Time</th>
-                                <th>Timeliness</th>
                                 <th>Quality</th>
                                 <th>Remarks</th>
                             </tr>

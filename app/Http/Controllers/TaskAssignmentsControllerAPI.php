@@ -35,6 +35,10 @@ class TaskAssignmentsControllerAPI extends Controller
                 $tasks = $tasks->where('status', $status);
             }
 
+            // sort by status and schedule
+            $tasks = $tasks->orderByRaw("FIELD(status, 'In Progress', 'On Hold', 'Not Started', 'Completed') ASC")
+                ->orderBy('schedule', 'asc');
+
             // OPTIMIZATION: Pre-fetch allowed editing date once instead of querying per completed row
             $allowed_daterange = AllowedEditingDate::first();
             $date_from = $allowed_daterange ? date('Y-m-d H:i:s', strtotime($allowed_daterange->allowed_date_from)) : null;
@@ -254,6 +258,10 @@ class TaskAssignmentsControllerAPI extends Controller
             } else {
                 $tasks = $tasks->where('status', $status);
             }
+
+            // sort by status and schedule (oldest to latest)
+            $tasks = $tasks->orderByRaw("FIELD(status, 'In Progress', 'On Hold', 'Not Started', 'Completed') ASC")
+                ->orderBy('schedule', 'asc');
 
             // OPTIMIZATION: Pre-fetch allowed editing date once instead of querying per completed row
             $allowed_daterange = AllowedEditingDate::first();

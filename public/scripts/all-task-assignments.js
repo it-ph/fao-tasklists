@@ -55,6 +55,8 @@ const TASK = (() => {
                 { data: 'action', name: 'action', className: 'text-center' },
                 { data: 'agent_id', name: 'theagent.fullname' },
                 { data: 'schedule', name: 'schedule', className: 'text-center' },
+                { data: 'timeliness', name: 'timeliness', defaultContent: '-', className: 'text-center' },
+
                 { data: 'thecluster.name', name: 'thecluster.name' },
                 {
                     data: 'theclient.name',
@@ -69,7 +71,6 @@ const TASK = (() => {
                 { data: 'end_date', name: 'end_date', className: 'text-center' },
                 { data: 'date_completed', name: 'date_completed', className: 'text-center' },
                 { data: 'actual_handling_time', name: 'actual_handling_time', className: 'text-center' },
-                { data: 'timeliness', name: 'timeliness', defaultContent: '-', className: 'text-center' },
                 { data: 'quality', name: 'quality', className: 'text-center' },
                 { data: 'remarks', name: 'remarks' },
             ],

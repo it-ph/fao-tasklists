@@ -79,8 +79,9 @@ class UserControllerAPI extends Controller
                 }
 
             ])->with([
-                'theactivetask:id,agent_id',
-                'theactiveassignment:id,agent_id',
+                'theactivetask:id,agent_id,client_activity_id',
+                'theactivetask.theclientactivity:id,name',
+                'theactiveassignment:id,agent_id,activity_name',
             ])
             ->select('id', 'fullname', 'permission')
             ->where('permission', '<>', 'superadmin');
@@ -105,13 +106,13 @@ class UserControllerAPI extends Controller
                 ->addColumn('clock_in', function ($value) {
                     $log = $value->theattendances->first();
                     return ($log && $log->clock_in)
-                            ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A')
+                            ? \Carbon\Carbon::parse($log->clock_in)->format('Y-m-d h:i A')
                             : '<span class="text-muted">—</span>';
                 })
                 ->addColumn('clock_out', function ($value) {
                     $log = $value->theattendances->first();
                     return ($log && $log->clock_out)
-                        ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A')
+                        ? \Carbon\Carbon::parse($log->clock_out)->format('Y-m-d h:i A')
                         : '<span class="text-muted">—</span>';
                 })
                 ->addColumn('live_status', function ($value) {
@@ -129,10 +130,10 @@ class UserControllerAPI extends Controller
                 })
                 ->addColumn('work_status', function ($value) {
                     if ($value->theactivetask) {
-                        return '<span class="text-primary fw-bold">' . $value->theactivetask->id . '</span>';
+                        return '<span class="text-primary fw-bold">' . $value->theactivetask->id . '-' . $value->theactivetask->theclientactivity->name . '</span>';
                     }
                     if ($value->theactiveassignment) {
-                        return '<span class="text-success fw-bold">TA' . $value->theactiveassignment->id . '</span>';
+                        return '<span class="text-success fw-bold">TA' . $value->theactiveassignment->id . '-' . $value->theactiveassignment->activity_name . '</span>';
                     }
                     return '<span class="text-muted fw-semibold">—</span>';
                 })

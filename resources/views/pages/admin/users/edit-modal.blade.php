@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label for="fullname" class="col-form-label custom-label"><strong>EMPLOYEE NAME:<span class="important">*</span></strong></label>
                         <input type="text" class="form-control" name="fullname" id="fullname_edit" placeholder="Enter Full Name">
-                        <label id="fullname_editameError" class="error" style="display:none"></label>
+                        <label id="fullname_editError" class="error" style="display:none"></label>
                     </div>
 
                     <div class="form-group">
@@ -91,7 +91,7 @@
                             <option {{ old("permission") == "accountant" ? "selected" : "" }} value="accountant">Accountant</option>
                             <option {{ old("permission") == "team leader" ? "selected" : "" }} value="team leader">Team Leader</option>
                             <option {{ old("permission") == "operations manager" ? "selected" : "" }} value="operations manager">Operations Manager</option>
-                        </select>
+                        </select>   
                         <label id="permission_editError" class="error"></label>
                     </div>
 
